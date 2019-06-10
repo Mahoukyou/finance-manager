@@ -1,10 +1,18 @@
 package com.wdowiak.financemanager;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import android.util.Log;
 import android.view.View;
 
 import androidx.core.view.GravityCompat;
@@ -21,7 +29,14 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
 
+import java.io.DataOutputStream;
+import java.io.InputStream;
+import java.io.StringReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
+
+import javax.net.ssl.HttpsURLConnection;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -52,6 +67,46 @@ public class MainActivity extends AppCompatActivity
         ((LocalDatabase) database).createSampleData();
         ArrayList<Transaction> items = database.getTransactions();
 
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                // Create URL
+               /* try {
+                     final String TAG = "MyActivity";
+                    Log.d(TAG, "test1");
+                    URL endpoint = new URL("http://192.168.1.25:51234/api/v1/users/authenticate");
+
+                    // Create connection
+                    HttpURLConnection myConnection = (HttpURLConnection) endpoint.openConnection();
+
+                    myConnection.setRequestProperty("User-Agent", "finance-manager-0.1");
+                   // myConnection.setRequestMethod("POST");
+                    //DataOutputStream dos =  new DataOutputStream(myConnection.getOutputStream());
+                   // dos.writeBytes("chogan");
+
+                   // if(myConnection.getResponseCode() == 404)
+                    {
+                        Log.d(TAG, "rescode"+ Integer.toString(myConnection.getResponseCode()));
+                        Log.d(TAG, myConnection.getResponseMessage());
+                        InputStream responseBody = myConnection.getInputStream();
+                        String s = responseBody.toString();
+
+                        Log.d(TAG, s);
+                    }
+                    //else
+                    {
+                        throw new Exception();
+                    }
+                }
+                catch(Exception e)
+                {
+                    e.printStackTrace();
+                }*/
+
+                //RestAPI rapi = new RestAPI(getApplicationContext());
+                //rapi.authUser("chogan", "111");
+            }
+        });
     }
 
     @Override
