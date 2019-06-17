@@ -1,4 +1,4 @@
-package com.wdowiak.financemanager;
+package com.wdowiak.financemanager.api;
 
 import android.content.Context;
 
@@ -6,51 +6,31 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.Volley;
 import com.wdowiak.financemanager.api.interfaces.IAuthCallback;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.Future;
 
-public class RestAPI implements IDatabaseInterface
+public class AuthApi
 {
-    RestAPI(Context context)
+    AuthApi(Context context, IAuthCallback callback)
     {
-        this.context = context;
+        this.authCallback = callback;
     }
 
-
-    static final String endpoint_url = "http://192.168.1.25:51234/api/";
-
-    public ArrayList<Transaction> getTransactions()
-    {
-        return new ArrayList<>();
-    }
-
-    public boolean newTransaction(Transaction transaction)
-    {
-        return false;
-    }
-
-    public String getUser()
-    {
-
-
-
-        return "";
-    }
-
-    public final void authUser(final String login, final String password, final IAuthCallback authCallback)
+    public void authUser(final String login, final String password, Future<String> future)
     {
         HashMap<String, String> params = new HashMap<>();
         params.put("login", login);
         params.put("password", password);
 
         final JsonObjectRequest request = new JsonObjectRequest(
-                endpoint_url + "/v1/users/authenticate",
+                EndpointUrl.url + "/v1/users/authenticate",
                 new JSONObject(params),
                 new Response.Listener<JSONObject>()
                 {
@@ -62,40 +42,31 @@ public class RestAPI implements IDatabaseInterface
                             String token = response.getString("Token");
                             if(!token.isEmpty())
                             {
-                                auth_token = token;
-                                authCallback.onSuccessfullAuth("D");
+                                authCallback.onSuccessfullAuth(token);
                             }
                             else
                             {
-                                authCallback.onUnsuccessfullAuth("D");
+                                authCallback.onUnsuccessfullAuth("Empty token returned");
                             }
                         }
-                        catch (JSONException e)
+                        catch (JSONException error)
                         {
-                            authCallback.onUnsuccessfullAuth("D");
+                            authCallback.onUnsuccessfullAuth(error.toString());
                         }
                     }
-                }, new Response.ErrorListener()
+                }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error)
                 {
-                    @Override
-                    public void onErrorResponse(VolleyError error)
-                    {
-                        authCallback.onUnsuccessfullAuth("D");
-                    }
+                    future.
+                    authCallback.onUnsuccessfullAuth(error.toString());
                 }
-        );
+        });
 
         final RequestQueue requestQueue = Volley.newRequestQueue(context);
         requestQueue.add(request);
     }
 
-    public final void logout()
-    {
-        auth_token = "";
-    }
-
-    // TODO, for now keep the token here
-    private String auth_token;
-
     Context context;
+    IAuthCallback authCallback;
 }

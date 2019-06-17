@@ -63,50 +63,6 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
-        IDatabaseInterface database = new LocalDatabase(this);
-        ((LocalDatabase) database).createSampleData();
-        ArrayList<Transaction> items = database.getTransactions();
-
-        AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                // Create URL
-               /* try {
-                     final String TAG = "MyActivity";
-                    Log.d(TAG, "test1");
-                    URL endpoint = new URL("http://192.168.1.25:51234/api/v1/users/authenticate");
-
-                    // Create connection
-                    HttpURLConnection myConnection = (HttpURLConnection) endpoint.openConnection();
-
-                    myConnection.setRequestProperty("User-Agent", "finance-manager-0.1");
-                   // myConnection.setRequestMethod("POST");
-                    //DataOutputStream dos =  new DataOutputStream(myConnection.getOutputStream());
-                   // dos.writeBytes("chogan");
-
-                   // if(myConnection.getResponseCode() == 404)
-                    {
-                        Log.d(TAG, "rescode"+ Integer.toString(myConnection.getResponseCode()));
-                        Log.d(TAG, myConnection.getResponseMessage());
-                        InputStream responseBody = myConnection.getInputStream();
-                        String s = responseBody.toString();
-
-                        Log.d(TAG, s);
-                    }
-                    //else
-                    {
-                        throw new Exception();
-                    }
-                }
-                catch(Exception e)
-                {
-                    e.printStackTrace();
-                }*/
-
-                //RestAPI rapi = new RestAPI(getApplicationContext());
-                //rapi.authUser("chogan", "111");
-            }
-        });
     }
 
     @Override
