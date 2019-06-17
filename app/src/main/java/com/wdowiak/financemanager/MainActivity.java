@@ -128,6 +128,17 @@ public class MainActivity extends AppCompatActivity
         }
         */
 
+        switch (id)
+        {
+            case R.id.nav_logout:
+                LoginRepository.getInstance().logout();
+                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(intent);
+                Toast.makeText(this, "Logged out", Toast.LENGTH_SHORT).show();
+
+                finish();
+        }
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
