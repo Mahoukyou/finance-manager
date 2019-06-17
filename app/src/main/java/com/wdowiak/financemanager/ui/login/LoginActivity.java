@@ -5,6 +5,7 @@ import android.app.Activity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.content.Intent;
 import android.net.Network;
 import android.os.Bundle;
 
@@ -23,6 +24,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.wdowiak.financemanager.MainActivity;
 import com.wdowiak.financemanager.R;
 import com.wdowiak.financemanager.api.NetworkManager;
 import com.wdowiak.financemanager.data.LoggedInUser;
@@ -156,9 +158,9 @@ public class LoginActivity extends AppCompatActivity
 
     private void updateUiWithUser(LoggedInUser model)
     {
-        String welcome = getString(R.string.welcome) + model.getLogin();
-        // TODO : initiate successful logged in experience
-        Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private void showLoginFailed(@StringRes Integer errorString)

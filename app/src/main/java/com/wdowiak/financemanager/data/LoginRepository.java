@@ -1,5 +1,7 @@
 package com.wdowiak.financemanager.data;
 
+import android.util.Log;
+
 /**
  * Class that requests authentication and user information from the remote data source and
  * maintains an in-memory cache of login status and user credentials information.
@@ -36,13 +38,23 @@ public class LoginRepository
 
     public final boolean isLoggedIn()
     {
-        return user != null && dataSource.getAuthToken() != null && !dataSource.getAuthToken().isEmpty();
+        return user != null && dataSource.getAuthToken() != null && dataSource.getAuthToken().isTokenValid();
+    }
+
+    public final AuthToken getAuthToken()
+    {
+        return dataSource.getAuthToken();
     }
 
     public final void logout()
     {
         user = null;
         dataSource.logout();
+    }
+
+    public final LoggedInUser getLoggedInUser()
+    {
+        return user;
     }
 
     private final void setLoggedInUser(final LoggedInUser user)

@@ -1,5 +1,6 @@
 package com.wdowiak.financemanager;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -21,6 +22,9 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
+import com.wdowiak.financemanager.data.LoggedInUser;
+import com.wdowiak.financemanager.data.LoginRepository;
+import com.wdowiak.financemanager.ui.login.LoginActivity;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -28,6 +32,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 import java.io.DataOutputStream;
 import java.io.InputStream;
@@ -63,6 +71,7 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
+        setUserInfo(navigationView);
     }
 
     @Override
@@ -122,5 +131,26 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void setUserInfo(NavigationView navigationView)
+    {
+        LoginRepository loginRepository = LoginRepository.getInstance();
+        if(!loginRepository.isLoggedIn())
+        {
+            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+            startActivity(intent);
+            Toast.makeText(this, "You are not logged in", Toast.LENGTH_SHORT).show();
+
+            finish();
+        }
+
+        final LoggedInUser user = loginRepository.getLoggedInUser();
+
+        TextView textView = navigationView.getHeaderView(0).findViewById(R.id.nav_header_user_name);
+        textView.setText(user.getFirstName() + " " + user.getLastName());
+
+        textView = navigationView.getHeaderView(0).findViewById(R.id.nav_header_user_email);
+        textView.setText(user.getEmail());
     }
 }
