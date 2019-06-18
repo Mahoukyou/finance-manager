@@ -22,6 +22,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
+import com.wdowiak.financemanager.api.TransactionsApi;
 import com.wdowiak.financemanager.data.LoggedInUser;
 import com.wdowiak.financemanager.data.LoginRepository;
 import com.wdowiak.financemanager.ui.login.LoginActivity;
@@ -72,6 +73,20 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         setUserInfo(navigationView);
+
+
+        TransactionsApi.getTransactions(new TransactionsApi.ITransactionCallback() {
+            @Override
+            public void OnSuccess(ArrayList<Transaction> transactions) {
+
+                Toast.makeText(MainActivity.this, transactions.get(0).toString(), Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void OnError(Exception error) {
+                Toast.makeText(MainActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
