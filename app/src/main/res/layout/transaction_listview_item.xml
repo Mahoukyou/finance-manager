@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:layout_margin="0dp">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/transaction_source_account"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:textSize="12dp"
+            android:gravity="center_vertical"
+            android:text="From: Wallet"/>
+
+        <TextView
+            android:id="@+id/transaction_target_account"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:textSize="12dp"
+            android:gravity="center_vertical"
+            android:text="To: Main Account"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/transaction_description"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:gravity="center"
+        android:text="Some random description of the transactions, obviously it was for drugs"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/transaction_amount"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="500$"
+        android:layout_weight="0.5"/>
+
+</LinearLayout>

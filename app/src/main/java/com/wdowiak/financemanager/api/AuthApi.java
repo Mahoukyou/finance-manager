@@ -1,17 +1,10 @@
 package com.wdowiak.financemanager.api;
 
-import android.content.Context;
-
-import com.android.volley.AuthFailureError;
-import com.android.volley.Network;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.Volley;
-import com.wdowiak.financemanager.api.interfaces.IAuthCallback;
 import com.wdowiak.financemanager.data.AuthToken;
 import com.wdowiak.financemanager.data.LoggedInUser;
 import com.wdowiak.financemanager.data.LoginRepository;
@@ -23,7 +16,6 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
@@ -44,7 +36,7 @@ public class AuthApi
 
         try
         {
-            JSONObject result = null;
+            JSONObject result;
             try
             {
                 result = future.get(30, TimeUnit.SECONDS);

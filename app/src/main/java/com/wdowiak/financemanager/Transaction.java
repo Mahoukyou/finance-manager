@@ -36,6 +36,41 @@ public final class Transaction
         return transaction;
     }
 
+    public final long getId()
+    {
+        return id;
+    }
+
+    public final String getSourceAccountName()
+    {
+        return sourceAccountName;
+    }
+
+    public final String getTargetAccountName()
+    {
+        return targetAccountName;
+    }
+
+    public final String getCategoryName()
+    {
+        return categoryName;
+    }
+
+    public final double getAmount()
+    {
+        return amount;
+    }
+
+    public final String getDescription()
+    {
+        return description;
+    }
+
+    public final String getStatusName()
+    {
+        return statusName;
+    }
+
     long id;
     String sourceAccountName;// todo
     String targetAccountName; // todo
