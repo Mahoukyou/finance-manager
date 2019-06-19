@@ -4,212 +4,244 @@
     android:layout_height="match_parent"
     android:background="#eeeeee">
 
-    <!-- Amount linear layout -->
     <LinearLayout
+        android:id="@+id/transaction_detail_view_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/layout_background"
-        android:orientation="horizontal"
-        android:padding="@dimen/view_layout_padding"
-        android:layout_margin="@dimen/view_layout_margin">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <!-- Amount linear layout -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Amount"
-            android:gravity="left|center"
-            android:layout_gravity="left"/>
+            android:background="@drawable/layout_background"
+            android:orientation="horizontal"
+            android:padding="@dimen/view_layout_padding"
+            android:layout_margin="@dimen/view_layout_margin">
 
-        <!-- Dummy view -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Amount"
+                android:gravity="left|center"
+                android:layout_gravity="left"/>
+
+            <!-- Dummy view -->
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@+id/transaction_currency_sign"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="$ "
+                android:gravity="right|center"/>
+
+            <TextView
+                android:id="@+id/transaction_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="500"
+                android:gravity="right|center"/>
+        </LinearLayout>
+
+        <!-- Middle linear layout -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/layout_background"
+            android:orientation="vertical"
+            android:padding="@dimen/view_layout_padding"
+            android:layout_margin="@dimen/view_layout_margin">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="From"
+                    android:gravity="left|center"
+                    android:layout_gravity="left"/>
+
+                <!-- Dummy view -->
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/transaction_source_account"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Main Account"
+                    android:gravity="right|center" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/view_layout_item_top_padding">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="To"
+                    android:gravity="left|center"
+                    android:layout_gravity="left"/>
+
+                <!-- Dummy view -->
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/transaction_target_account"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Wallet"
+                    android:gravity="right|center" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/view_layout_item_top_padding">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Category"
+                    android:gravity="left|center"
+                    android:layout_gravity="left"/>
+
+                <!-- Dummy view -->
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/transaction_category"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Drugs"
+                    android:gravity="right|center" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/view_layout_item_top_padding">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Status"
+                    android:gravity="left|center"
+                    android:layout_gravity="left"/>
+
+                <!-- Dummy view -->
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/transaction_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pending"
+                    android:gravity="right|center" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Description linear layout -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/layout_background"
+            android:orientation="vertical"
+            android:padding="@dimen/view_layout_padding"
+            android:layout_margin="@dimen/view_layout_margin">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14dp"
+                android:text="Description"
+                android:gravity="center"/>
+
+            <TextView
+                android:id="@+id/transaction_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec tincidunt nec lectus ut sagittis. Proin nec felis congue, eleifend elit eget, sollicitudin libero. Duis tempus lorem in tellus vehicula, eu tincidunt orci luctus."
+                android:layout_marginTop="@dimen/view_layout_item_top_padding"
+                android:gravity="center"/>
+        </LinearLayout>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/view_layout_margin"
+            android:layout_marginRight="@dimen/view_layout_margin"
+            android:text="See attachments"/>
+
         <View
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_weight="1"/>
 
-        <TextView
-            android:id="@+id/transaction_currency_sign"
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/view_layout_margin"
+            android:layout_marginRight="@dimen/view_layout_margin"
+            android:text="Edit transaction"
+            android:onClick="beginEditTransaction"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/view_layout_margin"
+            android:layout_marginRight="@dimen/view_layout_margin"
+            android:layout_marginBottom="25dp"
+            android:text="Delete transaction"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/transaction_progress_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!-- Dummy -->
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="$ "
-            android:gravity="right|center"/>
+            android:layout_gravity="center" />
 
-        <TextView
-            android:id="@+id/transaction_amount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="500"
-            android:gravity="right|center"/>
+        <!-- Dummy -->
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
     </LinearLayout>
-
-    <!-- Middle linear layout -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/layout_background"
-        android:orientation="vertical"
-        android:padding="@dimen/view_layout_padding"
-        android:layout_margin="@dimen/view_layout_margin">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="From"
-                android:gravity="left|center"
-                android:layout_gravity="left"/>
-
-            <!-- Dummy view -->
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1"/>
-
-            <TextView
-                android:id="@+id/transaction_source_account"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Main Account"
-                android:gravity="right|center" />
-
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="@dimen/view_layout_item_top_padding">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="To"
-                android:gravity="left|center"
-                android:layout_gravity="left"/>
-
-            <!-- Dummy view -->
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1"/>
-
-            <TextView
-                android:id="@+id/transaction_target_account"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Wallet"
-                android:gravity="right|center" />
-
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="@dimen/view_layout_item_top_padding">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Category"
-                android:gravity="left|center"
-                android:layout_gravity="left"/>
-
-            <!-- Dummy view -->
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1"/>
-
-            <TextView
-                android:id="@+id/transaction_category"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Drugs"
-                android:gravity="right|center" />
-
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="@dimen/view_layout_item_top_padding">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Status"
-                android:gravity="left|center"
-                android:layout_gravity="left"/>
-
-            <!-- Dummy view -->
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1"/>
-
-            <TextView
-                android:id="@+id/transaction_status"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Pending"
-                android:gravity="right|center" />
-
-        </LinearLayout>
-    </LinearLayout>
-
-    <!-- Description linear layout -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/layout_background"
-        android:orientation="vertical"
-        android:padding="@dimen/view_layout_padding"
-        android:layout_margin="@dimen/view_layout_margin">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="14dp"
-            android:text="Description"
-            android:gravity="center"/>
-
-        <TextView
-            android:id="@+id/transaction_description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec tincidunt nec lectus ut sagittis. Proin nec felis congue, eleifend elit eget, sollicitudin libero. Duis tempus lorem in tellus vehicula, eu tincidunt orci luctus."
-            android:layout_marginTop="@dimen/view_layout_item_top_padding"
-            android:gravity="center"/>
-    </LinearLayout>
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/view_layout_margin"
-        android:layout_marginRight="@dimen/view_layout_margin"
-        android:text="See attachments"/>
-
-    <View
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_weight="1"/>
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/view_layout_margin"
-        android:layout_marginRight="@dimen/view_layout_margin"
-        android:text="Edit transaction"/>
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/view_layout_margin"
-        android:layout_marginRight="@dimen/view_layout_margin"
-        android:layout_marginBottom="25dp"
-        android:text="Delete transaction"/>
-
-
 </LinearLayout>
