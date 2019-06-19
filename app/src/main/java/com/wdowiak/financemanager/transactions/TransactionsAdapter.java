@@ -54,10 +54,10 @@ public class TransactionsAdapter extends ArrayAdapter
         {
             viewHolder = new ViewHolder();
             convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.transaction_listview_item, parent, false);
-            viewHolder.sourceAccount = convertView.findViewById(R.id.transaction_source_account);
-            viewHolder.targetAccount = convertView.findViewById(R.id.transaction_target_account);
-            viewHolder.description = convertView.findViewById(R.id.transaction_description);
-            viewHolder.amount = convertView.findViewById(R.id.transaction_amount);
+            viewHolder.sourceAccount = convertView.findViewById(R.id.transaction_item_source_account);
+            viewHolder.targetAccount = convertView.findViewById(R.id.transaction_item_target_account);
+            viewHolder.description = convertView.findViewById(R.id.transaction_item_description);
+            viewHolder.amount = convertView.findViewById(R.id.transaction_item_amount);
 
             result = convertView;
             convertView.setTag(viewHolder);

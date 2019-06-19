@@ -11,7 +11,7 @@
         android:layout_weight="1">
 
         <TextView
-            android:id="@+id/transaction_source_account"
+            android:id="@+id/transaction_item_source_account"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -20,7 +20,7 @@
             android:text="From: Wallet"/>
 
         <TextView
-            android:id="@+id/transaction_target_account"
+            android:id="@+id/transaction_item_target_account"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -30,7 +30,7 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/transaction_description"
+        android:id="@+id/transaction_item_description"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="2"
@@ -39,7 +39,7 @@
         android:textSize="12sp" />
 
     <TextView
-        android:id="@+id/transaction_amount"
+        android:id="@+id/transaction_item_amount"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:gravity="center"

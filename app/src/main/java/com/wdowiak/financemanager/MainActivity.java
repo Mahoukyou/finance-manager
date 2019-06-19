@@ -25,6 +25,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.wdowiak.financemanager.api.TransactionsApi;
 import com.wdowiak.financemanager.data.LoggedInUser;
 import com.wdowiak.financemanager.data.LoginRepository;
+import com.wdowiak.financemanager.transactions.TransactionDetailActivity;
 import com.wdowiak.financemanager.transactions.TransactionsAdapter;
 import com.wdowiak.financemanager.ui.login.LoginActivity;
 
@@ -34,6 +35,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -72,6 +74,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
 
         transactionsListView = findViewById(R.id.transactions_listview);
+        transactionsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(getApplicationContext(), TransactionDetailActivity.class);
+                intent.putExtra(TransactionDetailActivity.INTENT_EXTRA_TRANSACTION_ID, transactionsData.get(i).getId());
+                startActivity(intent);
+            }
+        });
 
         setUserInfo(navigationView);
         queryAndDisplayTransactions();
@@ -159,7 +169,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     void queryAndDisplayTransactions()
     {
-        TransactionsApi.getTransactions(new TransactionsApi.ITransactionCallback()
+        TransactionsApi.getTransactions(new TransactionsApi.ITransactionCallback<ArrayList<Transaction>>()
         {
             @Override
             public void OnSuccess(ArrayList<Transaction> transactions)
@@ -186,4 +196,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
+
+    final void onTransactionItemClicked(final View view)
+    {
+
+    }
 }
