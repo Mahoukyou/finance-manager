@@ -27,9 +27,8 @@ public class AuthToken
     @Contract(pure = true)
     public final boolean isTokenValid()
     {
-        return prefix != null && !prefix.isEmpty();
+        return authToken != null && !authToken.isEmpty();
     }
-
 
     final static String prefix = "Bearer";
 

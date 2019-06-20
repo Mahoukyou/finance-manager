@@ -1,6 +1,7 @@
 package com.wdowiak.financemanager.data;
 
 
+import org.jetbrains.annotations.Contract;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -27,27 +28,32 @@ public class Account
         return account;
     }
 
-    public long getId()
+    @Contract(pure = true)
+    public final long getId()
     {
         return id;
     }
 
-    public String getName()
+    @Contract(pure = true)
+    public final String getName()
     {
         return name;
     }
 
-    public String getGroupName()
+    @Contract(pure = true)
+    public final String getGroupName()
     {
         return groupName;
     }
 
-    public String getCurrencyName()
+    @Contract(pure = true)
+    public final String getCurrencyName()
     {
         return currencyName;
     }
 
-    public double getStartingAmount()
+    @Contract(pure = true)
+    public final double getStartingAmount()
     {
         return startingAmount;
     }

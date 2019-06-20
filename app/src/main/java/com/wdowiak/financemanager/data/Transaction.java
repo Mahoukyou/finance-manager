@@ -1,5 +1,6 @@
-package com.wdowiak.financemanager;
+package com.wdowiak.financemanager.data;
 
+import org.jetbrains.annotations.Contract;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -36,36 +37,43 @@ public final class Transaction
         return transaction;
     }
 
+    @Contract(pure = true)
     public final long getId()
     {
         return id;
     }
 
+    @Contract(pure = true)
     public final String getSourceAccountName()
     {
         return sourceAccountName;
     }
 
+    @Contract(pure = true)
     public final String getTargetAccountName()
     {
         return targetAccountName;
     }
 
+    @Contract(pure = true)
     public final String getCategoryName()
     {
         return categoryName;
     }
 
+    @Contract(pure = true)
     public final double getAmount()
     {
         return amount;
     }
 
+    @Contract(pure = true)
     public final String getDescription()
     {
         return description;
     }
 
+    @Contract(pure = true)
     public final String getStatusName()
     {
         return statusName;

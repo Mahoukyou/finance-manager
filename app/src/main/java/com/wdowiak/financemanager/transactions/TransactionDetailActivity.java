@@ -9,12 +9,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.wdowiak.financemanager.MainActivity;
 import com.wdowiak.financemanager.R;
-import com.wdowiak.financemanager.Transaction;
+import com.wdowiak.financemanager.data.Transaction;
 import com.wdowiak.financemanager.api.TransactionsApi;
-
-import java.util.ArrayList;
 
 public class TransactionDetailActivity extends AppCompatActivity
 {

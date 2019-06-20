@@ -1,5 +1,7 @@
 package com.wdowiak.financemanager.data;
 
+import org.jetbrains.annotations.Contract;
+
 public class LoggedInUser
 {
     public LoggedInUser(long id, String login, String firstName, String lastName, String email)
@@ -11,27 +13,32 @@ public class LoggedInUser
         this.email = email;
     }
 
-    public long getId()
+    @Contract(pure = true)
+    public final long getId()
     {
         return id;
     }
 
-    public String getLogin()
+    @Contract(pure = true)
+    public final String getLogin()
     {
         return login;
     }
 
-    public String getFirstName()
+    @Contract(pure = true)
+    public final String getFirstName()
     {
         return firstName;
     }
 
-    public String getLastName()
+    @Contract(pure = true)
+    public final String getLastName()
     {
         return lastName;
     }
 
-    public String getEmail()
+    @Contract(pure = true)
+    public final String getEmail()
     {
         return email;
     }

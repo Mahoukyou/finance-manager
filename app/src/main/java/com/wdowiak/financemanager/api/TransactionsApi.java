@@ -5,21 +5,17 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.Volley;
-import com.wdowiak.financemanager.Transaction;
+import com.wdowiak.financemanager.data.Transaction;
 import com.wdowiak.financemanager.data.LoginRepository;
-import com.wdowiak.financemanager.data.Result;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeoutException;
 
 public class TransactionsApi
 {

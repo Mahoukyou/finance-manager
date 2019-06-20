@@ -1,19 +1,11 @@
 package com.wdowiak.financemanager;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
-import android.util.Log;
 import android.view.View;
 
 import androidx.core.view.GravityCompat;
@@ -25,6 +17,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.wdowiak.financemanager.api.TransactionsApi;
 import com.wdowiak.financemanager.data.LoggedInUser;
 import com.wdowiak.financemanager.data.LoginRepository;
+import com.wdowiak.financemanager.data.Transaction;
 import com.wdowiak.financemanager.transactions.TransactionDetailActivity;
 import com.wdowiak.financemanager.transactions.TransactionsAdapter;
 import com.wdowiak.financemanager.ui.login.LoginActivity;
@@ -36,7 +29,6 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;

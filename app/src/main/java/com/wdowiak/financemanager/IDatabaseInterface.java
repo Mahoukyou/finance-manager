@@ -1,5 +1,7 @@
 package com.wdowiak.financemanager;
 
+import com.wdowiak.financemanager.data.Transaction;
+
 import java.util.ArrayList;
 
 public interface IDatabaseInterface

@@ -8,6 +8,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.wdowiak.financemanager.api.interfaces.IAuthCallback;
+import com.wdowiak.financemanager.data.Transaction;
 
 import org.json.JSONException;
 import org.json.JSONObject;
