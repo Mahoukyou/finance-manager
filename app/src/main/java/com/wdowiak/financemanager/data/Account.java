@@ -17,12 +17,12 @@ public class Account
 
         if(!jsonObject.isNull("Group"))
         {
-            account.groupName = jsonObject.getJSONObject("Group").getString("Name");
+            account.group = Group.createFromJSONObject(jsonObject.getJSONObject("Group"));
         }
 
         if(!jsonObject.isNull("Currency"))
         {
-            account.currencyName = jsonObject.getJSONObject("Currency").getString("Name");
+            account.currency = Currency.createFromJSONObject(jsonObject.getJSONObject("Currency"));
         }
 
         return account;
@@ -41,15 +41,15 @@ public class Account
     }
 
     @Contract(pure = true)
-    public final String getGroupName()
+    public final Group getGroup()
     {
-        return groupName;
+        return group;
     }
 
     @Contract(pure = true)
-    public final String getCurrencyName()
+    public final Currency getCurrency()
     {
-        return currencyName;
+        return currency;
     }
 
     @Contract(pure = true)
@@ -58,10 +58,10 @@ public class Account
         return startingAmount;
     }
 
-    long id;
-    String name;
-    String groupName;
-    String currencyName;
-    double startingAmount;
+    long id = -1;
+    String name = null;
+    Group group = null;
+    Currency currency = null;
+    double startingAmount = 0.0;
 
 }

@@ -74,10 +74,10 @@ public class TransactionDetailActivity extends AppCompatActivity
         }
 
         TextView textView = findViewById(R.id.transaction_source_account);
-        textView.setText(transaction.getSourceAccountName());
+        textView.setText(transaction.getSourceAccount() != null ? transaction.getSourceAccount().getName() : null);
 
         textView = findViewById(R.id.transaction_target_account);
-        textView.setText(transaction.getTargetAccountName());
+        textView.setText(transaction.getTargetAccount() != null ? transaction.getTargetAccount().getName() : null);
 
         textView = findViewById(R.id.transaction_description);
         textView.setText(transaction.getDescription());
@@ -86,10 +86,11 @@ public class TransactionDetailActivity extends AppCompatActivity
         textView.setText(String.valueOf(transaction.getAmount()));
 
         textView = findViewById(R.id.transaction_status);
-        textView.setText(transaction.getStatusName());
+        textView.setText(transaction.getStatus() != null ? transaction.getStatus().getName() : null);
 
         textView = findViewById(R.id.transaction_category);
-        textView.setText(transaction.getCategoryName());
+        textView.setText(transaction.getCategory() != null ? transaction.getCategory().getName() : null);
+
     }
 
     public final void beginEditTransaction(final View view)

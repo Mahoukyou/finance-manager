@@ -12,26 +12,27 @@ public final class Transaction
 
         // todo redo obviously, just for test if it works
         transaction.id = jsonObject.getLong("TransactionId");
+        transaction.amount = jsonObject.getDouble("Amount");
+        transaction.description = jsonObject.getString("Description");
+
         if(!jsonObject.isNull("SourceAccount"))
         {
-            transaction.sourceAccountName = jsonObject.getJSONObject("SourceAccount").getString("Name");
+            transaction.sourceAccount = Account.createFromJSONObject(jsonObject.getJSONObject("SourceAccount"));
         }
+
         if(!jsonObject.isNull("TargetAccount"))
         {
-            transaction.targetAccountName = jsonObject.getJSONObject("TargetAccount").getString("Name");
+            transaction.targetAccount = Account.createFromJSONObject(jsonObject.getJSONObject("TargetAccount"));
         }
 
         if(!jsonObject.isNull("Category"))
         {
-            transaction.categoryName = jsonObject.getJSONObject("Category").getString("Name");
+            transaction.category = Category.createFromJSONObject(jsonObject.getJSONObject("Category"));
         }
-
-        transaction.amount = jsonObject.getDouble("Amount");
-        transaction.description = jsonObject.getString("Description");
 
         if(!jsonObject.isNull("TransactionStatus"))
         {
-            transaction.statusName = jsonObject.getJSONObject("TransactionStatus").getString("Name");
+            transaction.transactionStatus = TransactionStatus.createFromJSONObject(jsonObject.getJSONObject("TransactionStatus"));
         }
 
         return transaction;
@@ -41,24 +42,6 @@ public final class Transaction
     public final long getId()
     {
         return id;
-    }
-
-    @Contract(pure = true)
-    public final String getSourceAccountName()
-    {
-        return sourceAccountName;
-    }
-
-    @Contract(pure = true)
-    public final String getTargetAccountName()
-    {
-        return targetAccountName;
-    }
-
-    @Contract(pure = true)
-    public final String getCategoryName()
-    {
-        return categoryName;
     }
 
     @Contract(pure = true)
@@ -74,19 +57,35 @@ public final class Transaction
     }
 
     @Contract(pure = true)
-    public final String getStatusName()
+    public final Account getSourceAccount()
     {
-        return statusName;
+        return sourceAccount;
+    }
+
+    @Contract(pure = true)
+    public final Account getTargetAccount()
+    {
+        return targetAccount;
+    }
+
+    @Contract(pure = true)
+    public final Category getCategory()
+    {
+        return category;
+    }
+
+    @Contract(pure = true)
+    public final TransactionStatus getStatus()
+    {
+        return transactionStatus;
     }
 
     long id;
-    String sourceAccountName;// todo
-    String targetAccountName; // todo
-    String categoryName;
     double amount;
     String description;
-    String statusName;
-    // Date todo
-    // Status
-    // Category
+
+    Account sourceAccount;
+    Account targetAccount;
+    Category category;
+    TransactionStatus transactionStatus;
 }

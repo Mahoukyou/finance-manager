@@ -53,6 +53,40 @@ public class CategoriesApi
         });
     }
 
+    public static void getCategoriesHashmap(final Api.IQueryCallback<HashMap<Long, Category>> callback)
+    {
+        Api.asyncQuery(Request.Method.GET, queryCategoriesUrl, new JSONObject(), new Api.IApiCallback()
+        {
+            @Override
+            public void onResponse(JSONObject response)
+            {
+                try
+                {
+                    final JSONArray categoriesJSONArray = response.getJSONArray("Items");
+
+                    HashMap<Long, Category> categories = new HashMap<>();
+                    for(int i = 0; i < categoriesJSONArray.length(); ++i)
+                    {
+                        Category category = Category.createFromJSONObject(categoriesJSONArray.getJSONObject(i));
+                        categories.put(category.getId(), category);
+                    }
+
+                    callback.onSuccess(categories);
+                }
+                catch (JSONException error)
+                {
+                    callback.onError(error);
+                }
+            }
+
+            @Override
+            public void onErrorResponse(VolleyError error)
+            {
+                callback.onError(error);
+            }
+        });
+    }
+
     public static void getCategoryById(final long categoryId, final Api.IQueryCallback<Category> callback)
     {
         // hack or the right way?

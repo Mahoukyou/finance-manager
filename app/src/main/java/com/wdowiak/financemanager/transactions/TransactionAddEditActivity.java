@@ -23,10 +23,6 @@ import java.util.ArrayList;
 public class TransactionAddEditActivity extends AppCompatActivity {
 
     public final static String INTENT_EXTRA_TRANSACTION_ID = "INTENT_EXTRA_TRANSACTION_ID";
-    public final int QUERY_TRANSACTION = 0;
-    public final int QUERY_ACCOUNTS = 1;
-    public final int QUERY_CATEGORIES = 2;
-    public final int QUERY_STATUSES = 3;
 
     Long transactionId = null;
 
@@ -44,9 +40,6 @@ public class TransactionAddEditActivity extends AppCompatActivity {
 
         transactionId = getIntent().getExtras().getLong(INTENT_EXTRA_TRANSACTION_ID);
 
-        getAccounts();
-        getCategories();
-        getTransactionStatuses();
         getTransaction();
     }
 
@@ -69,6 +62,9 @@ public class TransactionAddEditActivity extends AppCompatActivity {
                 final ArrayList<String> accountsSpinnerData = accountNamesToArrayList(accounts);
                 sourceAccountSpinner.setAdapter(new ArrayAdapter<>(getApplicationContext(), R.layout.spinner_item, accountsSpinnerData));
                 targetAccountSpinner.setAdapter(new ArrayAdapter<>(getApplicationContext(), R.layout.spinner_item, accountsSpinnerData));
+
+
+               // final int sourceAccountToSelect = accounts.stream().filter(account -> account.getCurrencyName().equals("D"));
             }
 
             @Override
@@ -153,7 +149,9 @@ public class TransactionAddEditActivity extends AppCompatActivity {
                     finish();
                 }
 
-                // todo set rest
+                getAccounts();
+                getCategories();
+                getTransactionStatuses();
             }
 
             @Override

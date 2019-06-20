@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.wdowiak.financemanager.R;
+import com.wdowiak.financemanager.data.Account;
 import com.wdowiak.financemanager.data.Transaction;
 
 import java.util.ArrayList;
@@ -69,13 +70,16 @@ public class TransactionsAdapter extends ArrayAdapter
         }
 
         Transaction transaction = getItem(position);
-        viewHolder.sourceAccount.setText(transaction.getSourceAccountName());
-        viewHolder.targetAccount.setText(transaction.getTargetAccountName());
+
+        final Account sourceAccount = transaction.getSourceAccount();
+        viewHolder.sourceAccount.setText(sourceAccount != null ? sourceAccount.getName() : null);
+
+        final Account targetAccount = transaction.getTargetAccount();
+        viewHolder.targetAccount.setText(targetAccount != null ? targetAccount.getName() : null);
+
         viewHolder.description.setText(transaction.getDescription());
         viewHolder.amount.setText(String.valueOf(transaction.getAmount()));
 
-        // todo
-        //viewHolder..setTag(transaction.getId());
         return result;
     }
 }
