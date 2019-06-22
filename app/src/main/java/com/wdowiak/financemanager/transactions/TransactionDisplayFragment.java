@@ -46,8 +46,11 @@ public class TransactionDisplayFragment extends Fragment
             @Nullable Bundle savedInstanceState)
     {
         final View view = inflater.inflate(R.layout.transaction_display_fragment, container, false);
+
         transactionsListView = view.findViewById(R.id.transactions_listview);
         transactionsListView.setOnItemClickListener(this::OnTransactionClicked);
+
+        view.findViewById(R.id.add_transaction).setOnClickListener(this::onAddTransaction);
 
         return view;
     }
@@ -95,6 +98,12 @@ public class TransactionDisplayFragment extends Fragment
                 Toast.makeText(getActivity().getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public final void onAddTransaction(final View view)
+    {
+        Intent intent = new Intent(getActivity().getApplicationContext(), TransactionAddEditActivity.class);
+        startActivity(intent);
     }
 
 

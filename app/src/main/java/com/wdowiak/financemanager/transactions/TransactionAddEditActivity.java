@@ -46,7 +46,9 @@ public class TransactionAddEditActivity extends AppCompatActivity {
         }
         else
         {
-            // query
+            getAccounts();
+            getCategories();
+            getTransactionStatuses();
         }
     }
 
@@ -67,19 +69,23 @@ public class TransactionAddEditActivity extends AppCompatActivity {
                 final Spinner targetAccountSpinner = findViewById(R.id.transaction_target_account);
 
                 final ArrayList<String> accountsSpinnerData = accountNamesToArrayList(accounts);
+                accountsSpinnerData.add(0, "[None]"); // todo, use account spinner data
                 sourceAccountSpinner.setAdapter(new ArrayAdapter<>(getApplicationContext(), R.layout.spinner_item, accountsSpinnerData));
                 targetAccountSpinner.setAdapter(new ArrayAdapter<>(getApplicationContext(), R.layout.spinner_item, accountsSpinnerData));
 
-                if (transaction.getSourceAccount() != null)
+                if(transaction != null)
                 {
-                    final int sourceAccountToSelect = accounts.indexOf(transaction.getSourceAccount());
-                    sourceAccountSpinner.setSelection(sourceAccountToSelect);
-                }
+                    if (transaction.getSourceAccount() != null)
+                    {
+                        final int sourceAccountToSelect = accounts.indexOf(transaction.getSourceAccount()) + 1;
+                        sourceAccountSpinner.setSelection(sourceAccountToSelect);
+                    }
 
-                if (transaction.getTargetAccount() != null)
-                {
-                    final int targetAccountToSelect = accounts.indexOf(transaction.getTargetAccount());
-                    targetAccountSpinner.setSelection(targetAccountToSelect);
+                    if (transaction.getTargetAccount() != null)
+                    {
+                        final int targetAccountToSelect = accounts.indexOf(transaction.getTargetAccount()) + 1;
+                        targetAccountSpinner.setSelection(targetAccountToSelect);
+                    }
                 }
             }
 
@@ -109,7 +115,14 @@ public class TransactionAddEditActivity extends AppCompatActivity {
                 final Spinner categorySpinner = findViewById(R.id.transaction_category);
 
                 final ArrayList<String> categorySpinnerData = categoryNamesToArrayList(categories);
+                categorySpinnerData.add(0, "[None]"); // add cat spin adapter
                 categorySpinner.setAdapter(new ArrayAdapter<>(getApplicationContext(), R.layout.spinner_item, categorySpinnerData));
+
+                if(transaction != null && transaction.getCategory() != null)
+                {
+                    final int categoryToSelect = categories.indexOf(transaction.getCategory()) + 1;
+                    categorySpinner.setSelection(categoryToSelect);
+                }
             }
 
             @Override
@@ -138,7 +151,14 @@ public class TransactionAddEditActivity extends AppCompatActivity {
                 final Spinner transactionStatusSpinner = findViewById(R.id.transaction_status);
 
                 final ArrayList<String> statusesSpinnerData = transactionStatusNamesToArrayList(transactionStatuses);
+                statusesSpinnerData.add(0, "[None]");
                 transactionStatusSpinner.setAdapter(new ArrayAdapter<>(getApplicationContext(), R.layout.spinner_item, statusesSpinnerData));
+
+                if(transaction != null)
+                {
+                    final int statusToSelect = transactionStatuses.indexOf(transaction.getStatus()) + 1;
+                    transactionStatusSpinner.setSelection(statusToSelect);
+                }
             }
 
             @Override
