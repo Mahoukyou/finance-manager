@@ -14,32 +14,23 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
-import com.wdowiak.financemanager.api.TransactionsApi;
 import com.wdowiak.financemanager.data.LoggedInUser;
 import com.wdowiak.financemanager.data.LoginRepository;
-import com.wdowiak.financemanager.data.Transaction;
-import com.wdowiak.financemanager.transactions.TransactionDetailActivity;
-import com.wdowiak.financemanager.transactions.TransactionsAdapter;
+import com.wdowiak.financemanager.transactions.TransactionDisplayFragment;
 import com.wdowiak.financemanager.ui.login.LoginActivity;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 
 import android.view.Menu;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener
 {
-    ListView transactionsListView;
-    ArrayList<Transaction> transactionsData;
-    TransactionsAdapter transactionsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -65,18 +56,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
-        transactionsListView = findViewById(R.id.transactions_listview);
-        transactionsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(getApplicationContext(), TransactionDetailActivity.class);
-                intent.putExtra(TransactionDetailActivity.INTENT_EXTRA_TRANSACTION_ID, transactionsData.get(i).getId());
-                startActivity(intent);
-            }
-        });
-
         setUserInfo(navigationView);
-        queryAndDisplayTransactions();
+
+        displayFragment(TransactionDisplayFragment.newInstance());
+
     }
 
     @Override
@@ -159,38 +142,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         finish();
     }
 
-    void queryAndDisplayTransactions()
+
+    final void displayFragment(final Fragment instance)
     {
-        TransactionsApi.getTransactions(new TransactionsApi.ITransactionCallback<ArrayList<Transaction>>()
-        {
-            @Override
-            public void OnSuccess(ArrayList<Transaction> transactions)
-            {
-                transactionsData = transactions;
-                if(transactionsAdapter == null)
-                {
-                    transactionsAdapter = new TransactionsAdapter(transactionsData, getApplicationContext());
-                    transactionsListView.setAdapter(transactionsAdapter);
-                }
-                else
-                {
-                    transactionsAdapter.notifyDataSetChanged();
-                }
-
-                Toast.makeText(MainActivity.this, transactions.get(0).toString(), Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void OnError(Exception error)
-            {
-                Toast.makeText(MainActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-
-    final void onTransactionItemClicked(final View view)
-    {
-
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, instance).commitNow();
     }
 }

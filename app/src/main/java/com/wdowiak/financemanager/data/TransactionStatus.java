@@ -16,6 +16,25 @@ public class TransactionStatus
         return transactionStatus;
     }
 
+    // todo, at least for now for easier array search
+    @Contract(value = "null -> false", pure = true)
+    public final boolean equals(Object object)
+    {
+        if(!(object instanceof TransactionStatus))
+        {
+            return false;
+        }
+
+        TransactionStatus transactionStatus = (TransactionStatus)object;
+        return getId() == transactionStatus.getId();
+    }
+
+    public final int hashCode()
+    {
+        Long lId = id;
+        return lId.hashCode();
+    }
+
     @Contract(pure = true)
     public final long getId()
     {

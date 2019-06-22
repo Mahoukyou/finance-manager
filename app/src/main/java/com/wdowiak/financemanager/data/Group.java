@@ -17,6 +17,25 @@ public class Group
         return group;
     }
 
+    // todo, at least for now for easier array search
+    @Contract(value = "null -> false", pure = true)
+    public final boolean equals(Object object)
+    {
+        if(!(object instanceof Group))
+        {
+            return false;
+        }
+
+        Group group = (Group) object;
+        return getId() == group.getId();
+    }
+
+    public final int hashCode()
+    {
+        Long lId = id;
+        return lId.hashCode();
+    }
+
     @Contract(pure = true)
     public final long getId()
     {

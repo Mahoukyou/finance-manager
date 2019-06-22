@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -38,9 +39,15 @@ public class TransactionAddEditActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transaction_add_edit);
 
-        transactionId = getIntent().getExtras().getLong(INTENT_EXTRA_TRANSACTION_ID);
-
-        getTransaction();
+        if(getIntent().hasExtra(INTENT_EXTRA_TRANSACTION_ID))
+        {
+            transactionId = getIntent().getExtras().getLong(INTENT_EXTRA_TRANSACTION_ID);
+            getTransaction();
+        }
+        else
+        {
+            // query
+        }
     }
 
     private final void getAccounts()
@@ -51,7 +58,7 @@ public class TransactionAddEditActivity extends AppCompatActivity {
             public void OnSuccess(ArrayList<Account> result)
             {
                 accounts = result;
-                if(accounts == null || accounts.isEmpty())
+                if (accounts == null || accounts.isEmpty())
                 {
                     return;
                 }
@@ -63,8 +70,17 @@ public class TransactionAddEditActivity extends AppCompatActivity {
                 sourceAccountSpinner.setAdapter(new ArrayAdapter<>(getApplicationContext(), R.layout.spinner_item, accountsSpinnerData));
                 targetAccountSpinner.setAdapter(new ArrayAdapter<>(getApplicationContext(), R.layout.spinner_item, accountsSpinnerData));
 
+                if (transaction.getSourceAccount() != null)
+                {
+                    final int sourceAccountToSelect = accounts.indexOf(transaction.getSourceAccount());
+                    sourceAccountSpinner.setSelection(sourceAccountToSelect);
+                }
 
-               // final int sourceAccountToSelect = accounts.stream().filter(account -> account.getCurrencyName().equals("D"));
+                if (transaction.getTargetAccount() != null)
+                {
+                    final int targetAccountToSelect = accounts.indexOf(transaction.getTargetAccount());
+                    targetAccountSpinner.setSelection(targetAccountToSelect);
+                }
             }
 
             @Override
@@ -152,6 +168,12 @@ public class TransactionAddEditActivity extends AppCompatActivity {
                 getAccounts();
                 getCategories();
                 getTransactionStatuses();
+
+                EditText editText = findViewById(R.id.transaction_description);
+                editText.setText(transaction.getDescription());
+
+                editText = findViewById(R.id.transaction_amount);
+                editText.setText(String.valueOf(transaction.getAmount()));
             }
 
             @Override

@@ -58,6 +58,25 @@ public class Account
         return startingAmount;
     }
 
+    // todo, at least for now for easier array search
+    @Contract(value = "null -> false", pure = true)
+    public final boolean equals(Object object)
+    {
+        if(!(object instanceof Account))
+        {
+            return false;
+        }
+
+        Account account = (Account)object;
+        return getId() == account.getId();
+    }
+
+    public final int hashCode()
+    {
+        Long lId = id;
+        return lId.hashCode();
+    }
+
     long id = -1;
     String name = null;
     Group group = null;
