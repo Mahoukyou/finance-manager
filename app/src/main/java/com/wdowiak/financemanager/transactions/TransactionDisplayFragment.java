@@ -45,12 +45,12 @@ public class TransactionDisplayFragment extends Fragment
             @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState)
     {
-        final View view = inflater.inflate(R.layout.transaction_display_fragment, container, false);
+        final View view = inflater.inflate(R.layout.listview_display_fragment, container, false);
 
-        transactionsListView = view.findViewById(R.id.transactions_listview);
+        transactionsListView = view.findViewById(R.id.display_listview);
         transactionsListView.setOnItemClickListener(this::OnTransactionClicked);
 
-        view.findViewById(R.id.add_transaction).setOnClickListener(this::onAddTransaction);
+        view.findViewById(R.id.fab_add).setOnClickListener(this::onAddTransaction);
 
         return view;
     }
@@ -103,6 +103,4 @@ public class TransactionDisplayFragment extends Fragment
         Intent intent = new Intent(getActivity().getApplicationContext(), TransactionAddEditActivity.class);
         startActivity(intent);
     }
-
-
 }
