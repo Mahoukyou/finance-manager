@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:layout_margin="0dp">
+
+    <TextView
+        android:id="@+id/account_item_name"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="Name"
+        android:textSize="12dp" />
+
+
+    <TextView
+        android:id="@+id/account_item_group"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="Group"
+        android:textSize="12dp" />
+
+    <TextView
+        android:id="@+id/account_item_currency"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="Currency"
+        android:layout_weight="1"
+        android:textSize="12dp" />
+
+</LinearLayout>

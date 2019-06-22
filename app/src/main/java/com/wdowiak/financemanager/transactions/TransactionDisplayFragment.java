@@ -88,8 +88,6 @@ public class TransactionDisplayFragment extends Fragment
                 {
                     mViewModel.transactionsAdapter.notifyDataSetChanged();
                 }
-
-                Toast.makeText(getActivity().getApplicationContext(), transactions.get(0).toString(), Toast.LENGTH_LONG).show();
             }
 
             @Override

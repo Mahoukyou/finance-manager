@@ -3,17 +3,14 @@ package com.wdowiak.financemanager;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
-import android.view.View;
-
 import androidx.core.view.GravityCompat;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 
 import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
+import com.wdowiak.financemanager.accounts.AccountsDisplayFragment;
+import com.wdowiak.financemanager.categories.CategoriesDisplayFragment;
 import com.wdowiak.financemanager.data.LoggedInUser;
 import com.wdowiak.financemanager.data.LoginRepository;
 import com.wdowiak.financemanager.transactions.TransactionDisplayFragment;
@@ -103,6 +100,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     {
         switch (item.getItemId())
         {
+            case R.id.nav_accounts:
+                displayFragment(AccountsDisplayFragment.newInstance());
+                break;
+
+            case R.id.nav_transactions:
+                displayFragment(TransactionDisplayFragment.newInstance());
+                break;
+
+            case R.id.nav_categories:
+                displayFragment(CategoriesDisplayFragment.newInstance());
+                break;
+
+
             case R.id.nav_logout:
                 logoutAndClose("Logged out");
                 break;

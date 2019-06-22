@@ -52,6 +52,7 @@ public class Account
         return currency;
     }
 
+    // Is it even useful? Api doesnt use
     @Contract(pure = true)
     public final double getStartingAmount()
     {
