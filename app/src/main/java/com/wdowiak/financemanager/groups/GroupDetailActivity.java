@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,7 +23,6 @@ public class GroupDetailActivity extends AppCompatActivity
     public final static String INTENT_EXTRA_GROUP_ID = "INTENT_EXTRA_GROUP_ID";
     public final static String INTENT_EXTRA_RESULT_GROUP_WAS_DELETED = "INTENT_EXTRA_RESULT_GROUP_WAS_DELETED";
     static final int EDIT_GROUP_REQUEST = 2;
-
 
     Long groupId = null;
 
@@ -42,7 +42,7 @@ public class GroupDetailActivity extends AppCompatActivity
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == EDIT_GROUP_REQUEST && resultCode == Activity.RESULT_OK)
         {
-            if(data.hasExtra(GroupDetailActivity.INTENT_EXTRA_RESULT_GROUP_WAS_DELETED))
+            if(data.hasExtra(GroupAddEditActivity.INTENT_EXTRA_RESULT_GROUP_WAS_UPDATED))
             {
                 queryGroup();
             }
@@ -51,6 +51,8 @@ public class GroupDetailActivity extends AppCompatActivity
 
     final private void queryGroup()
     {
+        showProgressBar(true);
+
         GroupsApi.getGroupById(groupId, new Api.IQueryCallback<Group>() {
             @Override
             public void onSuccess(Group group)
@@ -64,25 +66,34 @@ public class GroupDetailActivity extends AppCompatActivity
                 }
 
                 updateDetailViewInfo(group);
-                showDetailViewLayout();
+                showProgressBar(false);
             }
 
             @Override
             public void onError(Exception error)
             {
-                Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Group could not be queried: " + error.getMessage(), Toast.LENGTH_SHORT).show();
                 finish();
             }
         });
     }
 
-    final void showDetailViewLayout()
+    private final void showProgressBar(final boolean show)
     {
-        final LinearLayout detailViewLayout = findViewById(R.id.detail_view_layout);
-        detailViewLayout.setVisibility(View.VISIBLE);
+        final LinearLayout detailViewLayout = findViewById(R.id.view_layout);
+        detailViewLayout.setVisibility(show ? View.GONE : View.VISIBLE);
 
         final LinearLayout progressBarLayout = findViewById(R.id.progress_bar_layout);
-        progressBarLayout.setVisibility(View.GONE);
+        progressBarLayout.setVisibility(show ? View.VISIBLE : View.GONE);
+    }
+
+    private final void disableButtons(final boolean disable)
+    {
+        final Button btn_add_edit = findViewById(R.id.add_save_action);
+        btn_add_edit.setEnabled(!disable);
+
+        final Button btn_cancel = findViewById(R.id.cancel_action);
+        btn_cancel.setEnabled(!disable);
     }
 
     final void updateDetailViewInfo(final Group group)

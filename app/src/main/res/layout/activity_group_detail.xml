@@ -5,7 +5,7 @@
     android:background="#eeeeee">
 
     <LinearLayout
-        android:id="@+id/detail_view_layout"
+        android:id="@+id/view_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -189,28 +189,9 @@
             android:onClick="onDelete"/>
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/progress_bar_layout"
+    <include
+        layout="@layout/progress_bar_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent" />
 
-        <!-- Dummy -->
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
-
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center" />
-
-        <!-- Dummy -->
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
-
-    </LinearLayout>
 </LinearLayout>

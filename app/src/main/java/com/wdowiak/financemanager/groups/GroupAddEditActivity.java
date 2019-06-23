@@ -38,14 +38,15 @@ public class GroupAddEditActivity extends AppCompatActivity {
 
         if(getIntent().hasExtra(INTENT_EXTRA_GROUP_ID))
         {
-            showProgressBar(true);
             groupId = getIntent().getExtras().getLong(INTENT_EXTRA_GROUP_ID);
-            getGroup();
+            queryGroup();
         }
     }
 
-    final void getGroup()
+    final void queryGroup()
     {
+        showProgressBar(true);
+
         GroupsApi.getGroupById(groupId, new Api.IQueryCallback<Group>()
         {
             @Override
