@@ -1,5 +1,6 @@
 package com.wdowiak.financemanager.groups;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -26,6 +27,8 @@ import java.util.ArrayList;
 
 public class GroupsDisplayFragment extends Fragment
 {
+    static final int DETAIL_VIEW_REQUEST = 1;
+
     private GroupsDisplayFragmentViewModel mViewModel;
 
     ListView groupsListView;
@@ -60,17 +63,30 @@ public class GroupsDisplayFragment extends Fragment
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(GroupsDisplayFragmentViewModel.class);
 
-        queryAndDisplayAccounts();
+        queryAndDisplayGroups();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == DETAIL_VIEW_REQUEST && resultCode == Activity.RESULT_OK)
+        {
+            if(data.hasExtra(GroupDetailActivity.INTENT_EXTRA_RESULT_GROUP_WAS_DELETED))
+            {
+                queryAndDisplayGroups();
+            }
+        }
     }
 
     private void onGroupClicked(AdapterView<?> adapterView, View view, int i, long l)
     {
         Intent intent = new Intent(getActivity().getApplicationContext(), GroupDetailActivity.class);
         intent.putExtra(GroupDetailActivity.INTENT_EXTRA_GROUP_ID, mViewModel.groupsData.get(i).getId());
-        startActivity(intent);
+        startActivityForResult(intent, DETAIL_VIEW_REQUEST);
     }
 
-    void queryAndDisplayAccounts()
+    void queryAndDisplayGroups()
     {
         GroupsApi.getGroups(new Api.IQueryCallback<ArrayList<Group>>() {
             @Override
@@ -98,8 +114,8 @@ public class GroupsDisplayFragment extends Fragment
 
     public final void onAddGroup(final View view)
     {
-      //  Intent intent = new Intent(getActivity().getApplicationContext(), TransactionAddEditActivity.class);
-       // startActivity(intent);
+        Intent intent = new Intent(getActivity().getApplicationContext(), GroupAddEditActivity.class);
+        startActivity(intent);
     }
 
 

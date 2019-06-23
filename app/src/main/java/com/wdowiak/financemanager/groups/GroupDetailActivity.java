@@ -1,5 +1,9 @@
 package com.wdowiak.financemanager.groups;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -10,14 +14,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.wdowiak.financemanager.R;
 import com.wdowiak.financemanager.api.Api;
-import com.wdowiak.financemanager.api.CategoriesApi;
 import com.wdowiak.financemanager.api.GroupsApi;
-import com.wdowiak.financemanager.data.Category;
 import com.wdowiak.financemanager.data.Group;
 
 public class GroupDetailActivity extends AppCompatActivity
 {
     public final static String INTENT_EXTRA_GROUP_ID = "INTENT_EXTRA_GROUP_ID";
+    public final static String INTENT_EXTRA_RESULT_GROUP_WAS_DELETED = "INTENT_EXTRA_RESULT_GROUP_WAS_DELETED";
 
     Long groupId = null;
 
@@ -33,7 +36,7 @@ public class GroupDetailActivity extends AppCompatActivity
 
     final private void queryCategory()
     {
-        GroupsApi.getGroupyById(groupId, new Api.IQueryCallback<Group>() {
+        GroupsApi.getGroupById(groupId, new Api.IQueryCallback<Group>() {
             @Override
             public void onSuccess(Group group)
             {
@@ -80,29 +83,61 @@ public class GroupDetailActivity extends AppCompatActivity
         // todo, transactions info
     }
 
-    public final void beginEditAccount(final View view)
+    public final void onEdit(final View view)
     {
-       // Intent intent = new Intent(getApplicationContext(), TransactionAddEditActivity.class);
-       // intent.putExtra(TransactionAddEditActivity.INTENT_EXTRA_TRANSACTION_ID, transactionId);
-       // startActivity(intent);
+        Intent intent = new Intent(getApplicationContext(), GroupAddEditActivity.class);
+        intent.putExtra(GroupAddEditActivity.INTENT_EXTRA_GROUP_ID, groupId);
+        startActivity(intent);
     }
 
-    public final void deleteGroup(final View view)
+    public final void onDelete(final View view)
     {
-        // todo confirmation
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener()
+        {
+            @Override
+            public void onClick(DialogInterface dialog, int which)
+            {
+                switch (which)
+                {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        // todo, show progress bar
+                        // todo, disable buttons
+                        deleteGroup(dialog);
+                        break;
 
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        dialog.dismiss();
+                        break;
+                }
+            }
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Are you sure you want to delete this group?")
+                .setPositiveButton("Yes", dialogClickListener)
+                .setNegativeButton("No", dialogClickListener).show();
+
+    }
+
+    private final void deleteGroup(DialogInterface dialog)
+    {
         GroupsApi.deleteGroupById(groupId, new Api.IQueryCallback<String>()
         {
             @Override
             public void onSuccess(String  result)
             {
-                // todo
+                Toast.makeText(getApplicationContext(), "Group was deleted successfully", Toast.LENGTH_SHORT).show();
+
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra(INTENT_EXTRA_RESULT_GROUP_WAS_DELETED, INTENT_EXTRA_RESULT_GROUP_WAS_DELETED);
+                setResult(Activity.RESULT_OK, resultIntent);
+                finish();
             }
 
             @Override
             public void onError(Exception error)
             {
-                // todo
+                Toast.makeText(getApplicationContext(), "Group could not be deleted. Is there any account using it?", Toast.LENGTH_SHORT).show();
             }
         });
     }

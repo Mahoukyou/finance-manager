@@ -1,12 +1,14 @@
 package com.wdowiak.financemanager.data;
 
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Group
 {
-    public static final Group createFromJSONObject(final JSONObject jsonObject) throws JSONException
+
+    public static final Group createFromJSONObject(@NotNull final JSONObject jsonObject) throws JSONException
     {
         final Group group = new Group();
 

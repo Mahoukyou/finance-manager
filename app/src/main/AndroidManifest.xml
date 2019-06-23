@@ -3,6 +3,7 @@
     package="com.wdowiak.financemanager">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
 
     <application
         android:allowBackup="true"
@@ -29,6 +30,7 @@
         <activity android:name=".accounts.AccountDetailActivity" />
         <activity android:name=".categories.CategoryDetailActivity" />
         <activity android:name=".groups.GroupDetailActivity" />
+        <activity android:name=".groups.GroupAddEditActivity" />
         <activity android:name=".transactions.TransactionAddEditActivity" />
         <activity android:name=".transactions.TransactionDetailActivity" />
     </application>

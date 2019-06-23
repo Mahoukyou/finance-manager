@@ -153,7 +153,7 @@
             android:layout_marginLeft="@dimen/view_layout_margin"
             android:layout_marginRight="@dimen/view_layout_margin"
             android:text="Edit group"
-            android:onClick="beginEditGroup"/>
+            android:onClick="onEdit"/>
 
         <Button
             android:layout_width="match_parent"
@@ -162,7 +162,7 @@
             android:layout_marginRight="@dimen/view_layout_margin"
             android:layout_marginBottom="25dp"
             android:text="Delete group"
-            android:onClick="deleteGroup"/>
+            android:onClick="onDelete"/>
     </LinearLayout>
 
     <LinearLayout
