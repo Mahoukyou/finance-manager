@@ -86,4 +86,24 @@ public class GroupDetailActivity extends AppCompatActivity
        // intent.putExtra(TransactionAddEditActivity.INTENT_EXTRA_TRANSACTION_ID, transactionId);
        // startActivity(intent);
     }
+
+    public final void deleteGroup(final View view)
+    {
+        // todo confirmation
+
+        GroupsApi.deleteGroupById(groupId, new Api.IQueryCallback<String>()
+        {
+            @Override
+            public void onSuccess(String  result)
+            {
+                // todo
+            }
+
+            @Override
+            public void onError(Exception error)
+            {
+                // todo
+            }
+        });
+    }
 }

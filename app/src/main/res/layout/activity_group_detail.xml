@@ -161,7 +161,8 @@
             android:layout_marginLeft="@dimen/view_layout_margin"
             android:layout_marginRight="@dimen/view_layout_margin"
             android:layout_marginBottom="25dp"
-            android:text="Delete group"/>
+            android:text="Delete group"
+            android:onClick="deleteGroup"/>
     </LinearLayout>
 
     <LinearLayout

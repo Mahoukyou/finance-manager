@@ -82,5 +82,26 @@ public class GroupsApi
         });
     }
 
+    public static void deleteGroupById(final long groupId, final Api.IQueryCallback<String> callback)
+    {
+        // hack or the right way?
+        final String deleteGruopById = getGroupsUrl + groupId;
+
+        Api.asyncStringQuery(Request.Method.DELETE, deleteGruopById, new Api.IApiStringCallback()
+        {
+            @Override
+            public void onResponse(String response)
+            {
+                callback.onSuccess(response);
+            }
+
+            @Override
+            public void onErrorResponse(VolleyError error)
+            {
+                callback.onError(error);
+            }
+        });
+    }
+
     final static String getGroupsUrl = EndpointUrl.url + "v1/groups/";
 }

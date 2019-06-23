@@ -4,6 +4,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import com.wdowiak.financemanager.data.LoginRepository;
@@ -18,6 +19,12 @@ public class Api
     public interface IApiCallback
     {
         void onResponse(JSONObject response);
+        void onErrorResponse(VolleyError error);
+    }
+
+    public interface IApiStringCallback
+    {
+        void onResponse(String response);
         void onErrorResponse(VolleyError error);
     }
 
@@ -53,16 +60,54 @@ public class Api
             @Override
             public Map<String, String> getHeaders()
             {
-                Map<String, String>  params = new HashMap<>();
-                params.put("User-Agent", "Finance Manager");
-                params.put("Accept-Language", "en");
-                params.put("Authorization", LoginRepository.getInstance().getAuthToken().getFullAuthToken());
-
-                return params;
+                return Api.getHeaders();
             }
         };
 
         final RequestQueue requestQueue = Volley.newRequestQueue(NetworkManager.getInstance().getContext());
         requestQueue.add(request);
+    }
+
+    public static void asyncStringQuery(final int method, final String queryUrl, final IApiStringCallback callback)
+    {
+        final StringRequest request = new StringRequest(
+                method,
+                queryUrl,
+                new Response.Listener<String>()
+                {
+                    @Override
+                    public void onResponse(String response)
+                    {
+                        callback.onResponse(response);
+                    }
+                }, new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error)
+                    {
+                        callback.onErrorResponse(error);
+                    }
+                }
+        )
+        {
+            @Override
+            public Map<String, String> getHeaders()
+            {
+                return Api.getHeaders();
+            }
+        };
+
+        final RequestQueue requestQueue = Volley.newRequestQueue(NetworkManager.getInstance().getContext());
+        requestQueue.add(request);
+    }
+
+    private static Map<String, String> getHeaders()
+    {
+        Map<String, String>  params = new HashMap<>();
+        params.put("User-Agent", "Finance Manager");
+        params.put("Accept-Language", "en");
+        params.put("Authorization", LoginRepository.getInstance().getAuthToken().getFullAuthToken());
+
+        return params;
     }
 }
