@@ -3,8 +3,8 @@ package com.wdowiak.financemanager.api;
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.wdowiak.financemanager.data.Group;
-import com.wdowiak.financemanager.data.NewGroup;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -81,7 +81,7 @@ public class GroupsApi
         });
     }
 
-    public static void createGroup(final NewGroup group, final Api.IQueryCallback<Group> callback)
+    public static void createGroup(@NotNull final Group group, final Api.IQueryCallback<Group> callback)
     {
         JSONObject params = group.createJSONObject();
         if(params == null)
@@ -90,6 +90,45 @@ public class GroupsApi
         }
 
         Api.asyncQuery(Request.Method.POST, getGroupsUrl, params, new Api.IApiCallback()
+        {
+            @Override
+            public void onResponse(JSONObject response)
+            {
+                try
+                {
+                    if(response == null)
+                    {
+                        callback.onSuccess(null);
+                        return;
+                    }
+
+                    callback.onSuccess(Group.createFromJSONObject(response));
+                }
+                catch (JSONException error)
+                {
+                    callback.onError(error);
+                }
+            }
+
+            @Override
+            public void onErrorResponse(VolleyError error)
+            {
+                callback.onError(error);
+            }
+        });
+    }
+
+    public static void updateGroup(@NotNull final Group group, final Api.IQueryCallback<Group> callback)
+    {
+        JSONObject params = group.createJSONObject();
+        if(params == null)
+        {
+            callback.onError(new Exception("Invalid group"));
+        }
+
+        final String updateGroupUrl = getGroupsUrl + group.getId();
+
+        Api.asyncQuery(Request.Method.PUT, updateGroupUrl, params, new Api.IApiCallback()
         {
             @Override
             public void onResponse(JSONObject response)

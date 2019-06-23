@@ -80,6 +80,9 @@ public class GroupDetailActivity extends AppCompatActivity
         TextView textView = findViewById(R.id.group_name);
         textView.setText(group.getName());
 
+        textView = findViewById(R.id.group_description);
+        textView.setText(group.getInfo());
+
         // todo, transactions info
     }
 

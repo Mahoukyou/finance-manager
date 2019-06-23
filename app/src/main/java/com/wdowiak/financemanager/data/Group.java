@@ -2,11 +2,28 @@ package com.wdowiak.financemanager.data;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+
 public class Group
 {
+    private Group() {}
+
+    public Group(@NotNull String name, @Nullable String description)
+    {
+        this.name = name;
+        this.info = description;
+    }
+
+    public Group(long id, @NotNull String name, @Nullable String description)
+    {
+        this.id = id;
+        this.name = name;
+        this.info = description;
+    }
 
     public static final Group createFromJSONObject(@NotNull final JSONObject jsonObject) throws JSONException
     {
@@ -17,6 +34,16 @@ public class Group
         group.info = jsonObject.getString("Info");
 
         return group;
+    }
+
+    public final JSONObject createJSONObject()
+    {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("name", getName());
+        params.put("info", getInfo());
+        params.put("ordinal", "0");
+
+        return new JSONObject(params);
     }
 
     // todo, at least for now for easier array search

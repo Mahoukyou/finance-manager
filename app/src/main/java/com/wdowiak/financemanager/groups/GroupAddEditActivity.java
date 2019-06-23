@@ -12,7 +12,6 @@ import com.wdowiak.financemanager.R;
 import com.wdowiak.financemanager.api.Api;
 import com.wdowiak.financemanager.api.GroupsApi;
 import com.wdowiak.financemanager.data.Group;
-import com.wdowiak.financemanager.data.NewGroup;
 
 public class GroupAddEditActivity extends AppCompatActivity {
 
@@ -74,26 +73,30 @@ public class GroupAddEditActivity extends AppCompatActivity {
 
     private final boolean isEdit()
     {
-        return getIntent().hasExtra(INTENT_EXTRA_GROUP_ID) && groupId != null;
+        return getIntent().hasExtra(INTENT_EXTRA_GROUP_ID);
     }
 
     public void onAddSave(final View view)
     {
-        NewGroup newGroup = createGroupFromInput();
-        if(!newGroup.isValid())
+        Group newGroup = createGroupFromInput();
+        /* if(!newGroup.isValid())
         {
+        // todo
             Toast.makeText(this, "Input is not valid", Toast.LENGTH_SHORT).show();
             return;
-        }
-        
+        } */
+
         if(isEdit())
         {
-            // query update
+            // todo, check if there was any change
+            updateGroup(newGroup);
         }
         else
         {
             createGroup(newGroup);
         }
+
+        // todo, notify about result
     }
 
     public void onCancel(final View view)
@@ -102,7 +105,7 @@ public class GroupAddEditActivity extends AppCompatActivity {
         finish();
     }
 
-    private NewGroup createGroupFromInput()
+    private Group createGroupFromInput()
     {
         EditText editText = findViewById(R.id.group_name);
         final String name = editText.getText().toString();
@@ -110,25 +113,48 @@ public class GroupAddEditActivity extends AppCompatActivity {
         editText = findViewById(R.id.group_description);
         final String description = editText.getText().toString();
 
-        NewGroup newGroup = new NewGroup(name, description);
-        return newGroup;
+        if(isEdit())
+        {
+            return new Group(groupId, name, description);
+        }
+
+        return new Group(name, description);
     }
 
-    private void createGroup(NewGroup newGroup)
+    private void createGroup(Group newGroup)
     {
         GroupsApi.createGroup(newGroup, new Api.IQueryCallback<Group>()
         {
             @Override
             public void onSuccess(Group result)
             {
-                Toast.makeText(getApplicationContext(), "Group was added succcessfulty", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Group was added successfully", Toast.LENGTH_SHORT).show();
                 finish();
             }
 
             @Override
             public void onError(Exception error)
             {
-                Toast.makeText(getApplicationContext(), "Group could not be added" + error.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Group could not be added: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void updateGroup(Group newGroup)
+    {
+        GroupsApi.updateGroup(newGroup, new Api.IQueryCallback<Group>()
+        {
+            @Override
+            public void onSuccess(Group result)
+            {
+                Toast.makeText(getApplicationContext(), "Group was updated successfully", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+
+            @Override
+            public void onError(Exception error)
+            {
+                Toast.makeText(getApplicationContext(), "Group could not be updated: " + error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
