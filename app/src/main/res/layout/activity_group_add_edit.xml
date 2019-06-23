@@ -5,70 +5,82 @@
     android:background="#eeeeee">
 
     <LinearLayout
+        android:id="@+id/view_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/layout_background"
-        android:orientation="vertical"
-        android:padding="@dimen/view_layout_padding"
-        android:layout_margin="@dimen/view_layout_margin">
+        android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/group_name"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textSize="14dp"
-            android:hint="Name"/>
+            android:background="@drawable/layout_background"
+            android:orientation="vertical"
+            android:padding="@dimen/view_layout_padding"
+            android:layout_margin="@dimen/view_layout_margin">
 
-    </LinearLayout>
+            <EditText
+                android:id="@+id/group_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="14dp"
+                android:hint="Name"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/layout_background"
-        android:orientation="vertical"
-        android:padding="@dimen/view_layout_padding"
-        android:layout_margin="@dimen/view_layout_margin">
+        </LinearLayout>
 
-        <EditText
-            android:id="@+id/group_description"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="Description"
-            android:singleLine="false"
-            android:textSize="14dp" />
+            android:background="@drawable/layout_background"
+            android:orientation="vertical"
+            android:padding="@dimen/view_layout_padding"
+            android:layout_margin="@dimen/view_layout_margin">
 
+            <EditText
+                android:id="@+id/group_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Description"
+                android:singleLine="false"
+                android:textSize="14dp" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/view_layout_margin"
+            android:layout_marginRight="@dimen/view_layout_margin"
+            android:layout_marginBottom="25dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/add_save_action"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Save"
+                android:onClick="onAddSave"/>
+
+            <Button
+                android:id="@+id/cancel_action"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Cancel"
+                android:onClick="onCancel"/>
+        </LinearLayout>
     </LinearLayout>
 
-    <View
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
-
-    <LinearLayout
+    <include
+        layout="@layout/progress_bar_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/view_layout_margin"
-        android:layout_marginRight="@dimen/view_layout_margin"
-        android:layout_marginBottom="25dp"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/add_save_action"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Save"
-            android:onClick="onAddSave"/>
-
-        <Button
-            android:id="@+id/cancel_action"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Cancel"
-            android:onClick="onCancel"/>
-    </LinearLayout>
+        android:layout_height="match_parent" />
 
 </LinearLayout>

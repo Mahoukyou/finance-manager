@@ -21,6 +21,8 @@ public class GroupDetailActivity extends AppCompatActivity
 {
     public final static String INTENT_EXTRA_GROUP_ID = "INTENT_EXTRA_GROUP_ID";
     public final static String INTENT_EXTRA_RESULT_GROUP_WAS_DELETED = "INTENT_EXTRA_RESULT_GROUP_WAS_DELETED";
+    static final int EDIT_GROUP_REQUEST = 2;
+
 
     Long groupId = null;
 
@@ -31,10 +33,23 @@ public class GroupDetailActivity extends AppCompatActivity
         setContentView(R.layout.activity_group_detail);
 
         groupId = getIntent().getExtras().getLong(INTENT_EXTRA_GROUP_ID);
-        queryCategory();
+        queryGroup();
     }
 
-    final private void queryCategory()
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == EDIT_GROUP_REQUEST && resultCode == Activity.RESULT_OK)
+        {
+            if(data.hasExtra(GroupDetailActivity.INTENT_EXTRA_RESULT_GROUP_WAS_DELETED))
+            {
+                queryGroup();
+            }
+        }
+    }
+
+    final private void queryGroup()
     {
         GroupsApi.getGroupById(groupId, new Api.IQueryCallback<Group>() {
             @Override
@@ -90,7 +105,7 @@ public class GroupDetailActivity extends AppCompatActivity
     {
         Intent intent = new Intent(getApplicationContext(), GroupAddEditActivity.class);
         intent.putExtra(GroupAddEditActivity.INTENT_EXTRA_GROUP_ID, groupId);
-        startActivity(intent);
+        startActivityForResult(intent, EDIT_GROUP_REQUEST);
     }
 
     public final void onDelete(final View view)

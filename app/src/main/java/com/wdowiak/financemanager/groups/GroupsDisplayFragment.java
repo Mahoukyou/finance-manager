@@ -28,6 +28,8 @@ import java.util.ArrayList;
 public class GroupsDisplayFragment extends Fragment
 {
     static final int DETAIL_VIEW_REQUEST = 1;
+    static final int CREATE_GROUP_REQUEST = 2;
+
 
     private GroupsDisplayFragmentViewModel mViewModel;
 
@@ -77,6 +79,14 @@ public class GroupsDisplayFragment extends Fragment
                 queryAndDisplayGroups();
             }
         }
+
+        if(requestCode == CREATE_GROUP_REQUEST && resultCode == Activity.RESULT_OK)
+        {
+            if(data.hasExtra(GroupAddEditActivity.INTENT_EXTRA_RESULT_GROUP_WAS_CREATED))
+            {
+                queryAndDisplayGroups();
+            }
+        }
     }
 
     private void onGroupClicked(AdapterView<?> adapterView, View view, int i, long l)
@@ -100,6 +110,8 @@ public class GroupsDisplayFragment extends Fragment
                 }
                 else
                 {
+                    mViewModel.groupsAdapter.clear();
+                    mViewModel.groupsAdapter.addAll(mViewModel.groupsData);
                     mViewModel.groupsAdapter.notifyDataSetChanged();
                 }
             }
@@ -115,7 +127,7 @@ public class GroupsDisplayFragment extends Fragment
     public final void onAddGroup(final View view)
     {
         Intent intent = new Intent(getActivity().getApplicationContext(), GroupAddEditActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, CREATE_GROUP_REQUEST);
     }
 
 
