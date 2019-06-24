@@ -166,32 +166,15 @@
             </LinearLayout>
         </LinearLayout>
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
-
-        <Button
+        <include
+            layout="@layout/detail_view_buttons"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/view_layout_margin"
-            android:layout_marginRight="@dimen/view_layout_margin"
-            android:text="Edit group"
-            android:onClick="onEdit"/>
+            android:layout_height="match_parent" />
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/view_layout_margin"
-            android:layout_marginRight="@dimen/view_layout_margin"
-            android:layout_marginBottom="25dp"
-            android:text="Delete group"
-            android:onClick="onDelete"/>
     </LinearLayout>
 
     <include
         layout="@layout/progress_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
 </LinearLayout>

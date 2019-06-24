@@ -5,7 +5,7 @@
     android:background="#eeeeee">
 
     <LinearLayout
-        android:id="@+id/account_detail_view_layout"
+        android:id="@+id/view_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -216,7 +216,7 @@
             android:layout_marginLeft="@dimen/view_layout_margin"
             android:layout_marginRight="@dimen/view_layout_margin"
             android:text="Edit account"
-            android:onClick="beginEditAccount"/>
+            android:onClick="onEdit"/>
 
         <Button
             android:layout_width="match_parent"
@@ -224,31 +224,12 @@
             android:layout_marginLeft="@dimen/view_layout_margin"
             android:layout_marginRight="@dimen/view_layout_margin"
             android:layout_marginBottom="25dp"
-            android:text="Delete account"/>
+            android:text="Delete account"
+            android:onClick="onDelete"/>
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/account_progress_bar_layout"
+    <include
+        layout="@layout/progress_bar_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <!-- Dummy -->
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
-
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center" />
-
-        <!-- Dummy -->
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
-
-    </LinearLayout>
+        android:layout_height="match_parent" />
 </LinearLayout>

@@ -69,7 +69,7 @@ public class AccountsDisplayFragment extends Fragment
     private void OnAccountClicked(AdapterView<?> adapterView, View view, int i, long l)
     {
         Intent intent = new Intent(getActivity().getApplicationContext(), AccountDetailActivity.class);
-        intent.putExtra(AccountDetailActivity.INTENT_EXTRA_ACCOUNT_ID, mViewModel.accountsData.get(i).getId());
+        intent.putExtra(AccountDetailActivity.INTENT_EXTRA_ITEM_ID, mViewModel.accountsData.get(i).getId());
         startActivity(intent);
     }
 

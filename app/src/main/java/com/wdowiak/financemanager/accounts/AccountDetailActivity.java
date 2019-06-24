@@ -1,26 +1,27 @@
 package com.wdowiak.financemanager.accounts;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.wdowiak.financemanager.CommonDetailViewActivity;
 import com.wdowiak.financemanager.R;
 import com.wdowiak.financemanager.api.AccountsApi;
 import com.wdowiak.financemanager.api.TransactionsApi;
 import com.wdowiak.financemanager.data.Account;
 import com.wdowiak.financemanager.data.Transaction;
+import com.wdowiak.financemanager.groups.GroupAddEditActivity;
 import com.wdowiak.financemanager.transactions.TransactionAddEditActivity;
 
-public class AccountDetailActivity extends AppCompatActivity
+public class AccountDetailActivity extends CommonDetailViewActivity<Account>
 {
-    public final static String INTENT_EXTRA_ACCOUNT_ID = "INTENT_EXTRA_ACCOUNT_ID";
-
-    Long accountId = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -28,27 +29,32 @@ public class AccountDetailActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_detail);
 
-        accountId = getIntent().getExtras().getLong(INTENT_EXTRA_ACCOUNT_ID);
-        queryAccount();
+        // todo, no aaddedit for account just yet
+        addEditClass = GroupAddEditActivity.class;
+
+        afterCreate();
     }
 
-    final private void queryAccount()
+    @Override
+    final protected void queryItem()
     {
-        AccountsApi.getAccountById(accountId, new AccountsApi.IAccountsCallback<Account>()
+        showProgressBar(true);
+
+        AccountsApi.getAccountById(getItemId(), new AccountsApi.IAccountsCallback<Account>()
         {
             @Override
             public void OnSuccess(final Account account)
             {
                 if(account == null)
                 {
-                    Toast.makeText(getApplicationContext(), "Account[id= " + accountId + "] does not exist", Toast.LENGTH_SHORT);
+                    Toast.makeText(getApplicationContext(), "Account[id= " + getItemId() + "] does not exist", Toast.LENGTH_SHORT);
                     finish();
 
                     return;
                 }
 
                 updateDetailViewInfo(account);
-                showDetailViewLayout();
+                showProgressBar(false);
             }
 
             @Override
@@ -60,16 +66,8 @@ public class AccountDetailActivity extends AppCompatActivity
         });
     }
 
-    final void showDetailViewLayout()
-    {
-        final LinearLayout detailViewLayout = findViewById(R.id.account_detail_view_layout);
-        detailViewLayout.setVisibility(View.VISIBLE);
-
-        final LinearLayout progressBarLayout = findViewById(R.id.account_progress_bar_layout);
-        progressBarLayout.setVisibility(View.GONE);
-    }
-
-    final void updateDetailViewInfo(final Account account)
+    @Override
+    protected final void updateDetailViewInfo(final Account account)
     {
         if(account == null)
         {
@@ -88,10 +86,9 @@ public class AccountDetailActivity extends AppCompatActivity
         // todo, transactions info
     }
 
-    public final void beginEditAccount(final View view)
+    @Override
+    protected final void deleteItem()
     {
-       // Intent intent = new Intent(getApplicationContext(), TransactionAddEditActivity.class);
-       // intent.putExtra(TransactionAddEditActivity.INTENT_EXTRA_TRANSACTION_ID, transactionId);
-       // startActivity(intent);
+        throw new RuntimeException("STUB");
     }
 }
