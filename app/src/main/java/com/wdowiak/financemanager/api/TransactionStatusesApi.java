@@ -14,7 +14,7 @@ public class TransactionStatusesApi
 {
     public static void getTransactionStatuses(final Api.IQueryCallback<ArrayList<TransactionStatus>> callback)
     {
-        Api.asyncQuery(Request.Method.GET, queryTransactionStatusesUrl, new JSONObject(), new Api.IApiCallback()
+        Api.asyncQuery(Request.Method.GET, transactionStatusUrl, new JSONObject(), new Api.IApiCallback()
         {
             @Override
             public void onResponse(JSONObject response)
@@ -48,7 +48,7 @@ public class TransactionStatusesApi
     public static void getTransactionStatusById(final long transactionStatusId, final Api.IQueryCallback<TransactionStatus> callback)
     {
         // hack or the right way?
-        final String queryTransactionStatusByIdUrl = queryTransactionStatusesUrl + transactionStatusId;
+        final String queryTransactionStatusByIdUrl = transactionStatusUrl + transactionStatusId;
 
         Api.asyncQuery(Request.Method.GET, queryTransactionStatusByIdUrl, new JSONObject(), new Api.IApiCallback()
         {
@@ -80,5 +80,93 @@ public class TransactionStatusesApi
         });
     }
 
-    final static String queryTransactionStatusesUrl = EndpointUrl.url + "v1/transactionstatuses/";
+    public static void createTransactionStatus(final TransactionStatus transactionStatus, final Api.IQueryCallback<TransactionStatus> callback)
+    {
+        final JSONObject params = transactionStatus.createJSONObject();
+
+        Api.asyncQuery(Request.Method.POST, transactionStatusUrl, params, new Api.IApiCallback()
+        {
+            @Override
+            public void onResponse(JSONObject response)
+            {
+                try
+                {
+                    if(response == null)
+                    {
+                        callback.onSuccess(null);
+                        return;
+                    }
+
+                    callback.onSuccess(TransactionStatus.createFromJSONObject(response));
+                }
+                catch (JSONException error)
+                {
+                    callback.onError(error);
+                }
+            }
+
+            @Override
+            public void onErrorResponse(VolleyError error)
+            {
+                callback.onError(error);
+            }
+        });
+    }
+
+    public static void updateTransactionStatus(final TransactionStatus transactionStatus, final Api.IQueryCallback<TransactionStatus> callback)
+    {
+        final JSONObject params = transactionStatus.createJSONObject();
+        final String updateTransactionStatusUrl = transactionStatusUrl + transactionStatus.getId();
+
+        Api.asyncQuery(Request.Method.PUT, updateTransactionStatusUrl, params, new Api.IApiCallback()
+        {
+            @Override
+            public void onResponse(JSONObject response)
+            {
+                try
+                {
+                    if(response == null)
+                    {
+                        callback.onSuccess(null);
+                        return;
+                    }
+
+                    callback.onSuccess(TransactionStatus.createFromJSONObject(response));
+                }
+                catch (JSONException error)
+                {
+                    callback.onError(error);
+                }
+            }
+
+            @Override
+            public void onErrorResponse(VolleyError error)
+            {
+                callback.onError(error);
+            }
+        });
+    }
+
+    public static void deleteTransactionStatusById(final long transactionStatusId, final Api.IQueryCallback<String> callback)
+    {
+        // hack or the right way?
+        final String deleteTransactionStatusByIdUrl = transactionStatusUrl + transactionStatusId;
+
+        Api.asyncStringQuery(Request.Method.DELETE, deleteTransactionStatusByIdUrl, new Api.IApiStringCallback()
+        {
+            @Override
+            public void onResponse(String response)
+            {
+                callback.onSuccess(response);
+            }
+
+            @Override
+            public void onErrorResponse(VolleyError error)
+            {
+                callback.onError(error);
+            }
+        });
+    }
+
+    final static String transactionStatusUrl = EndpointUrl.url + "v1/transactionstatuses/";
 }
