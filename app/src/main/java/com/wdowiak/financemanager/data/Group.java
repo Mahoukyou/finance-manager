@@ -8,7 +8,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
-public class Group
+public class Group implements IItem
 {
     private Group() {}
 
@@ -36,6 +36,9 @@ public class Group
         return group;
     }
 
+    @NotNull
+    @Contract(" -> new")
+    @Override
     public final JSONObject createJSONObject()
     {
         HashMap<String, String> params = new HashMap<>();
@@ -66,12 +69,14 @@ public class Group
     }
 
     @Contract(pure = true)
+    @NotNull
     public final long getId()
     {
         return id;
     }
 
     @Contract(pure = true)
+    @NotNull
     public final String getName()
     {
         return name;

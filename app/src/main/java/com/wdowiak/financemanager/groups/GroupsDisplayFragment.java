@@ -17,8 +17,9 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.wdowiak.financemanager.R;
 import com.wdowiak.financemanager.api.Api;
-import com.wdowiak.financemanager.api.GroupsApi;
+import com.wdowiak.financemanager.api.QueryApi;
 import com.wdowiak.financemanager.data.Group;
+import com.wdowiak.financemanager.data.IItem;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -98,7 +99,7 @@ public class GroupsDisplayFragment extends Fragment
 
     void queryAndDisplayGroups()
     {
-        GroupsApi.getGroups(new Api.IQueryCallback<ArrayList<Group>>() {
+        QueryApi.getItems(IItem.Type.Group, new Api.IQueryCallback<ArrayList<Group>>() {
             @Override
             public void onSuccess(ArrayList<Group> groups)
             {

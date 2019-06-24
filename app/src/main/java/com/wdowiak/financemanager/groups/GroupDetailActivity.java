@@ -15,8 +15,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.wdowiak.financemanager.R;
 import com.wdowiak.financemanager.api.Api;
-import com.wdowiak.financemanager.api.GroupsApi;
+import com.wdowiak.financemanager.api.QueryApi;
 import com.wdowiak.financemanager.data.Group;
+import com.wdowiak.financemanager.data.IItem;
 
 public class GroupDetailActivity extends AppCompatActivity
 {
@@ -53,7 +54,7 @@ public class GroupDetailActivity extends AppCompatActivity
     {
         showProgressBar(true);
 
-        GroupsApi.getGroupById(groupId, new Api.IQueryCallback<Group>() {
+        QueryApi.getItemById(groupId, IItem.Type.Group, new Api.IQueryCallback<Group>() {
             @Override
             public void onSuccess(Group group)
             {
@@ -150,7 +151,7 @@ public class GroupDetailActivity extends AppCompatActivity
 
     private final void deleteGroup(DialogInterface dialog)
     {
-        GroupsApi.deleteGroupById(groupId, new Api.IQueryCallback<String>()
+        QueryApi.deleteItemById(groupId, IItem.Type.Group, new Api.IQueryCallback<String>()
         {
             @Override
             public void onSuccess(String  result)
