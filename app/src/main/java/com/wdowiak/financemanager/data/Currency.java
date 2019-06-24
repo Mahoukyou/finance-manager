@@ -7,7 +7,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
-public class Currency
+public class Currency implements IItem
 {
     private Currency() {}
 
@@ -40,6 +40,7 @@ public class Currency
 
     @NotNull
     @Contract(" -> new")
+    @Override
     public final JSONObject createJSONObject()
     {
         HashMap<String, String> params = new HashMap<>();
@@ -71,12 +72,14 @@ public class Currency
     }
 
     @Contract(pure = true)
+    @Override
     public final long getId()
     {
         return id;
     }
 
     @Contract(pure = true)
+    @Override
     public final String getName()
     {
         return name;
