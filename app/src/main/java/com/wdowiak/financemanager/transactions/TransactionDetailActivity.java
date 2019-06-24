@@ -10,8 +10,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.wdowiak.financemanager.R;
+import com.wdowiak.financemanager.api.Api;
+import com.wdowiak.financemanager.api.QueryApi;
+import com.wdowiak.financemanager.data.IItem;
 import com.wdowiak.financemanager.data.Transaction;
-import com.wdowiak.financemanager.api.TransactionsApi;
 
 public class TransactionDetailActivity extends AppCompatActivity
 {
@@ -31,10 +33,10 @@ public class TransactionDetailActivity extends AppCompatActivity
 
     final private void queryTransaction()
     {
-        TransactionsApi.getTransactionById(transactionId, new TransactionsApi.ITransactionCallback<Transaction>()
+        QueryApi.getItemById(transactionId, IItem.Type.Transaction, new Api.IQueryCallback<Transaction>()
         {
             @Override
-            public void OnSuccess(final Transaction transaction)
+            public void onSuccess(final Transaction transaction)
             {
                 if(transaction == null)
                 {
@@ -49,7 +51,7 @@ public class TransactionDetailActivity extends AppCompatActivity
             }
 
             @Override
-            public void OnError(final Exception error)
+            public void onError(final Exception error)
             {
                 Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
                 finish();

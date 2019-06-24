@@ -54,6 +54,7 @@ public final class Transaction implements IItem
     }
 
     @Contract(pure = true)
+    @Override
     public final long getId()
     {
         return id;

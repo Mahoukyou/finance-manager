@@ -14,7 +14,6 @@ import com.wdowiak.financemanager.data.IItem;
 import com.wdowiak.financemanager.data.Transaction;
 import com.wdowiak.financemanager.api.Api;
 import com.wdowiak.financemanager.api.TransactionStatusesApi;
-import com.wdowiak.financemanager.api.TransactionsApi;
 import com.wdowiak.financemanager.data.Account;
 import com.wdowiak.financemanager.data.Category;
 import com.wdowiak.financemanager.data.TransactionStatus;
@@ -173,10 +172,10 @@ public class TransactionAddEditActivity extends AppCompatActivity {
 
     final void getTransaction()
     {
-        TransactionsApi.getTransactionById(transactionId, new TransactionsApi.ITransactionCallback<Transaction>()
+        QueryApi.getItemById(transactionId, IItem.Type.Transaction, new Api.IQueryCallback<Transaction>()
         {
             @Override
-            public void OnSuccess(Transaction result)
+            public void onSuccess(Transaction result)
             {
                 transaction = result;
                 if(transaction == null)
@@ -197,7 +196,7 @@ public class TransactionAddEditActivity extends AppCompatActivity {
             }
 
             @Override
-            public void OnError(Exception error)
+            public void onError(Exception error)
             {
                 error.printStackTrace();
                 Toast.makeText(TransactionAddEditActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();

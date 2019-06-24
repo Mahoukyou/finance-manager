@@ -17,7 +17,9 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.wdowiak.financemanager.R;
-import com.wdowiak.financemanager.api.TransactionsApi;
+import com.wdowiak.financemanager.api.Api;
+import com.wdowiak.financemanager.api.QueryApi;
+import com.wdowiak.financemanager.data.IItem;
 import com.wdowiak.financemanager.data.Transaction;
 
 import org.jetbrains.annotations.Contract;
@@ -73,10 +75,10 @@ public class TransactionDisplayFragment extends Fragment
 
     void queryAndDisplayTransactions()
     {
-        TransactionsApi.getTransactions(new TransactionsApi.ITransactionCallback<ArrayList<Transaction>>()
+        QueryApi.getItems(IItem.Type.Transaction, new Api.IQueryCallback<ArrayList<Transaction>>()
         {
             @Override
-            public void OnSuccess(ArrayList<Transaction> transactions)
+            public void onSuccess(ArrayList<Transaction> transactions)
             {
                 mViewModel.transactionsData = transactions;
                 if(mViewModel.transactionsAdapter == null)
@@ -91,7 +93,7 @@ public class TransactionDisplayFragment extends Fragment
             }
 
             @Override
-            public void OnError(Exception error)
+            public void onError(Exception error)
             {
                 Toast.makeText(getActivity().getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
             }
