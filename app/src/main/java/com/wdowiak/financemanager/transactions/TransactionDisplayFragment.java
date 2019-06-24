@@ -70,7 +70,7 @@ public class TransactionDisplayFragment extends Fragment
     private void OnTransactionClicked(AdapterView<?> adapterView, View view, int i, long l)
     {
         Intent intent = new Intent(getActivity().getApplicationContext(), TransactionDetailActivity.class);
-        intent.putExtra(TransactionDetailActivity.INTENT_EXTRA_TRANSACTION_ID, mViewModel.transactionsData.get(i).getId());
+        intent.putExtra(TransactionDetailActivity.INTENT_EXTRA_ITEM_ID, mViewModel.transactionsData.get(i).getId());
         startActivity(intent);
     }
 
