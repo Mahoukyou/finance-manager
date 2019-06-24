@@ -67,7 +67,7 @@ public class CategoriesDisplayFragment extends Fragment
     private void onCategoryClicked(AdapterView<?> adapterView, View view, int i, long l)
     {
         Intent intent = new Intent(getActivity().getApplicationContext(), CategoryDetailActivity.class);
-        intent.putExtra(CategoryDetailActivity.INTENT_EXTRA_CATEGORY_ID, mViewModel.categoriesData.get(i).getId());
+        intent.putExtra(CategoryDetailActivity.INTENT_EXTRA_ITEM_ID , mViewModel.categoriesData.get(i).getId());
         startActivity(intent);
     }
 
