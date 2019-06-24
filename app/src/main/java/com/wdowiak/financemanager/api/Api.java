@@ -14,6 +14,9 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+// TODO, apis(get, create, update, delete) for every data class can be done by a single generic "class"
+// redo this, too lazy to do it now, so copy paste it is
+
 public class Api
 {
     public interface IApiCallback
