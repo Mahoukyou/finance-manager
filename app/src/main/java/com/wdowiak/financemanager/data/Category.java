@@ -1,12 +1,28 @@
 package com.wdowiak.financemanager.data;
 
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+
 public class Category
 {
-    public static final Category createFromJSONObject(final JSONObject jsonObject) throws JSONException
+    private Category() {}
+
+    public Category(@NotNull String name)
+    {
+        this.name = name;
+    }
+
+    public Category(long id, @NotNull String name)
+    {
+        this.id = id;
+        this.name = name;
+    }
+
+    public static final Category createFromJSONObject(@NotNull final JSONObject jsonObject) throws JSONException
     {
         final Category category = new Category();
 
@@ -14,6 +30,18 @@ public class Category
         category.name = jsonObject.getString("Name");
 
         return category;
+    }
+
+
+    @NotNull
+    @Contract(" -> new")
+    public final JSONObject createJSONObject()
+    {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("name", getName());
+        params.put("rootid", "0");
+
+        return new JSONObject(params);
     }
 
     // todo, at least for now for easier array search
@@ -50,4 +78,5 @@ public class Category
 
     long id;
     String name;
+
 }

@@ -8,6 +8,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.wdowiak.financemanager.data.Account;
 import com.wdowiak.financemanager.data.Category;
+import com.wdowiak.financemanager.data.Group;
 import com.wdowiak.financemanager.data.LoginRepository;
 
 import org.json.JSONArray;
@@ -53,40 +54,6 @@ public class CategoriesApi
         });
     }
 
-    public static void getCategoriesHashmap(final Api.IQueryCallback<HashMap<Long, Category>> callback)
-    {
-        Api.asyncQuery(Request.Method.GET, queryCategoriesUrl, new JSONObject(), new Api.IApiCallback()
-        {
-            @Override
-            public void onResponse(JSONObject response)
-            {
-                try
-                {
-                    final JSONArray categoriesJSONArray = response.getJSONArray("Items");
-
-                    HashMap<Long, Category> categories = new HashMap<>();
-                    for(int i = 0; i < categoriesJSONArray.length(); ++i)
-                    {
-                        Category category = Category.createFromJSONObject(categoriesJSONArray.getJSONObject(i));
-                        categories.put(category.getId(), category);
-                    }
-
-                    callback.onSuccess(categories);
-                }
-                catch (JSONException error)
-                {
-                    callback.onError(error);
-                }
-            }
-
-            @Override
-            public void onErrorResponse(VolleyError error)
-            {
-                callback.onError(error);
-            }
-        });
-    }
-
     public static void getCategoryById(final long categoryId, final Api.IQueryCallback<Category> callback)
     {
         // hack or the right way?
@@ -112,6 +79,94 @@ public class CategoriesApi
                 {
                     callback.onError(error);
                 }
+            }
+
+            @Override
+            public void onErrorResponse(VolleyError error)
+            {
+                callback.onError(error);
+            }
+        });
+    }
+
+    public static void createCategory(final Category category, final Api.IQueryCallback<Category> callback)
+    {
+        final JSONObject params = category.createJSONObject();
+
+        Api.asyncQuery(Request.Method.POST, queryCategoriesUrl, params, new Api.IApiCallback()
+        {
+            @Override
+            public void onResponse(JSONObject response)
+            {
+                try
+                {
+                    if(response == null)
+                    {
+                        callback.onSuccess(null);
+                        return;
+                    }
+
+                    callback.onSuccess(Category.createFromJSONObject(response));
+                }
+                catch (JSONException error)
+                {
+                    callback.onError(error);
+                }
+            }
+
+            @Override
+            public void onErrorResponse(VolleyError error)
+            {
+                callback.onError(error);
+            }
+        });
+    }
+
+    public static void updateCategory(final Category category, final Api.IQueryCallback<Category> callback)
+    {
+        final JSONObject params = category.createJSONObject();
+        final String updateCategoryUrl = queryCategoriesUrl + category.getId();
+
+        Api.asyncQuery(Request.Method.PUT, updateCategoryUrl, params, new Api.IApiCallback()
+        {
+            @Override
+            public void onResponse(JSONObject response)
+            {
+                try
+                {
+                    if(response == null)
+                    {
+                        callback.onSuccess(null);
+                        return;
+                    }
+
+                    callback.onSuccess(Category.createFromJSONObject(response));
+                }
+                catch (JSONException error)
+                {
+                    callback.onError(error);
+                }
+            }
+
+            @Override
+            public void onErrorResponse(VolleyError error)
+            {
+                callback.onError(error);
+            }
+        });
+    }
+
+    public static void deleteCategoryById(final long categoryId, final Api.IQueryCallback<String> callback)
+    {
+        // hack or the right way?
+        final String deleteCategoryByIdUrl = queryCategoriesUrl + categoryId;
+
+        Api.asyncStringQuery(Request.Method.DELETE, deleteCategoryByIdUrl, new Api.IApiStringCallback()
+        {
+            @Override
+            public void onResponse(String response)
+            {
+                callback.onSuccess(response);
             }
 
             @Override
