@@ -14,8 +14,6 @@ import com.wdowiak.financemanager.groups.GroupAddEditActivity;
 
 public class AccountDetailActivity extends CommonDetailViewActivity<Account>
 {
-    IItem.Type type = IItem.Type.Account;
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -24,39 +22,9 @@ public class AccountDetailActivity extends CommonDetailViewActivity<Account>
 
         // todo, no aaddedit for account just yet
         addEditClass = GroupAddEditActivity.class;
+        itemType = IItem.Type.Account;
 
         afterCreate();
-    }
-
-    @Override
-    final protected void queryItem()
-    {
-        showProgressBar(true);
-
-        QueryApi.getItemById(getItemId(), type, new Api.IQueryCallback<Account>()
-        {
-            @Override
-            public void onSuccess(final Account account)
-            {
-                if(account == null)
-                {
-                    Toast.makeText(getApplicationContext(), "Account[id= " + getItemId() + "] does not exist", Toast.LENGTH_SHORT);
-                    finish();
-
-                    return;
-                }
-
-                updateDetailViewInfo(account);
-                showProgressBar(false);
-            }
-
-            @Override
-            public void onError(final Exception error)
-            {
-                Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
-                finish();
-            }
-        });
     }
 
     @Override
@@ -77,11 +45,5 @@ public class AccountDetailActivity extends CommonDetailViewActivity<Account>
         textView.setText(account.getCurrency() != null ? account.getCurrency().getName() : null);
 
         // todo, transactions info
-    }
-
-    @Override
-    protected final void deleteItem()
-    {
-        throw new RuntimeException("STUB");
     }
 }

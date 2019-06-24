@@ -8,10 +8,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-abstract public class CommonDetailViewActivity<T> extends AppCompatActivity
+import com.wdowiak.financemanager.api.Api;
+import com.wdowiak.financemanager.api.QueryApi;
+import com.wdowiak.financemanager.data.IItem;
+
+abstract public class CommonDetailViewActivity<T extends IItem> extends AppCompatActivity
 {
     public final static String INTENT_EXTRA_ITEM_ID = "INTENT_EXTRA_ITEM_ID";
     public final static String INTENT_EXTRA_RESULT_ITEM_WAS_DELETED = "INTENT_EXTRA_RESULT_ITEM_WAS_DELETED";
@@ -20,6 +25,7 @@ abstract public class CommonDetailViewActivity<T> extends AppCompatActivity
 
     private Long itemId = null;
     protected Class<?> addEditClass = null;
+    protected IItem.Type itemType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -51,7 +57,35 @@ abstract public class CommonDetailViewActivity<T> extends AppCompatActivity
         }
     }
 
-    abstract protected void queryItem();
+    protected void queryItem()
+    {
+        showProgressBar(true);
+
+        QueryApi.getItemById(getItemId(), itemType, new Api.IQueryCallback<T>()
+        {
+            @Override
+            public void onSuccess(final T item)
+            {
+                if(item == null)
+                {
+                    Toast.makeText(getApplicationContext(), "Item[id= " + getItemId() + "] does not exist", Toast.LENGTH_SHORT);
+                    finish();
+
+                    return;
+                }
+
+                updateDetailViewInfo(item);
+                showProgressBar(false);
+            }
+
+            @Override
+            public void onError(final Exception error)
+            {
+                Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        });
+    }
 
     protected final void showProgressBar(final boolean show)
     {
@@ -109,14 +143,27 @@ abstract public class CommonDetailViewActivity<T> extends AppCompatActivity
 
     }
 
-    protected abstract void deleteItem();
-
-    protected final void finishIntentOnItemDelete()
+    protected void deleteItem()
     {
-        Intent resultIntent = new Intent();
-        resultIntent.putExtra(INTENT_EXTRA_RESULT_ITEM_WAS_DELETED, INTENT_EXTRA_RESULT_ITEM_WAS_DELETED);
-        setResult(Activity.RESULT_OK, resultIntent);
-        finish();
+        QueryApi.deleteItemById(itemId, itemType, new Api.IQueryCallback<String>()
+        {
+            @Override
+            public void onSuccess(String  result)
+            {
+                Toast.makeText(getApplicationContext(), "<<<ITEM>>> was deleted successfully", Toast.LENGTH_SHORT).show();
+
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra(INTENT_EXTRA_RESULT_ITEM_WAS_DELETED, INTENT_EXTRA_RESULT_ITEM_WAS_DELETED);
+                setResult(Activity.RESULT_OK, resultIntent);
+                finish();
+            }
+
+            @Override
+            public void onError(Exception error)
+            {
+                Toast.makeText(getApplicationContext(), "<<<ITEM>>> could not be deleted. Is there any account using it?", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     protected long getItemId()
