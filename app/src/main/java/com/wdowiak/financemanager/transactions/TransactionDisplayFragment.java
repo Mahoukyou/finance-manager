@@ -17,6 +17,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.wdowiak.financemanager.CommonDisplayFragment;
+import com.wdowiak.financemanager.IDisplayFragmentViewModel;
 import com.wdowiak.financemanager.R;
 import com.wdowiak.financemanager.api.Api;
 import com.wdowiak.financemanager.api.QueryApi;
@@ -28,12 +30,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
-public class TransactionDisplayFragment extends Fragment
+public class TransactionDisplayFragment extends CommonDisplayFragment<Transaction, TransactionsAdapter>
 {
-    private TransactionDisplayFragmentViewModel mViewModel;
-
-    ListView transactionsListView;
-
     @NotNull
     @Contract(" -> new")
     public static TransactionDisplayFragment newInstance()
@@ -48,67 +46,30 @@ public class TransactionDisplayFragment extends Fragment
             @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState)
     {
-        final View view = inflater.inflate(R.layout.listview_display_fragment, container, false);
+        itemType = IItem.Type.Transaction;
+        detailClass = TransactionDetailActivity.class;
 
-        transactionsListView = view.findViewById(R.id.display_listview);
-        transactionsListView.setOnItemClickListener(this::OnTransactionClicked);
-
-        view.findViewById(R.id.fab_add).setOnClickListener(this::onAddTransaction);
-
-        return view;
+        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState)
     {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(TransactionDisplayFragmentViewModel.class);
+        viewModel = ViewModelProviders.of(this).get(TransactionDisplayFragmentViewModel.class);
 
-        queryAndDisplayTransactions();
+        queryAndDisplayItems();
     }
 
-    private void OnTransactionClicked(AdapterView<?> adapterView, View view, int i, long l)
+    @Override
+    protected IDisplayFragmentViewModel<Transaction, TransactionsAdapter> getViewModel()
     {
-        Intent intent = new Intent(getActivity().getApplicationContext(), TransactionDetailActivity.class);
-        intent.putExtra(TransactionDetailActivity.INTENT_EXTRA_ITEM_ID, mViewModel.transactionsData.get(i).getId());
-        startActivity(intent);
+        return super.getViewModel();
     }
 
-    void queryAndDisplayTransactions()
+    @Override
+    protected TransactionsAdapter createItemAdapter()
     {
-        QueryApi.getItems(IItem.Type.Transaction, new Api.IQueryCallback<ArrayList<Transaction>>()
-        {
-            @Override
-            public void onSuccess(ArrayList<Transaction> transactions)
-            {
-                if(getActivity() == null  || getActivity().getApplicationContext() == null)
-                {
-                    return;
-                }
-
-                mViewModel.transactionsData = transactions;
-                if(mViewModel.transactionsAdapter == null)
-                {
-                    mViewModel.transactionsAdapter = new TransactionsAdapter(mViewModel.transactionsData, getActivity().getApplicationContext());
-                    transactionsListView.setAdapter(mViewModel.transactionsAdapter);
-                }
-                else
-                {
-                    mViewModel.transactionsAdapter.notifyDataSetChanged();
-                }
-            }
-
-            @Override
-            public void onError(Exception error)
-            {
-                Toast.makeText(getActivity().getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    public final void onAddTransaction(final View view)
-    {
-        Intent intent = new Intent(getActivity().getApplicationContext(), TransactionAddEditActivity.class);
-        startActivity(intent);
+        return new TransactionsAdapter(viewModel.getData(), getActivity().getApplicationContext());
     }
 }

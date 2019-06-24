@@ -20,13 +20,13 @@ import com.wdowiak.financemanager.data.IItem;
 
 import java.util.ArrayList;
 
-abstract public class CommonDisplayFragment<T extends IItem, ItemAdapter extends ArrayAdapter<T>> extends Fragment
+abstract public class CommonDisplayFragment<T extends IItem, ItemAdapter extends ArrayAdapter> extends Fragment
 {
-    private IDisplayFragmentViewModel<T, ItemAdapter> viewModel;
+    protected IDisplayFragmentViewModel<T, ItemAdapter> viewModel;
 
-    ListView accountsListView;
+    ListView itemsListView;
 
-    IItem.Type itemType;
+    protected IItem.Type itemType;
     protected Class<?> detailClass;
 
     @Nullable
@@ -39,8 +39,8 @@ abstract public class CommonDisplayFragment<T extends IItem, ItemAdapter extends
         final View view = inflater.inflate(R.layout.listview_display_fragment, container, false);
 
         // todo, bind buttons in xml?
-        accountsListView = view.findViewById(R.id.display_listview);
-        accountsListView.setOnItemClickListener(this::onItemClicked);
+        itemsListView = view.findViewById(R.id.display_listview);
+        itemsListView.setOnItemClickListener(this::onItemClicked);
 
         view.findViewById(R.id.fab_add).setOnClickListener(this::onAddItem);
 
@@ -66,7 +66,7 @@ abstract public class CommonDisplayFragment<T extends IItem, ItemAdapter extends
 
     protected void queryAndDisplayItems()
     {
-        QueryApi.getItems(IItem.Type.Account, new Api.IQueryCallback<ArrayList<T>>()
+        QueryApi.getItems(itemType, new Api.IQueryCallback<ArrayList<T>>()
         {
             @Override
             public void onSuccess(ArrayList<T> transactions)
@@ -75,7 +75,7 @@ abstract public class CommonDisplayFragment<T extends IItem, ItemAdapter extends
                 if(viewModel.getAdapter() == null)
                 {
                     viewModel.setAdapter(createItemAdapter());
-                    accountsListView.setAdapter(viewModel.getAdapter());
+                    itemsListView.setAdapter(viewModel.getAdapter());
                 }
                 else
                 {

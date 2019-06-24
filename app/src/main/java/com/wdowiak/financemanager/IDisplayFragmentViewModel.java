@@ -6,7 +6,7 @@ import com.wdowiak.financemanager.data.IItem;
 
 import java.util.ArrayList;
 
-public interface IDisplayFragmentViewModel<ItemType extends IItem, AdapterType extends ArrayAdapter<ItemType>>
+public interface IDisplayFragmentViewModel<ItemType extends IItem, AdapterType extends ArrayAdapter>
 {
     ArrayList<ItemType> getData();
     AdapterType getAdapter();
