@@ -8,6 +8,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.wdowiak.financemanager.CommonDetailViewActivity;
 import com.wdowiak.financemanager.R;
 import com.wdowiak.financemanager.api.QueryApi;
 import com.wdowiak.financemanager.data.IItem;
@@ -20,8 +21,6 @@ import com.wdowiak.financemanager.data.TransactionStatus;
 import java.util.ArrayList;
 
 public class TransactionAddEditActivity extends AppCompatActivity {
-
-    public final static String INTENT_EXTRA_TRANSACTION_ID = "INTENT_EXTRA_TRANSACTION_ID";
 
     Long transactionId = null;
 
@@ -37,9 +36,9 @@ public class TransactionAddEditActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transaction_add_edit);
 
-        if(getIntent().hasExtra(INTENT_EXTRA_TRANSACTION_ID))
+        if(getIntent().hasExtra(CommonDetailViewActivity.INTENT_EXTRA_ITEM_ID))
         {
-            transactionId = getIntent().getExtras().getLong(INTENT_EXTRA_TRANSACTION_ID);
+            transactionId = getIntent().getExtras().getLong(CommonDetailViewActivity.INTENT_EXTRA_ITEM_ID);
             getTransaction();
         }
         else

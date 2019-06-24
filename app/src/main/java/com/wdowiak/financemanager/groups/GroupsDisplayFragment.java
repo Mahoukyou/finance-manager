@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.wdowiak.financemanager.CommonDetailViewActivity;
 import com.wdowiak.financemanager.R;
 import com.wdowiak.financemanager.api.Api;
 import com.wdowiak.financemanager.api.QueryApi;
@@ -75,7 +76,7 @@ public class GroupsDisplayFragment extends Fragment
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == DETAIL_VIEW_REQUEST && resultCode == Activity.RESULT_OK)
         {
-            if(data.hasExtra(GroupDetailActivity.INTENT_EXTRA_RESULT_GROUP_WAS_DELETED))
+            if(data.hasExtra(GroupDetailActivity.INTENT_EXTRA_RESULT_ITEM_WAS_DELETED))
             {
                 queryAndDisplayGroups();
             }
@@ -83,7 +84,7 @@ public class GroupsDisplayFragment extends Fragment
 
         if(requestCode == CREATE_GROUP_REQUEST && resultCode == Activity.RESULT_OK)
         {
-            if(data.hasExtra(GroupAddEditActivity.INTENT_EXTRA_RESULT_GROUP_WAS_CREATED))
+            if(data.hasExtra(CommonDetailViewActivity.INTENT_EXTRA_RESULT_ITEM_WAS_CREATED))
             {
                 queryAndDisplayGroups();
             }
@@ -93,7 +94,7 @@ public class GroupsDisplayFragment extends Fragment
     private void onGroupClicked(AdapterView<?> adapterView, View view, int i, long l)
     {
         Intent intent = new Intent(getActivity().getApplicationContext(), GroupDetailActivity.class);
-        intent.putExtra(GroupDetailActivity.INTENT_EXTRA_GROUP_ID, mViewModel.groupsData.get(i).getId());
+        intent.putExtra(GroupDetailActivity.INTENT_EXTRA_ITEM_ID, mViewModel.groupsData.get(i).getId());
         startActivityForResult(intent, DETAIL_VIEW_REQUEST);
     }
 

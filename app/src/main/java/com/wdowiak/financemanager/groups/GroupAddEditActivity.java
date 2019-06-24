@@ -13,18 +13,15 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.wdowiak.financemanager.CommonDetailViewActivity;
 import com.wdowiak.financemanager.R;
 import com.wdowiak.financemanager.api.Api;
 import com.wdowiak.financemanager.api.QueryApi;
 import com.wdowiak.financemanager.data.Group;
 import com.wdowiak.financemanager.data.IItem;
 
-public class GroupAddEditActivity extends AppCompatActivity {
-
-    public final static String INTENT_EXTRA_GROUP_ID = "INTENT_EXTRA_GROUP_ID";
-    public final static String INTENT_EXTRA_RESULT_GROUP_WAS_UPDATED = "INTENT_EXTRA_RESULT_GROUP_WAS_UPDATED";
-    public final static String INTENT_EXTRA_RESULT_GROUP_WAS_CREATED = "INTENT_EXTRA_RESULT_GROUP_WAS_CREATED";
-
+public class GroupAddEditActivity extends AppCompatActivity
+{
     Long groupId = null;
     Group group = null;
 
@@ -37,9 +34,9 @@ public class GroupAddEditActivity extends AppCompatActivity {
         final Button btn_add_save = findViewById(R.id.add_save_action);
         btn_add_save.setText(isEdit() ? "Save" : "Create");
 
-        if(getIntent().hasExtra(INTENT_EXTRA_GROUP_ID))
+        if(getIntent().hasExtra(CommonDetailViewActivity.INTENT_EXTRA_ITEM_ID))
         {
-            groupId = getIntent().getExtras().getLong(INTENT_EXTRA_GROUP_ID);
+            groupId = getIntent().getExtras().getLong(CommonDetailViewActivity.INTENT_EXTRA_ITEM_ID);
             queryGroup();
         }
     }
@@ -81,7 +78,7 @@ public class GroupAddEditActivity extends AppCompatActivity {
 
     private final boolean isEdit()
     {
-        return getIntent().hasExtra(INTENT_EXTRA_GROUP_ID);
+        return getIntent().hasExtra(CommonDetailViewActivity.INTENT_EXTRA_ITEM_ID);
     }
 
     public void onAddSave(final View view)
@@ -174,7 +171,7 @@ public class GroupAddEditActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Group was added successfully", Toast.LENGTH_SHORT).show();
 
                 Intent resultIntent = new Intent();
-                resultIntent.putExtra(INTENT_EXTRA_RESULT_GROUP_WAS_CREATED, INTENT_EXTRA_RESULT_GROUP_WAS_CREATED);
+                resultIntent.putExtra(CommonDetailViewActivity.INTENT_EXTRA_RESULT_ITEM_WAS_CREATED, CommonDetailViewActivity.INTENT_EXTRA_RESULT_ITEM_WAS_CREATED);
                 setResult(Activity.RESULT_OK, resultIntent);
 
                 finish();
@@ -199,7 +196,7 @@ public class GroupAddEditActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Group was updated successfully", Toast.LENGTH_SHORT).show();
 
                 Intent resultIntent = new Intent();
-                resultIntent.putExtra(INTENT_EXTRA_RESULT_GROUP_WAS_UPDATED, INTENT_EXTRA_RESULT_GROUP_WAS_UPDATED);
+                resultIntent.putExtra(CommonDetailViewActivity.INTENT_EXTRA_RESULT_ITEM_WAS_UPDATED, CommonDetailViewActivity.INTENT_EXTRA_RESULT_ITEM_WAS_UPDATED);
                 setResult(Activity.RESULT_OK, resultIntent);
 
                 finish();
