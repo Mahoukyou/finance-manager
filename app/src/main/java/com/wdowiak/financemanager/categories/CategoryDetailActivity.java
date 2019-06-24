@@ -10,8 +10,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.wdowiak.financemanager.R;
 import com.wdowiak.financemanager.api.Api;
-import com.wdowiak.financemanager.api.CategoriesApi;
+import com.wdowiak.financemanager.api.QueryApi;
 import com.wdowiak.financemanager.data.Category;
+import com.wdowiak.financemanager.data.IItem;
 
 public class CategoryDetailActivity extends AppCompatActivity
 {
@@ -31,7 +32,7 @@ public class CategoryDetailActivity extends AppCompatActivity
 
     final private void queryCategory()
     {
-        CategoriesApi.getCategoryById(categoryId, new Api.IQueryCallback<Category>() {
+        QueryApi.getItemById(categoryId, IItem.Type.Category, new Api.IQueryCallback<Category>() {
             @Override
             public void onSuccess(Category category)
             {

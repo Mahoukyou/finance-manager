@@ -16,8 +16,9 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.wdowiak.financemanager.R;
 import com.wdowiak.financemanager.api.Api;
-import com.wdowiak.financemanager.api.CategoriesApi;
+import com.wdowiak.financemanager.api.QueryApi;
 import com.wdowiak.financemanager.data.Category;
+import com.wdowiak.financemanager.data.IItem;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -72,7 +73,7 @@ public class CategoriesDisplayFragment extends Fragment
 
     void queryAndDisplayAccounts()
     {
-        CategoriesApi.getCategories(new Api.IQueryCallback<ArrayList<Category>>() {
+        QueryApi.getItems(IItem.Type.Category, new Api.IQueryCallback<ArrayList<Category>>() {
             @Override
             public void onSuccess(ArrayList<Category> categories)
             {
