@@ -1,27 +1,20 @@
 package com.wdowiak.financemanager.accounts;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.wdowiak.financemanager.CommonDetailViewActivity;
 import com.wdowiak.financemanager.R;
-import com.wdowiak.financemanager.api.AccountsApi;
-import com.wdowiak.financemanager.api.TransactionsApi;
+import com.wdowiak.financemanager.api.Api;
+import com.wdowiak.financemanager.api.QueryApi;
 import com.wdowiak.financemanager.data.Account;
-import com.wdowiak.financemanager.data.Transaction;
+import com.wdowiak.financemanager.data.IItem;
 import com.wdowiak.financemanager.groups.GroupAddEditActivity;
-import com.wdowiak.financemanager.transactions.TransactionAddEditActivity;
 
 public class AccountDetailActivity extends CommonDetailViewActivity<Account>
 {
+    IItem.Type type = IItem.Type.Account;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -40,10 +33,10 @@ public class AccountDetailActivity extends CommonDetailViewActivity<Account>
     {
         showProgressBar(true);
 
-        AccountsApi.getAccountById(getItemId(), new AccountsApi.IAccountsCallback<Account>()
+        QueryApi.getItemById(getItemId(), type, new Api.IQueryCallback<Account>()
         {
             @Override
-            public void OnSuccess(final Account account)
+            public void onSuccess(final Account account)
             {
                 if(account == null)
                 {
@@ -58,7 +51,7 @@ public class AccountDetailActivity extends CommonDetailViewActivity<Account>
             }
 
             @Override
-            public void OnError(final Exception error)
+            public void onError(final Exception error)
             {
                 Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
                 finish();

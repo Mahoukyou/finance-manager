@@ -8,7 +8,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
-public class Account
+public class Account implements IItem
 {
     private Account() {}
 
@@ -58,6 +58,7 @@ public class Account
 
     @NotNull
     @Contract(" -> new")
+    @Override
     public final JSONObject createJSONObject()
     {
         HashMap<String, String> params = new HashMap<>();
@@ -70,12 +71,14 @@ public class Account
     }
 
     @Contract(pure = true)
+    @Override
     public final long getId()
     {
         return id;
     }
 
     @Contract(pure = true)
+    @Override
     public final String getName()
     {
         return name;

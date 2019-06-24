@@ -7,8 +7,16 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import com.wdowiak.financemanager.data.Account;
+import com.wdowiak.financemanager.data.Category;
+import com.wdowiak.financemanager.data.Currency;
+import com.wdowiak.financemanager.data.Group;
+import com.wdowiak.financemanager.data.IItem;
 import com.wdowiak.financemanager.data.LoginRepository;
+import com.wdowiak.financemanager.data.Transaction;
+import com.wdowiak.financemanager.data.TransactionStatus;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -113,4 +121,37 @@ public class Api
 
         return params;
     }
+
+    public static final String getQueryUrl(@NotNull IItem.Type itemType)
+    {
+        switch(itemType) {
+            case Account:
+                return accountsUrl;
+
+            case Category:
+                return categoriesUrl;
+
+            case Currency:
+                return currenciesUrl;
+
+            case Group:
+                return groupsUrl;
+
+            case Transaction:
+                return transactionsUrl;
+
+            case TransactionStatus:
+                return transactionStatusesUrl;
+
+            default:
+                throw new RuntimeException("Invalid item type");
+        }
+    }
+
+    public final static String accountsUrl = EndpointUrl.url + "v1/accounts/";
+    public final static String categoriesUrl = EndpointUrl.url + "v1/categories/";
+    public final static String currenciesUrl = EndpointUrl.url + "v1/currencies/";
+    public final static String groupsUrl = EndpointUrl.url + "v1/groups/";
+    public final static String transactionsUrl = EndpointUrl.url + "v1/transactions/";
+    public final static String transactionStatusesUrl = EndpointUrl.url + "v1/transactionstatuses/";
 }

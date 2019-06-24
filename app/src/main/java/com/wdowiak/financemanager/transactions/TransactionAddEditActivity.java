@@ -9,12 +9,10 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.wdowiak.financemanager.R;
+import com.wdowiak.financemanager.api.QueryApi;
+import com.wdowiak.financemanager.data.IItem;
 import com.wdowiak.financemanager.data.Transaction;
-import com.wdowiak.financemanager.api.AccountsApi;
 import com.wdowiak.financemanager.api.Api;
-import com.wdowiak.financemanager.api.CategoriesApi;
-import com.wdowiak.financemanager.api.TransactionStatusesApi;
-import com.wdowiak.financemanager.api.TransactionsApi;
 import com.wdowiak.financemanager.data.Account;
 import com.wdowiak.financemanager.data.Category;
 import com.wdowiak.financemanager.data.TransactionStatus;
@@ -54,10 +52,10 @@ public class TransactionAddEditActivity extends AppCompatActivity {
 
     private final void getAccounts()
     {
-        AccountsApi.getAccounts(new AccountsApi.IAccountsCallback<ArrayList<Account>>()
+        QueryApi.getItems(IItem.Type.Account,new Api.IQueryCallback<ArrayList<Account>>()
         {
             @Override
-            public void OnSuccess(ArrayList<Account> result)
+            public void onSuccess(ArrayList<Account> result)
             {
                 accounts = result;
                 if (accounts == null || accounts.isEmpty())
@@ -90,7 +88,7 @@ public class TransactionAddEditActivity extends AppCompatActivity {
             }
 
             @Override
-            public void OnError(Exception error)
+            public void onError(Exception error)
             {
                 error.printStackTrace();
                 Toast.makeText(TransactionAddEditActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
@@ -101,7 +99,7 @@ public class TransactionAddEditActivity extends AppCompatActivity {
 
     private final void getCategories()
     {
-        CategoriesApi.getCategories(new Api.IQueryCallback<ArrayList<Category>>()
+        QueryApi.getItems(IItem.Type.Category, new Api.IQueryCallback<ArrayList<Category>>()
         {
             @Override
             public void onSuccess(ArrayList<Category> result)
@@ -137,7 +135,7 @@ public class TransactionAddEditActivity extends AppCompatActivity {
 
     private final void getTransactionStatuses()
     {
-        TransactionStatusesApi.getTransactionStatuses(new Api.IQueryCallback<ArrayList<TransactionStatus>>()
+        QueryApi.getItems(IItem.Type.TransactionStatus, new Api.IQueryCallback<ArrayList<TransactionStatus>>()
         {
             @Override
             public void onSuccess(ArrayList<TransactionStatus> result)
@@ -173,10 +171,10 @@ public class TransactionAddEditActivity extends AppCompatActivity {
 
     final void getTransaction()
     {
-        TransactionsApi.getTransactionById(transactionId, new TransactionsApi.ITransactionCallback<Transaction>()
+        QueryApi.getItemById(transactionId, IItem.Type.Transaction, new Api.IQueryCallback<Transaction>()
         {
             @Override
-            public void OnSuccess(Transaction result)
+            public void onSuccess(Transaction result)
             {
                 transaction = result;
                 if(transaction == null)
@@ -197,7 +195,7 @@ public class TransactionAddEditActivity extends AppCompatActivity {
             }
 
             @Override
-            public void OnError(Exception error)
+            public void onError(Exception error)
             {
                 error.printStackTrace();
                 Toast.makeText(TransactionAddEditActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();

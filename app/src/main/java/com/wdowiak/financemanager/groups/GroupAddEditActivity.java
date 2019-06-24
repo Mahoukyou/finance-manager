@@ -15,8 +15,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.wdowiak.financemanager.R;
 import com.wdowiak.financemanager.api.Api;
-import com.wdowiak.financemanager.api.GroupsApi;
+import com.wdowiak.financemanager.api.QueryApi;
 import com.wdowiak.financemanager.data.Group;
+import com.wdowiak.financemanager.data.IItem;
 
 public class GroupAddEditActivity extends AppCompatActivity {
 
@@ -47,7 +48,7 @@ public class GroupAddEditActivity extends AppCompatActivity {
     {
         showProgressBar(true);
 
-        GroupsApi.getGroupById(groupId, new Api.IQueryCallback<Group>()
+        QueryApi.getItemById(groupId, IItem.Type.Group,new Api.IQueryCallback<Group>()
         {
             @Override
             public void onSuccess(Group result)
@@ -165,7 +166,7 @@ public class GroupAddEditActivity extends AppCompatActivity {
 
     private void createGroup(Group newGroup)
     {
-        GroupsApi.createGroup(newGroup, new Api.IQueryCallback<Group>()
+        QueryApi.createItem(newGroup, IItem.Type.Group, new Api.IQueryCallback<Group>()
         {
             @Override
             public void onSuccess(Group result)
@@ -190,7 +191,7 @@ public class GroupAddEditActivity extends AppCompatActivity {
 
     private void updateGroup(Group newGroup)
     {
-        GroupsApi.updateGroup(newGroup, new Api.IQueryCallback<Group>()
+        QueryApi.updateItem(newGroup, IItem.Type.Group, new Api.IQueryCallback<Group>()
         {
             @Override
             public void onSuccess(Group result)

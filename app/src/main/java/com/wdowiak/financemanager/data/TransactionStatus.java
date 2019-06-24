@@ -7,7 +7,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
-public class TransactionStatus
+public class TransactionStatus implements IItem
 {
     private TransactionStatus() {}
 
@@ -34,6 +34,7 @@ public class TransactionStatus
 
     @NotNull
     @Contract(" -> new")
+    @Override
     public final JSONObject createJSONObject()
     {
         HashMap<String, String> params = new HashMap<>();
@@ -63,12 +64,14 @@ public class TransactionStatus
     }
 
     @Contract(pure = true)
+    @Override
     public final long getId()
     {
         return id;
     }
 
     @Contract(pure = true)
+    @Override
     public final String getName()
     {
         return name;

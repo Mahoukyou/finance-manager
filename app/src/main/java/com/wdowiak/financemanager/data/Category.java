@@ -7,7 +7,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
-public class Category
+public class Category implements IItem
 {
     private Category() {}
 
@@ -35,6 +35,7 @@ public class Category
 
     @NotNull
     @Contract(" -> new")
+    @Override
     public final JSONObject createJSONObject()
     {
         HashMap<String, String> params = new HashMap<>();
@@ -65,12 +66,14 @@ public class Category
 
 
     @Contract(pure = true)
+    @Override
     public final long getId()
     {
         return id;
     }
 
     @Contract(pure = true)
+    @Override
     public final String getName()
     {
         return name;
