@@ -29,7 +29,7 @@ public class AccountsApi
     {
         final JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.GET,
-                queryAccountsUrl,
+                accountsUrl,
                 new JSONObject(),
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -80,7 +80,7 @@ public class AccountsApi
     public static void getAccountById(final long accountId, final IAccountsCallback<Account> callback)
     {
         // hack or the right way?
-        final String queryAccountByIdUrl = queryAccountsUrl + accountId;
+        final String queryAccountByIdUrl = accountsUrl + accountId;
 
         final JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.GET,
@@ -131,5 +131,93 @@ public class AccountsApi
         requestQueue.add(request);
     }
 
-    final static String queryAccountsUrl = EndpointUrl.url + "v1/accounts/";
+    public static void createAccount(final Account account, final Api.IQueryCallback<Account> callback)
+    {
+        final JSONObject params = account.createJSONObject();
+
+        Api.asyncQuery(Request.Method.POST, accountsUrl, params, new Api.IApiCallback()
+        {
+            @Override
+            public void onResponse(JSONObject response)
+            {
+                try
+                {
+                    if(response == null)
+                    {
+                        callback.onSuccess(null);
+                        return;
+                    }
+
+                    callback.onSuccess(Account.createFromJSONObject(response));
+                }
+                catch (JSONException error)
+                {
+                    callback.onError(error);
+                }
+            }
+
+            @Override
+            public void onErrorResponse(VolleyError error)
+            {
+                callback.onError(error);
+            }
+        });
+    }
+
+    public static void updateAccount(final Account account, final Api.IQueryCallback<Account> callback)
+    {
+        final JSONObject params = account.createJSONObject();
+        final String updateAccountUrl = accountsUrl + account.getId();
+
+        Api.asyncQuery(Request.Method.PUT, updateAccountUrl, params, new Api.IApiCallback()
+        {
+            @Override
+            public void onResponse(JSONObject response)
+            {
+                try
+                {
+                    if(response == null)
+                    {
+                        callback.onSuccess(null);
+                        return;
+                    }
+
+                    callback.onSuccess(Account.createFromJSONObject(response));
+                }
+                catch (JSONException error)
+                {
+                    callback.onError(error);
+                }
+            }
+
+            @Override
+            public void onErrorResponse(VolleyError error)
+            {
+                callback.onError(error);
+            }
+        });
+    }
+
+    public static void deleteAccountById(final long accountId, final Api.IQueryCallback<String> callback)
+    {
+        // hack or the right way?
+        final String deleteAccountByIdUrl = accountsUrl + accountId;
+
+        Api.asyncStringQuery(Request.Method.DELETE, deleteAccountByIdUrl, new Api.IApiStringCallback()
+        {
+            @Override
+            public void onResponse(String response)
+            {
+                callback.onSuccess(response);
+            }
+
+            @Override
+            public void onErrorResponse(VolleyError error)
+            {
+                callback.onError(error);
+            }
+        });
+    }
+
+    final static String accountsUrl = EndpointUrl.url + "v1/accounts/";
 }
