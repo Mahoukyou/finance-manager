@@ -45,6 +45,7 @@ public class GroupDetailActivity extends AppCompatActivity
         {
             if(data.hasExtra(GroupAddEditActivity.INTENT_EXTRA_RESULT_GROUP_WAS_UPDATED))
             {
+                // todo, when group was updated, make sure it is set in listview as well
                 queryGroup();
             }
         }

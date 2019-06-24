@@ -13,7 +13,6 @@ import com.wdowiak.financemanager.api.QueryApi;
 import com.wdowiak.financemanager.data.IItem;
 import com.wdowiak.financemanager.data.Transaction;
 import com.wdowiak.financemanager.api.Api;
-import com.wdowiak.financemanager.api.TransactionStatusesApi;
 import com.wdowiak.financemanager.data.Account;
 import com.wdowiak.financemanager.data.Category;
 import com.wdowiak.financemanager.data.TransactionStatus;
@@ -136,7 +135,7 @@ public class TransactionAddEditActivity extends AppCompatActivity {
 
     private final void getTransactionStatuses()
     {
-        TransactionStatusesApi.getTransactionStatuses(new Api.IQueryCallback<ArrayList<TransactionStatus>>()
+        QueryApi.getItems(IItem.Type.TransactionStatus, new Api.IQueryCallback<ArrayList<TransactionStatus>>()
         {
             @Override
             public void onSuccess(ArrayList<TransactionStatus> result)
