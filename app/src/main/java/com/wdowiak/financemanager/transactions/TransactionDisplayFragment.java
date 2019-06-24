@@ -2,6 +2,7 @@ package com.wdowiak.financemanager.transactions;
 
 import androidx.lifecycle.ViewModelProviders;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -80,6 +81,11 @@ public class TransactionDisplayFragment extends Fragment
             @Override
             public void onSuccess(ArrayList<Transaction> transactions)
             {
+                if(getActivity() == null  || getActivity().getApplicationContext() == null)
+                {
+                    return;
+                }
+
                 mViewModel.transactionsData = transactions;
                 if(mViewModel.transactionsAdapter == null)
                 {
