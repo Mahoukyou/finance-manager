@@ -1,10 +1,14 @@
 package com.wdowiak.financemanager.data;
 
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public final class Transaction
+import java.util.HashMap;
+
+public final class Transaction implements IItem
 {
     public static final Transaction createFromJSONObject(final JSONObject jsonObject) throws JSONException
     {
@@ -38,10 +42,28 @@ public final class Transaction
         return transaction;
     }
 
+    @NotNull
+    @Contract(" -> new")
+    @Override
+    public final JSONObject createJSONObject()
+    {
+        HashMap<String, String> params = new HashMap<>();
+        // todo
+
+        return new JSONObject(params);
+    }
+
     @Contract(pure = true)
     public final long getId()
     {
         return id;
+    }
+
+    @Nullable
+    @Contract(pure = true)
+    public final String getName()
+    {
+        throw new RuntimeException("Unused interface method");
     }
 
     @Contract(pure = true)

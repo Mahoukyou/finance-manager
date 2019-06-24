@@ -15,12 +15,10 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.wdowiak.financemanager.R;
-import com.wdowiak.financemanager.api.AccountsApi;
-import com.wdowiak.financemanager.api.TransactionsApi;
+import com.wdowiak.financemanager.api.Api;
+import com.wdowiak.financemanager.api.QueryApi;
 import com.wdowiak.financemanager.data.Account;
-import com.wdowiak.financemanager.data.Transaction;
-import com.wdowiak.financemanager.transactions.TransactionAddEditActivity;
-import com.wdowiak.financemanager.transactions.TransactionDetailActivity;
+import com.wdowiak.financemanager.data.IItem;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -75,10 +73,10 @@ public class AccountsDisplayFragment extends Fragment
 
     void queryAndDisplayAccounts()
     {
-        AccountsApi.getAccounts(new AccountsApi.IAccountsCallback<ArrayList<Account>>()
+        QueryApi.getItems(IItem.Type.Account, new Api.IQueryCallback<ArrayList<Account>>()
         {
             @Override
-            public void OnSuccess(ArrayList<Account> transactions)
+            public void onSuccess(ArrayList<Account> transactions)
             {
                 mViewModel.accountsData = transactions;
                 if(mViewModel.accountsAdapter == null)
@@ -93,7 +91,7 @@ public class AccountsDisplayFragment extends Fragment
             }
 
             @Override
-            public void OnError(Exception error)
+            public void onError(Exception error)
             {
                 Toast.makeText(getActivity().getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
             }
