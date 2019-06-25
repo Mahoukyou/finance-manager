@@ -51,9 +51,9 @@ public class TransactionDisplayFragment extends CommonDisplayFragment<Transactio
     }
 
     @Override
-    protected DisplayFragmentViewModel<Transaction, TransactionsAdapter> getViewModel()
+    protected TransactionDisplayFragmentViewModel getViewModel()
     {
-        return super.getViewModel();
+        return (TransactionDisplayFragmentViewModel) super.getViewModel();
     }
 
     @Override

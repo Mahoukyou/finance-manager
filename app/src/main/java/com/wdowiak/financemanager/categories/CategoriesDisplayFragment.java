@@ -64,9 +64,9 @@ public class CategoriesDisplayFragment extends CommonDisplayFragment<Category, C
     }
 
     @Override
-    protected DisplayFragmentViewModel<Category, CategoriesAdapter> getViewModel()
+    protected CategoriesDisplayFragmentViewModel getViewModel()
     {
-        return super.getViewModel();
+        return (CategoriesDisplayFragmentViewModel) super.getViewModel();
     }
 
     @Override

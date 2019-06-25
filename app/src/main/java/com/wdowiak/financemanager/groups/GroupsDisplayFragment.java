@@ -21,6 +21,7 @@ import com.wdowiak.financemanager.DisplayFragmentViewModel;
 import com.wdowiak.financemanager.R;
 import com.wdowiak.financemanager.api.Api;
 import com.wdowiak.financemanager.api.QueryApi;
+import com.wdowiak.financemanager.categories.CategoriesDisplayFragmentViewModel;
 import com.wdowiak.financemanager.data.Group;
 import com.wdowiak.financemanager.data.IItem;
 import com.wdowiak.financemanager.data.Transaction;
@@ -68,9 +69,9 @@ public class GroupsDisplayFragment extends CommonDisplayFragment<Group, GroupsAd
     }
 
     @Override
-    protected DisplayFragmentViewModel<Group, GroupsAdapter> getViewModel()
+    protected GroupsDisplayFragmentViewModel getViewModel()
     {
-        return super.getViewModel();
+        return (GroupsDisplayFragmentViewModel) super.getViewModel();
     }
 
     @Override
