@@ -78,7 +78,7 @@ abstract public class CommonAddEditActivity<ItemType extends IItem, FormState ex
     {
         showProgressBar(true);
 
-        QueryApi.getItemById(viewModel.getItemId(), IItem.Type.Group,new Api.IQueryCallback<ItemType>()
+        QueryApi.getItemById(viewModel.getItemId(), itemType, new Api.IQueryCallback<ItemType>()
         {
             @Override
             public void onSuccess(ItemType item)
