@@ -27,6 +27,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
+import static com.wdowiak.financemanager.IntentExtras.INTENT_EXTRA_ITEM_ID;
+import static com.wdowiak.financemanager.IntentExtras.INTENT_EXTRA_RESULT_ITEM_WAS_CREATED;
+import static com.wdowiak.financemanager.IntentExtras.INTENT_EXTRA_RESULT_ITEM_WAS_DELETED;
+
 public class GroupsDisplayFragment extends Fragment
 {
     static final int DETAIL_VIEW_REQUEST = 1;
@@ -76,7 +80,7 @@ public class GroupsDisplayFragment extends Fragment
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == DETAIL_VIEW_REQUEST && resultCode == Activity.RESULT_OK)
         {
-            if(data.hasExtra(GroupDetailActivity.INTENT_EXTRA_RESULT_ITEM_WAS_DELETED))
+            if(data.hasExtra(INTENT_EXTRA_RESULT_ITEM_WAS_DELETED))
             {
                 queryAndDisplayGroups();
             }
@@ -84,7 +88,7 @@ public class GroupsDisplayFragment extends Fragment
 
         if(requestCode == CREATE_GROUP_REQUEST && resultCode == Activity.RESULT_OK)
         {
-            if(data.hasExtra(CommonDetailViewActivity.INTENT_EXTRA_RESULT_ITEM_WAS_CREATED))
+            if(data.hasExtra(INTENT_EXTRA_RESULT_ITEM_WAS_CREATED))
             {
                 queryAndDisplayGroups();
             }
@@ -94,7 +98,7 @@ public class GroupsDisplayFragment extends Fragment
     private void onGroupClicked(AdapterView<?> adapterView, View view, int i, long l)
     {
         Intent intent = new Intent(getActivity().getApplicationContext(), GroupDetailActivity.class);
-        intent.putExtra(GroupDetailActivity.INTENT_EXTRA_ITEM_ID, mViewModel.groupsData.get(i).getId());
+        intent.putExtra(INTENT_EXTRA_ITEM_ID, mViewModel.groupsData.get(i).getId());
         startActivityForResult(intent, DETAIL_VIEW_REQUEST);
     }
 

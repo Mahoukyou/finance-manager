@@ -20,6 +20,8 @@ import com.wdowiak.financemanager.data.TransactionStatus;
 
 import java.util.ArrayList;
 
+import static com.wdowiak.financemanager.IntentExtras.INTENT_EXTRA_ITEM_ID;
+
 public class TransactionAddEditActivity extends AppCompatActivity {
 
     Long transactionId = null;
@@ -36,9 +38,9 @@ public class TransactionAddEditActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transaction_add_edit);
 
-        if(getIntent().hasExtra(CommonDetailViewActivity.INTENT_EXTRA_ITEM_ID))
+        if(getIntent().hasExtra(INTENT_EXTRA_ITEM_ID))
         {
-            transactionId = getIntent().getExtras().getLong(CommonDetailViewActivity.INTENT_EXTRA_ITEM_ID);
+            transactionId = getIntent().getExtras().getLong(INTENT_EXTRA_ITEM_ID);
             getTransaction();
         }
         else

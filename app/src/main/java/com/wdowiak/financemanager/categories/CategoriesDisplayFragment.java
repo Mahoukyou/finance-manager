@@ -25,6 +25,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
+import static com.wdowiak.financemanager.IntentExtras.INTENT_EXTRA_ITEM_ID;
+
 public class CategoriesDisplayFragment extends Fragment
 {
     private CategoriesDisplayFragmentViewModel mViewModel;
@@ -67,7 +69,7 @@ public class CategoriesDisplayFragment extends Fragment
     private void onCategoryClicked(AdapterView<?> adapterView, View view, int i, long l)
     {
         Intent intent = new Intent(getActivity().getApplicationContext(), CategoryDetailActivity.class);
-        intent.putExtra(CategoryDetailActivity.INTENT_EXTRA_ITEM_ID , mViewModel.categoriesData.get(i).getId());
+        intent.putExtra(INTENT_EXTRA_ITEM_ID , mViewModel.categoriesData.get(i).getId());
         startActivity(intent);
     }
 

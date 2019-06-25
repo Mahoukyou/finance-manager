@@ -25,6 +25,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
+import static com.wdowiak.financemanager.IntentExtras.INTENT_EXTRA_ITEM_ID;
+
 public class AccountsDisplayFragment extends Fragment
 {
     private AccountsDisplayFragmentViewModel mViewModel;
@@ -67,7 +69,7 @@ public class AccountsDisplayFragment extends Fragment
     private void OnAccountClicked(AdapterView<?> adapterView, View view, int i, long l)
     {
         Intent intent = new Intent(getActivity().getApplicationContext(), AccountDetailActivity.class);
-        intent.putExtra(AccountDetailActivity.INTENT_EXTRA_ITEM_ID, mViewModel.accountsData.get(i).getId());
+        intent.putExtra(INTENT_EXTRA_ITEM_ID, mViewModel.accountsData.get(i).getId());
         startActivity(intent);
     }
 

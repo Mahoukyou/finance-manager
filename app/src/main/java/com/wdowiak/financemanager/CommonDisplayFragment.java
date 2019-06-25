@@ -1,5 +1,6 @@
 package com.wdowiak.financemanager;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -19,6 +20,13 @@ import com.wdowiak.financemanager.api.QueryApi;
 import com.wdowiak.financemanager.data.IItem;
 
 import java.util.ArrayList;
+
+import static com.wdowiak.financemanager.IntentExtras.ADD_ITEM_REQUEST;
+import static com.wdowiak.financemanager.IntentExtras.EDIT_ITEM_REQUEST;
+import static com.wdowiak.financemanager.IntentExtras.INTENT_EXTRA_ITEM_ID;
+import static com.wdowiak.financemanager.IntentExtras.INTENT_EXTRA_RESULT_ITEM_WAS_CREATED;
+import static com.wdowiak.financemanager.IntentExtras.INTENT_EXTRA_RESULT_ITEM_WAS_DELETED;
+import static com.wdowiak.financemanager.IntentExtras.INTENT_EXTRA_RESULT_ITEM_WAS_UPDATED;
 
 abstract public class CommonDisplayFragment<T extends IItem, ItemAdapter extends ArrayAdapter> extends Fragment
 {
@@ -55,12 +63,37 @@ abstract public class CommonDisplayFragment<T extends IItem, ItemAdapter extends
         }
 
         return view;
+
+
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == ADD_ITEM_REQUEST && resultCode == Activity.RESULT_OK)
+        {
+            if(data.hasExtra(INTENT_EXTRA_RESULT_ITEM_WAS_CREATED))
+            {
+                queryAndDisplayItems();
+            }
+        }
+
+        if(requestCode == EDIT_ITEM_REQUEST && resultCode == Activity.RESULT_OK)
+        {
+            if(data.hasExtra(INTENT_EXTRA_RESULT_ITEM_WAS_UPDATED) || data.hasExtra(INTENT_EXTRA_RESULT_ITEM_WAS_DELETED))
+            {
+                queryAndDisplayItems();
+            }
+        }
+    }
+
+
 
     protected void onItemClicked(AdapterView<?> adapterView, View view, int i, long l)
     {
         Intent intent = new Intent(getActivity().getApplicationContext(), detailClass);
-        intent.putExtra(CommonDetailViewActivity.INTENT_EXTRA_ITEM_ID, viewModel.getData().get(i).getId());
+        intent.putExtra(INTENT_EXTRA_ITEM_ID, viewModel.getData().get(i).getId());
         startActivity(intent);
     }
 

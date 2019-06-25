@@ -16,14 +16,13 @@ import com.wdowiak.financemanager.api.Api;
 import com.wdowiak.financemanager.api.QueryApi;
 import com.wdowiak.financemanager.data.IItem;
 
+import static com.wdowiak.financemanager.IntentExtras.EDIT_ITEM_REQUEST;
+import static com.wdowiak.financemanager.IntentExtras.INTENT_EXTRA_ITEM_ID;
+import static com.wdowiak.financemanager.IntentExtras.INTENT_EXTRA_RESULT_ITEM_WAS_DELETED;
+import static com.wdowiak.financemanager.IntentExtras.INTENT_EXTRA_RESULT_ITEM_WAS_UPDATED;
+
 abstract public class CommonDetailViewActivity<T extends IItem> extends AppCompatActivity
 {
-    public final static String INTENT_EXTRA_ITEM_ID = "INTENT_EXTRA_ITEM_ID";
-    public final static String INTENT_EXTRA_RESULT_ITEM_WAS_CREATED = "INTENT_EXTRA_RESULT_ITEM_WAS_CREATED";
-    public final static String INTENT_EXTRA_RESULT_ITEM_WAS_UPDATED = "INTENT_EXTRA_RESULT_ITEM_WAS_UPDATED";
-    public final static String INTENT_EXTRA_RESULT_ITEM_WAS_DELETED = "INTENT_EXTRA_RESULT_ITEM_WAS_DELETED";
-    public static final int EDIT_ITEM_REQUEST = 2;
-
     private Long itemId = null;
     protected Class<?> addEditClass = null;
     protected IItem.Type itemType;
