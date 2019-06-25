@@ -63,8 +63,6 @@ abstract public class CommonDisplayFragment<T extends IItem, ItemAdapter extends
         }
 
         return view;
-
-
     }
 
     @Override
@@ -87,8 +85,6 @@ abstract public class CommonDisplayFragment<T extends IItem, ItemAdapter extends
             }
         }
     }
-
-
 
     protected void onItemClicked(AdapterView<?> adapterView, View view, int i, long l)
     {
@@ -119,7 +115,10 @@ abstract public class CommonDisplayFragment<T extends IItem, ItemAdapter extends
             @Override
             public void onError(Exception error)
             {
-                Toast.makeText(getActivity().getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                if(getActivity() != null && getActivity().getApplicationContext() != null)
+                {
+                    Toast.makeText(getActivity().getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
