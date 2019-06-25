@@ -47,7 +47,7 @@ public class Currency implements IItem
         params.put("name", getName());
         params.put("symbol", getSymbol());
         params.put("acronym", getAcronym());
-        params.put("prefix", getPrefix() ? "1" : "0");
+        params.put("prefix", getPrefix() ? "true" : "false");
 
         return new JSONObject(params);
     }

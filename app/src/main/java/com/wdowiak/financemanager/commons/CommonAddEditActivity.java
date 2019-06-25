@@ -31,12 +31,6 @@ abstract public class CommonAddEditActivity<ItemType extends IItem, FormState ex
 
     protected IItem.Type itemType;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-    }
-
     protected void afterCreate()
     {
         if(itemType == null)

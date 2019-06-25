@@ -17,8 +17,7 @@ public class CurrencyDetailActivity extends CommonDetailViewActivity<Currency>
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_currencies_detail);
 
-        // todo, no aaddedit for account just yet
-        addEditClass = GroupAddEditActivity.class;
+        addEditClass = CurrencyAddEditActivity.class;
         itemType = IItem.Type.Currency;
 
         afterCreate();
