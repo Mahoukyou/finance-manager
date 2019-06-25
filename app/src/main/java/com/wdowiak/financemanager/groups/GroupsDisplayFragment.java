@@ -34,6 +34,7 @@ public class GroupsDisplayFragment extends CommonDisplayFragment<Group, GroupsAd
     {
         itemType = IItem.Type.Group;
         detailClass = GroupDetailActivity.class;
+        addEditClass = GroupAddEditActivity.class;
 
         return super.onCreateView(inflater, container, savedInstanceState);
     }

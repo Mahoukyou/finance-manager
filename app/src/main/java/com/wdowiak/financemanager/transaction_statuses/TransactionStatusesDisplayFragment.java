@@ -34,6 +34,7 @@ public class TransactionStatusesDisplayFragment extends CommonDisplayFragment<Tr
     {
         itemType = IItem.Type.TransactionStatus;
         detailClass = TransactionStatusesDetailActivity.class;
+        addEditClass = TransactionStatusesDetailActivity.class; // todo
 
         return super.onCreateView(inflater, container, savedInstanceState);
     }
