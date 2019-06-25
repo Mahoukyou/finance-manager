@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.wdowiak.financemanager.CommonDisplayFragment;
+import com.wdowiak.financemanager.commons.CommonDisplayFragment;
 import com.wdowiak.financemanager.data.Currency;
 import com.wdowiak.financemanager.data.IItem;
 

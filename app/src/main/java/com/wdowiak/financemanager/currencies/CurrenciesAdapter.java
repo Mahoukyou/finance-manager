@@ -8,9 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.wdowiak.financemanager.R;
-import com.wdowiak.financemanager.data.Account;
 import com.wdowiak.financemanager.data.Currency;
-import com.wdowiak.financemanager.data.Group;
 
 import java.util.ArrayList;
 

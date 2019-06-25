@@ -3,9 +3,8 @@ package com.wdowiak.financemanager.currencies;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import com.wdowiak.financemanager.CommonDetailViewActivity;
+import com.wdowiak.financemanager.commons.CommonDetailViewActivity;
 import com.wdowiak.financemanager.R;
-import com.wdowiak.financemanager.data.Account;
 import com.wdowiak.financemanager.data.Currency;
 import com.wdowiak.financemanager.data.IItem;
 import com.wdowiak.financemanager.groups.GroupAddEditActivity;
