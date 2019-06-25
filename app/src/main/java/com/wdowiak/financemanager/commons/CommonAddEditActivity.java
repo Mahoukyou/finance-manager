@@ -27,9 +27,9 @@ import static com.wdowiak.financemanager.commons.IntentExtras.INTENT_EXTRA_RESUL
 
 abstract public class CommonAddEditActivity<ItemType extends IItem, FormState extends CommonAddEditFormState> extends AppCompatActivity
 {
-    CommonAddEditViewModel<ItemType, FormState> viewModel = null;
+    private CommonAddEditViewModel<ItemType, FormState> viewModel = null;
 
-    IItem.Type itemType;
+    protected IItem.Type itemType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -37,14 +37,14 @@ abstract public class CommonAddEditActivity<ItemType extends IItem, FormState ex
         super.onCreate(savedInstanceState);
     }
 
-    void afterCreate()
+    protected void afterCreate()
     {
         if(itemType == null)
         {
             throw new RuntimeException("itemType cannot be null");
         }
 
-        createViewModel();
+        viewModel = createViewModel();
         if(viewModel == null)
         {
             throw new RuntimeException("View model cannot be null");
@@ -60,6 +60,9 @@ abstract public class CommonAddEditActivity<ItemType extends IItem, FormState ex
                     return;
                 }
 
+                final Button btn_add_edit = findViewById(R.id.add_save_action);
+                btn_add_edit.setEnabled(loginFormState.isDataValid());
+
                 onFormStateChanged(loginFormState);
             }
         });
@@ -71,7 +74,7 @@ abstract public class CommonAddEditActivity<ItemType extends IItem, FormState ex
         }
     }
 
-    void queryItem()
+    protected void queryItem()
     {
         showProgressBar(true);
 
@@ -113,16 +116,19 @@ abstract public class CommonAddEditActivity<ItemType extends IItem, FormState ex
 
     public void onAddSave(final View view)
     {
+        if(!viewModel.getFormState().getValue().isDataValid())
+        {
+            return;
+        }
+
         disableButtons(true);
 
         ItemType newItem = createItemFromInput();
         if(isEdit())
         {
-            // If nothing has changed, no need to update
-            if(viewModel.hasDataChanged())
-            {
-                updateItem(newItem);
-            }
+            // Update even if nothing has changed locally
+            // the data could be changed somewhere else by the time we press the save button
+            updateItem(newItem);
         }
         else
         {
@@ -230,7 +236,7 @@ abstract public class CommonAddEditActivity<ItemType extends IItem, FormState ex
         });
     }
 
-    private final void showProgressBar(final boolean show)
+    protected final void showProgressBar(final boolean show)
     {
         final LinearLayout detailViewLayout = findViewById(R.id.view_layout);
         detailViewLayout.setVisibility(show ? View.GONE : View.VISIBLE);
@@ -239,7 +245,7 @@ abstract public class CommonAddEditActivity<ItemType extends IItem, FormState ex
         progressBarLayout.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
-    private final void disableButtons(final boolean disable)
+    protected final void disableButtons(final boolean disable)
     {
         final Button btn_add_edit = findViewById(R.id.add_save_action);
         btn_add_edit.setEnabled(!disable);
@@ -248,8 +254,13 @@ abstract public class CommonAddEditActivity<ItemType extends IItem, FormState ex
         btn_cancel.setEnabled(!disable);
     }
 
-    abstract CommonAddEditViewModel<ItemType, FormState> createViewModel();
-    abstract void updateAddEditView();
-    abstract ItemType createItemFromInput();
-    abstract void onFormStateChanged(FormState formState);
+    abstract protected CommonAddEditViewModel<ItemType, FormState> createViewModel();
+    abstract protected void updateAddEditView();
+    abstract protected ItemType createItemFromInput();
+    abstract protected void onFormStateChanged(FormState formState);
+
+    protected CommonAddEditViewModel<ItemType, FormState> getViewModel()
+    {
+        return viewModel;
+    }
 }

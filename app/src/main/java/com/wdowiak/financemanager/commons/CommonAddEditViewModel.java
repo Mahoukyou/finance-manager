@@ -14,32 +14,37 @@ abstract public class CommonAddEditViewModel<ItemType extends IItem, Form extend
 
     private Long itemId = null;
 
-    ItemType getQueriedItem()
+    public ItemType getQueriedItem()
     {
         return queriedItem;
     }
 
-    void setQueriedItem(ItemType queriedItem)
+    public void setQueriedItem(ItemType queriedItem)
     {
         this.queriedItem = queriedItem;
     }
 
-    LiveData<Form> getFormState()
+    public LiveData<Form> getFormState()
     {
         return formState;
     }
 
-    Long getItemId()
+    protected void setFormState(Form formState)
     {
-        return getItemId();
+        this.formState.setValue(formState);
     }
 
-    void setItemId(Long itemId)
+    public Long getItemId()
+    {
+        return itemId;
+    }
+
+    public void setItemId(Long itemId)
     {
         this.itemId = itemId;
     }
 
-    abstract boolean hasDataChanged();
+    abstract public boolean hasDataChanged();
 
  //   abstract void createFormState();
 }
