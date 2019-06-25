@@ -3,12 +3,15 @@ package com.wdowiak.financemanager;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -21,18 +24,15 @@ import com.wdowiak.financemanager.data.IItem;
 
 import java.util.ArrayList;
 
-import static com.wdowiak.financemanager.IntentExtras.ADD_ITEM_REQUEST;
-import static com.wdowiak.financemanager.IntentExtras.EDIT_ITEM_REQUEST;
-import static com.wdowiak.financemanager.IntentExtras.INTENT_EXTRA_ITEM_ID;
-import static com.wdowiak.financemanager.IntentExtras.INTENT_EXTRA_RESULT_ITEM_WAS_CREATED;
-import static com.wdowiak.financemanager.IntentExtras.INTENT_EXTRA_RESULT_ITEM_WAS_DELETED;
-import static com.wdowiak.financemanager.IntentExtras.INTENT_EXTRA_RESULT_ITEM_WAS_UPDATED;
+import static com.wdowiak.financemanager.IntentExtras.*;
 
 abstract public class CommonDisplayFragment<T extends IItem, ItemAdapter extends ArrayAdapter> extends Fragment
 {
-    protected IDisplayFragmentViewModel<T, ItemAdapter> viewModel;
+    protected DisplayFragmentViewModel<T, ItemAdapter> viewModel;
 
     ListView itemsListView;
+    RelativeLayout viewLayout;
+    LinearLayout progressBarLayout;
 
     protected IItem.Type itemType;
     protected Class<?> detailClass;
@@ -49,6 +49,9 @@ abstract public class CommonDisplayFragment<T extends IItem, ItemAdapter extends
         // todo, bind buttons in xml?
         itemsListView = view.findViewById(R.id.display_listview);
         itemsListView.setOnItemClickListener(this::onItemClicked);
+
+        viewLayout = view.findViewById(R.id.view_layout);
+        progressBarLayout = view.findViewById(R.id.progress_bar_layout);
 
         view.findViewById(R.id.fab_add).setOnClickListener(this::onAddItem);
 
@@ -90,11 +93,12 @@ abstract public class CommonDisplayFragment<T extends IItem, ItemAdapter extends
     {
         Intent intent = new Intent(getActivity().getApplicationContext(), detailClass);
         intent.putExtra(INTENT_EXTRA_ITEM_ID, viewModel.getData().get(i).getId());
-        startActivity(intent);
+        startActivityForResult(intent, EDIT_ITEM_REQUEST);
     }
 
     protected void queryAndDisplayItems()
     {
+        showProgressBar(true);
         QueryApi.getItems(itemType, new Api.IQueryCallback<ArrayList<T>>()
         {
             @Override
@@ -108,8 +112,10 @@ abstract public class CommonDisplayFragment<T extends IItem, ItemAdapter extends
                 }
                 else
                 {
-                    viewModel.getAdapter().notifyDataSetChanged();
+                    viewModel.populateAdapterWithDataAndNotify();
                 }
+
+                showProgressBar(false);
             }
 
             @Override
@@ -123,6 +129,12 @@ abstract public class CommonDisplayFragment<T extends IItem, ItemAdapter extends
         });
     }
 
+    protected final void showProgressBar(final boolean show)
+    {
+        viewLayout.setVisibility(show ? View.GONE : View.VISIBLE);
+        progressBarLayout.setVisibility(show ? View.VISIBLE : View.GONE);
+    }
+
     public void onAddItem(final View view)
     {
         // todo
@@ -130,7 +142,7 @@ abstract public class CommonDisplayFragment<T extends IItem, ItemAdapter extends
         // startActivity(intent);
     }
 
-    protected IDisplayFragmentViewModel<T, ItemAdapter> getViewModel()
+    protected DisplayFragmentViewModel<T, ItemAdapter> getViewModel()
     {
         return viewModel;
     }

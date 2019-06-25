@@ -2,33 +2,22 @@ package com.wdowiak.financemanager.transactions;
 
 import androidx.lifecycle.ViewModelProviders;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.Toast;
 
 import com.wdowiak.financemanager.CommonDisplayFragment;
-import com.wdowiak.financemanager.IDisplayFragmentViewModel;
-import com.wdowiak.financemanager.R;
-import com.wdowiak.financemanager.api.Api;
-import com.wdowiak.financemanager.api.QueryApi;
+import com.wdowiak.financemanager.DisplayFragmentViewModel;
 import com.wdowiak.financemanager.data.IItem;
 import com.wdowiak.financemanager.data.Transaction;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
 
 public class TransactionDisplayFragment extends CommonDisplayFragment<Transaction, TransactionsAdapter>
 {
@@ -62,7 +51,7 @@ public class TransactionDisplayFragment extends CommonDisplayFragment<Transactio
     }
 
     @Override
-    protected IDisplayFragmentViewModel<Transaction, TransactionsAdapter> getViewModel()
+    protected DisplayFragmentViewModel<Transaction, TransactionsAdapter> getViewModel()
     {
         return super.getViewModel();
     }
