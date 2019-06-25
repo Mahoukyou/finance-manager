@@ -14,23 +14,24 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.wdowiak.financemanager.CommonDisplayFragment;
+import com.wdowiak.financemanager.DisplayFragmentViewModel;
 import com.wdowiak.financemanager.R;
 import com.wdowiak.financemanager.api.Api;
 import com.wdowiak.financemanager.api.QueryApi;
 import com.wdowiak.financemanager.data.Account;
 import com.wdowiak.financemanager.data.IItem;
+import com.wdowiak.financemanager.groups.GroupDetailActivity;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
-public class AccountsDisplayFragment extends Fragment
+import static com.wdowiak.financemanager.IntentExtras.INTENT_EXTRA_ITEM_ID;
+
+public class AccountsDisplayFragment extends CommonDisplayFragment<Account, AccountsAdapter>
 {
-    private AccountsDisplayFragmentViewModel mViewModel;
-
-    ListView accountsListView;
-
     @NotNull
     @Contract(" -> new")
     public static AccountsDisplayFragment newInstance()
@@ -45,64 +46,30 @@ public class AccountsDisplayFragment extends Fragment
             @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState)
     {
-        final View view = inflater.inflate(R.layout.listview_display_fragment, container, false);
+        itemType = IItem.Type.Account;
+        detailClass = AccountDetailActivity.class;
 
-        accountsListView = view.findViewById(R.id.display_listview);
-        accountsListView.setOnItemClickListener(this::OnAccountClicked);
-
-        view.findViewById(R.id.fab_add).setOnClickListener(this::onAddAccount);
-
-        return view;
+        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState)
     {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(AccountsDisplayFragmentViewModel.class);
+        viewModel = ViewModelProviders.of(this).get(AccountsDisplayFragmentViewModel.class);
 
-        queryAndDisplayAccounts();
+        queryAndDisplayItems();
     }
 
-    private void OnAccountClicked(AdapterView<?> adapterView, View view, int i, long l)
+    @Override
+    protected AccountsDisplayFragmentViewModel getViewModel()
     {
-        Intent intent = new Intent(getActivity().getApplicationContext(), AccountDetailActivity.class);
-        intent.putExtra(AccountDetailActivity.INTENT_EXTRA_ITEM_ID, mViewModel.accountsData.get(i).getId());
-        startActivity(intent);
+        return (AccountsDisplayFragmentViewModel) super.getViewModel();
     }
 
-    void queryAndDisplayAccounts()
+    @Override
+    protected AccountsAdapter createItemAdapter()
     {
-        QueryApi.getItems(IItem.Type.Account, new Api.IQueryCallback<ArrayList<Account>>()
-        {
-            @Override
-            public void onSuccess(ArrayList<Account> transactions)
-            {
-                mViewModel.accountsData = transactions;
-                if(mViewModel.accountsAdapter == null)
-                {
-                    mViewModel.accountsAdapter = new AccountsAdapter(mViewModel.accountsData, getActivity().getApplicationContext());
-                    accountsListView.setAdapter(mViewModel.accountsAdapter);
-                }
-                else
-                {
-                    mViewModel.accountsAdapter.notifyDataSetChanged();
-                }
-            }
-
-            @Override
-            public void onError(Exception error)
-            {
-                Toast.makeText(getActivity().getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
+        return new AccountsAdapter(viewModel.getData(), getActivity().getApplicationContext());
     }
-
-    public final void onAddAccount(final View view)
-    {
-      //  Intent intent = new Intent(getActivity().getApplicationContext(), TransactionAddEditActivity.class);
-       // startActivity(intent);
-    }
-
-
 }

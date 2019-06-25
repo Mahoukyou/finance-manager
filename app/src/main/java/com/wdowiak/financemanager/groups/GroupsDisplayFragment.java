@@ -16,27 +16,29 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.wdowiak.financemanager.CommonDetailViewActivity;
+import com.wdowiak.financemanager.CommonDisplayFragment;
+import com.wdowiak.financemanager.DisplayFragmentViewModel;
 import com.wdowiak.financemanager.R;
 import com.wdowiak.financemanager.api.Api;
 import com.wdowiak.financemanager.api.QueryApi;
+import com.wdowiak.financemanager.categories.CategoriesDisplayFragmentViewModel;
 import com.wdowiak.financemanager.data.Group;
 import com.wdowiak.financemanager.data.IItem;
+import com.wdowiak.financemanager.data.Transaction;
+import com.wdowiak.financemanager.transactions.TransactionDetailActivity;
+import com.wdowiak.financemanager.transactions.TransactionsAdapter;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
-public class GroupsDisplayFragment extends Fragment
+import static com.wdowiak.financemanager.IntentExtras.INTENT_EXTRA_ITEM_ID;
+import static com.wdowiak.financemanager.IntentExtras.INTENT_EXTRA_RESULT_ITEM_WAS_CREATED;
+import static com.wdowiak.financemanager.IntentExtras.INTENT_EXTRA_RESULT_ITEM_WAS_DELETED;
+
+public class GroupsDisplayFragment extends CommonDisplayFragment<Group, GroupsAdapter>
 {
-    static final int DETAIL_VIEW_REQUEST = 1;
-    static final int CREATE_GROUP_REQUEST = 2;
-
-
-    private GroupsDisplayFragmentViewModel mViewModel;
-
-    ListView groupsListView;
-
     @NotNull
     @Contract(" -> new")
     public static GroupsDisplayFragment newInstance()
@@ -51,86 +53,30 @@ public class GroupsDisplayFragment extends Fragment
             @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState)
     {
-        final View view = inflater.inflate(R.layout.listview_display_fragment, container, false);
+        itemType = IItem.Type.Group;
+        detailClass = GroupDetailActivity.class;
 
-        groupsListView = view.findViewById(R.id.display_listview);
-        groupsListView.setOnItemClickListener(this::onGroupClicked);
-
-        view.findViewById(R.id.fab_add).setOnClickListener(this::onAddGroup);
-
-        return view;
+        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState)
     {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(GroupsDisplayFragmentViewModel.class);
+        viewModel = ViewModelProviders.of(this).get(GroupsDisplayFragmentViewModel.class);
 
-        queryAndDisplayGroups();
+        queryAndDisplayItems();
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    protected GroupsDisplayFragmentViewModel getViewModel()
     {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == DETAIL_VIEW_REQUEST && resultCode == Activity.RESULT_OK)
-        {
-            if(data.hasExtra(GroupDetailActivity.INTENT_EXTRA_RESULT_ITEM_WAS_DELETED))
-            {
-                queryAndDisplayGroups();
-            }
-        }
-
-        if(requestCode == CREATE_GROUP_REQUEST && resultCode == Activity.RESULT_OK)
-        {
-            if(data.hasExtra(CommonDetailViewActivity.INTENT_EXTRA_RESULT_ITEM_WAS_CREATED))
-            {
-                queryAndDisplayGroups();
-            }
-        }
+        return (GroupsDisplayFragmentViewModel) super.getViewModel();
     }
 
-    private void onGroupClicked(AdapterView<?> adapterView, View view, int i, long l)
+    @Override
+    protected GroupsAdapter createItemAdapter()
     {
-        Intent intent = new Intent(getActivity().getApplicationContext(), GroupDetailActivity.class);
-        intent.putExtra(GroupDetailActivity.INTENT_EXTRA_ITEM_ID, mViewModel.groupsData.get(i).getId());
-        startActivityForResult(intent, DETAIL_VIEW_REQUEST);
+        return new GroupsAdapter(viewModel.getData(), getActivity().getApplicationContext());
     }
-
-    void queryAndDisplayGroups()
-    {
-        QueryApi.getItems(IItem.Type.Group, new Api.IQueryCallback<ArrayList<Group>>() {
-            @Override
-            public void onSuccess(ArrayList<Group> groups)
-            {
-                mViewModel.groupsData = groups;
-                if(mViewModel.groupsAdapter == null)
-                {
-                    mViewModel.groupsAdapter = new GroupsAdapter(mViewModel.groupsData, getActivity().getApplicationContext());
-                    groupsListView.setAdapter(mViewModel.groupsAdapter);
-                }
-                else
-                {
-                    mViewModel.groupsAdapter.clear();
-                    mViewModel.groupsAdapter.addAll(mViewModel.groupsData);
-                    mViewModel.groupsAdapter.notifyDataSetChanged();
-                }
-            }
-
-            @Override
-            public void onError(Exception error)
-            {
-                Toast.makeText(getActivity().getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    public final void onAddGroup(final View view)
-    {
-        Intent intent = new Intent(getActivity().getApplicationContext(), GroupAddEditActivity.class);
-        startActivityForResult(intent, CREATE_GROUP_REQUEST);
-    }
-
-
 }

@@ -14,23 +14,26 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.wdowiak.financemanager.CommonDisplayFragment;
+import com.wdowiak.financemanager.DisplayFragmentViewModel;
 import com.wdowiak.financemanager.R;
 import com.wdowiak.financemanager.api.Api;
 import com.wdowiak.financemanager.api.QueryApi;
 import com.wdowiak.financemanager.data.Category;
+import com.wdowiak.financemanager.data.Group;
 import com.wdowiak.financemanager.data.IItem;
+import com.wdowiak.financemanager.groups.GroupDetailActivity;
+import com.wdowiak.financemanager.groups.GroupsAdapter;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
-public class CategoriesDisplayFragment extends Fragment
+import static com.wdowiak.financemanager.IntentExtras.INTENT_EXTRA_ITEM_ID;
+
+public class CategoriesDisplayFragment extends CommonDisplayFragment<Category, CategoriesAdapter>
 {
-    private CategoriesDisplayFragmentViewModel mViewModel;
-
-    ListView categoriesListView;
-
     @NotNull
     @Contract(" -> new")
     public static CategoriesDisplayFragment newInstance()
@@ -45,63 +48,30 @@ public class CategoriesDisplayFragment extends Fragment
             @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState)
     {
-        final View view = inflater.inflate(R.layout.listview_display_fragment, container, false);
+        itemType = IItem.Type.Category;
+        detailClass = CategoryDetailActivity.class;
 
-        categoriesListView = view.findViewById(R.id.display_listview);
-        categoriesListView.setOnItemClickListener(this::onCategoryClicked);
-
-        view.findViewById(R.id.fab_add).setOnClickListener(this::onAddCategory);
-
-        return view;
+        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState)
     {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(CategoriesDisplayFragmentViewModel.class);
+        viewModel = ViewModelProviders.of(this).get(CategoriesDisplayFragmentViewModel.class);
 
-        queryAndDisplayAccounts();
+        queryAndDisplayItems();
     }
 
-    private void onCategoryClicked(AdapterView<?> adapterView, View view, int i, long l)
+    @Override
+    protected CategoriesDisplayFragmentViewModel getViewModel()
     {
-        Intent intent = new Intent(getActivity().getApplicationContext(), CategoryDetailActivity.class);
-        intent.putExtra(CategoryDetailActivity.INTENT_EXTRA_ITEM_ID , mViewModel.categoriesData.get(i).getId());
-        startActivity(intent);
+        return (CategoriesDisplayFragmentViewModel) super.getViewModel();
     }
 
-    void queryAndDisplayAccounts()
+    @Override
+    protected CategoriesAdapter createItemAdapter()
     {
-        QueryApi.getItems(IItem.Type.Category, new Api.IQueryCallback<ArrayList<Category>>() {
-            @Override
-            public void onSuccess(ArrayList<Category> categories)
-            {
-                mViewModel.categoriesData = categories;
-                if(mViewModel.categoriesAdapter == null)
-                {
-                    mViewModel.categoriesAdapter = new CategoriesAdapter(mViewModel.categoriesData, getActivity().getApplicationContext());
-                    categoriesListView.setAdapter(mViewModel.categoriesAdapter);
-                }
-                else
-                {
-                    mViewModel.categoriesAdapter.notifyDataSetChanged();
-                }
-            }
-
-            @Override
-            public void onError(Exception error)
-            {
-                Toast.makeText(getActivity().getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
+        return new CategoriesAdapter(viewModel.getData(), getActivity().getApplicationContext());
     }
-
-    public final void onAddCategory(final View view)
-    {
-      //  Intent intent = new Intent(getActivity().getApplicationContext(), TransactionAddEditActivity.class);
-       // startActivity(intent);
-    }
-
-
 }

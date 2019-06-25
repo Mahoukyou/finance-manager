@@ -1,11 +1,12 @@
 package com.wdowiak.financemanager.transactions;
 
-import androidx.lifecycle.ViewModel;
+import com.wdowiak.financemanager.DisplayFragmentViewModel;
 import com.wdowiak.financemanager.data.Transaction;
-import java.util.ArrayList;
 
-public class TransactionDisplayFragmentViewModel extends ViewModel
+// since we cannot get .class of templated type CommonViewModel<TYPE, AdAPTER>
+// we have to make empty class derived from the templated one
+public class TransactionDisplayFragmentViewModel
+        extends DisplayFragmentViewModel<Transaction, TransactionsAdapter>
 {
-    public ArrayList<Transaction> transactionsData;
-    public TransactionsAdapter transactionsAdapter;
+
 }
