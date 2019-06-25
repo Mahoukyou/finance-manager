@@ -27,6 +27,8 @@ abstract public class CommonDetailViewActivity<T extends IItem> extends AppCompa
     protected Class<?> addEditClass = null;
     protected IItem.Type itemType;
 
+    boolean wasItemUpdated = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -52,9 +54,24 @@ abstract public class CommonDetailViewActivity<T extends IItem> extends AppCompa
         {
             if(data.hasExtra(INTENT_EXTRA_RESULT_ITEM_WAS_UPDATED))
             {
+                wasItemUpdated = true;
                 queryItem();
             }
         }
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        // Relay the item update to fragment
+        if(wasItemUpdated)
+        {
+            Intent resultIntent = new Intent();
+            resultIntent.putExtra(INTENT_EXTRA_RESULT_ITEM_WAS_UPDATED, INTENT_EXTRA_RESULT_ITEM_WAS_UPDATED);
+            setResult(Activity.RESULT_OK, resultIntent);
+        }
+
+        super.onBackPressed();
     }
 
     protected void queryItem()
@@ -96,6 +113,7 @@ abstract public class CommonDetailViewActivity<T extends IItem> extends AppCompa
         progressBarLayout.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
+    // todo use it!
     protected final void disableButtons(final boolean disable)
     {
         final Button btn_add_edit = findViewById(R.id.add_save_action);

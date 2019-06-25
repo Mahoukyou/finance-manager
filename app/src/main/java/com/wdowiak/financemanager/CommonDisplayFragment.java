@@ -102,9 +102,15 @@ abstract public class CommonDisplayFragment<T extends IItem, ItemAdapter extends
         QueryApi.getItems(itemType, new Api.IQueryCallback<ArrayList<T>>()
         {
             @Override
-            public void onSuccess(ArrayList<T> transactions)
+            public void onSuccess(ArrayList<T> items)
             {
-                viewModel.setData(transactions);
+                // async request returned when activity was destroyed
+                if(getActivity() == null || getActivity().getApplicationContext() == null)
+                {
+                    return;
+                }
+
+                viewModel.setData(items);
                 if(viewModel.getAdapter() == null)
                 {
                     viewModel.setAdapter(createItemAdapter());
