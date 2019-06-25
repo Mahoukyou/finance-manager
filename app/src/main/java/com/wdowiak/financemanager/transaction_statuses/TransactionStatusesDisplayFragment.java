@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.wdowiak.financemanager.categories.CategoryDetailActivity;
 import com.wdowiak.financemanager.commons.CommonDisplayFragment;
 import com.wdowiak.financemanager.data.IItem;
 import com.wdowiak.financemanager.data.TransactionStatus;
@@ -34,7 +33,7 @@ public class TransactionStatusesDisplayFragment extends CommonDisplayFragment<Tr
             @Nullable Bundle savedInstanceState)
     {
         itemType = IItem.Type.TransactionStatus;
-        detailClass = CategoryDetailActivity.class; // todo
+        detailClass = TransactionStatusesDetailActivity.class;
 
         return super.onCreateView(inflater, container, savedInstanceState);
     }

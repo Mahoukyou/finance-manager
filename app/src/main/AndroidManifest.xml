@@ -33,6 +33,7 @@
         <activity android:name=".groups.GroupAddEditActivity" />
         <activity android:name=".transactions.TransactionAddEditActivity" />
         <activity android:name=".transactions.TransactionDetailActivity" />
+        <activity android:name=".transaction_statuses.TransactionStatusesDetailActivity" />
     </application>
 
 </manifest>
