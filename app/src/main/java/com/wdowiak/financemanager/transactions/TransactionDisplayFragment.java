@@ -11,8 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.wdowiak.financemanager.CommonDisplayFragment;
-import com.wdowiak.financemanager.DisplayFragmentViewModel;
+import com.wdowiak.financemanager.commons.CommonDisplayFragment;
 import com.wdowiak.financemanager.data.IItem;
 import com.wdowiak.financemanager.data.Transaction;
 

@@ -3,7 +3,7 @@ package com.wdowiak.financemanager.groups;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import com.wdowiak.financemanager.CommonDetailViewActivity;
+import com.wdowiak.financemanager.commons.CommonDetailViewActivity;
 import com.wdowiak.financemanager.R;
 import com.wdowiak.financemanager.data.Group;
 import com.wdowiak.financemanager.data.IItem;

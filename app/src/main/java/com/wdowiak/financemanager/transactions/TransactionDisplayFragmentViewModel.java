@@ -1,6 +1,6 @@
 package com.wdowiak.financemanager.transactions;
 
-import com.wdowiak.financemanager.DisplayFragmentViewModel;
+import com.wdowiak.financemanager.commons.DisplayFragmentViewModel;
 import com.wdowiak.financemanager.data.Transaction;
 
 // since we cannot get .class of templated type CommonViewModel<TYPE, AdAPTER>

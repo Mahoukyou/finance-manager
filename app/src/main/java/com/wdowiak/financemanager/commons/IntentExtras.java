@@ -1,4 +1,4 @@
-package com.wdowiak.financemanager;
+package com.wdowiak.financemanager.commons;
 
 public class IntentExtras
 {

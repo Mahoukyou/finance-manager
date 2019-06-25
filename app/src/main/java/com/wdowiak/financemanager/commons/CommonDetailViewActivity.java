@@ -1,4 +1,4 @@
-package com.wdowiak.financemanager;
+package com.wdowiak.financemanager.commons;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -12,14 +12,15 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.wdowiak.financemanager.R;
 import com.wdowiak.financemanager.api.Api;
 import com.wdowiak.financemanager.api.QueryApi;
 import com.wdowiak.financemanager.data.IItem;
 
-import static com.wdowiak.financemanager.IntentExtras.EDIT_ITEM_REQUEST;
-import static com.wdowiak.financemanager.IntentExtras.INTENT_EXTRA_ITEM_ID;
-import static com.wdowiak.financemanager.IntentExtras.INTENT_EXTRA_RESULT_ITEM_WAS_DELETED;
-import static com.wdowiak.financemanager.IntentExtras.INTENT_EXTRA_RESULT_ITEM_WAS_UPDATED;
+import static com.wdowiak.financemanager.commons.IntentExtras.EDIT_ITEM_REQUEST;
+import static com.wdowiak.financemanager.commons.IntentExtras.INTENT_EXTRA_ITEM_ID;
+import static com.wdowiak.financemanager.commons.IntentExtras.INTENT_EXTRA_RESULT_ITEM_WAS_DELETED;
+import static com.wdowiak.financemanager.commons.IntentExtras.INTENT_EXTRA_RESULT_ITEM_WAS_UPDATED;
 
 abstract public class CommonDetailViewActivity<T extends IItem> extends AppCompatActivity
 {

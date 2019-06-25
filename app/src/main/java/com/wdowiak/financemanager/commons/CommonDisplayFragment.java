@@ -1,9 +1,8 @@
-package com.wdowiak.financemanager;
+package com.wdowiak.financemanager.commons;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,13 +17,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.wdowiak.financemanager.R;
 import com.wdowiak.financemanager.api.Api;
 import com.wdowiak.financemanager.api.QueryApi;
 import com.wdowiak.financemanager.data.IItem;
 
 import java.util.ArrayList;
 
-import static com.wdowiak.financemanager.IntentExtras.*;
+import static com.wdowiak.financemanager.commons.IntentExtras.*;
 
 abstract public class CommonDisplayFragment<T extends IItem, ItemAdapter extends ArrayAdapter> extends Fragment
 {

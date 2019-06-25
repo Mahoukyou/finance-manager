@@ -8,7 +8,6 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.wdowiak.financemanager.CommonDetailViewActivity;
 import com.wdowiak.financemanager.R;
 import com.wdowiak.financemanager.api.QueryApi;
 import com.wdowiak.financemanager.data.IItem;
@@ -20,7 +19,7 @@ import com.wdowiak.financemanager.data.TransactionStatus;
 
 import java.util.ArrayList;
 
-import static com.wdowiak.financemanager.IntentExtras.INTENT_EXTRA_ITEM_ID;
+import static com.wdowiak.financemanager.commons.IntentExtras.INTENT_EXTRA_ITEM_ID;
 
 public class TransactionAddEditActivity extends AppCompatActivity {
 

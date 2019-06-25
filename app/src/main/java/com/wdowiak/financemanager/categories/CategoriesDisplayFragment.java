@@ -1,36 +1,20 @@
 package com.wdowiak.financemanager.categories;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.wdowiak.financemanager.CommonDisplayFragment;
-import com.wdowiak.financemanager.DisplayFragmentViewModel;
-import com.wdowiak.financemanager.R;
-import com.wdowiak.financemanager.api.Api;
-import com.wdowiak.financemanager.api.QueryApi;
+import com.wdowiak.financemanager.commons.CommonDisplayFragment;
 import com.wdowiak.financemanager.data.Category;
-import com.wdowiak.financemanager.data.Group;
 import com.wdowiak.financemanager.data.IItem;
-import com.wdowiak.financemanager.groups.GroupDetailActivity;
-import com.wdowiak.financemanager.groups.GroupsAdapter;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-
-import static com.wdowiak.financemanager.IntentExtras.INTENT_EXTRA_ITEM_ID;
 
 public class CategoriesDisplayFragment extends CommonDisplayFragment<Category, CategoriesAdapter>
 {
