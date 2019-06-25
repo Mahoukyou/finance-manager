@@ -34,6 +34,7 @@ public class CurrenciesDisplayFragment extends CommonDisplayFragment<Currency, C
     {
         itemType = IItem.Type.Currency;
         detailClass = CurrencyDetailActivity.class;
+        addEditClass = CurrencyDetailActivity.class; // todo
 
         return super.onCreateView(inflater, container, savedInstanceState);
     }

@@ -35,7 +35,7 @@ abstract public class CommonDisplayFragment<T extends IItem, ItemAdapter extends
     LinearLayout progressBarLayout;
 
     protected IItem.Type itemType;
-    protected Class<?> detailClass;
+    protected Class<?> detailClass, addEditClass;
 
     @Nullable
     @Override
@@ -63,6 +63,11 @@ abstract public class CommonDisplayFragment<T extends IItem, ItemAdapter extends
         if(detailClass == null)
         {
             throw new RuntimeException("detailClass cannot be null");
+        }
+
+        if(addEditClass == null)
+        {
+            throw new RuntimeException("addEditClass cannot be null");
         }
 
         return view;
@@ -143,9 +148,8 @@ abstract public class CommonDisplayFragment<T extends IItem, ItemAdapter extends
 
     public void onAddItem(final View view)
     {
-        // todo
-        //  Intent intent = new Intent(getActivity().getApplicationContext(), TransactionAddEditActivity.class);
-        // startActivity(intent);
+        Intent intent = new Intent(getActivity().getApplicationContext(), addEditClass);
+        startActivityForResult(intent, ADD_ITEM_REQUEST);
     }
 
     protected DisplayFragmentViewModel<T, ItemAdapter> getViewModel()

@@ -34,6 +34,7 @@ public class CategoriesDisplayFragment extends CommonDisplayFragment<Category, C
     {
         itemType = IItem.Type.Category;
         detailClass = CategoryDetailActivity.class;
+        addEditClass = CategoryDetailActivity.class; // todo
 
         return super.onCreateView(inflater, container, savedInstanceState);
     }
