@@ -29,6 +29,7 @@
 
         <activity android:name=".accounts.AccountDetailActivity" />
         <activity android:name=".categories.CategoryDetailActivity" />
+        <activity android:name=".currencies.CurrencyDetailActivity" />
         <activity android:name=".groups.GroupDetailActivity" />
         <activity android:name=".groups.GroupAddEditActivity" />
         <activity android:name=".transactions.TransactionAddEditActivity" />

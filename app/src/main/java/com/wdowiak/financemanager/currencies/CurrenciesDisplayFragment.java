@@ -10,8 +10,6 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.wdowiak.financemanager.CommonDisplayFragment;
-import com.wdowiak.financemanager.accounts.AccountDetailActivity;
-import com.wdowiak.financemanager.data.Account;
 import com.wdowiak.financemanager.data.Currency;
 import com.wdowiak.financemanager.data.IItem;
 
@@ -35,9 +33,7 @@ public class CurrenciesDisplayFragment extends CommonDisplayFragment<Currency, C
             @Nullable Bundle savedInstanceState)
     {
         itemType = IItem.Type.Currency;
-
-        // todo, currencies detail does not exist yet
-        detailClass = AccountDetailActivity.class;
+        detailClass = CurrencyDetailActivity.class;
 
         return super.onCreateView(inflater, container, savedInstanceState);
     }
