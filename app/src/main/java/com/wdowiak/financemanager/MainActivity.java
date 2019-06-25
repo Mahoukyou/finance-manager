@@ -14,6 +14,7 @@ import com.wdowiak.financemanager.categories.CategoriesDisplayFragment;
 import com.wdowiak.financemanager.data.LoggedInUser;
 import com.wdowiak.financemanager.data.LoginRepository;
 import com.wdowiak.financemanager.groups.GroupsDisplayFragment;
+import com.wdowiak.financemanager.transaction_statuses.TransactionStatusesDisplayFragment;
 import com.wdowiak.financemanager.transactions.TransactionDisplayFragment;
 import com.wdowiak.financemanager.ui.login.LoginActivity;
 
@@ -115,6 +116,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             case R.id.nav_categories:
                 displayFragment(CategoriesDisplayFragment.newInstance());
+                break;
+
+            case R.id.nav_statuses:
+                displayFragment(TransactionStatusesDisplayFragment.newInstance());
                 break;
 
 
