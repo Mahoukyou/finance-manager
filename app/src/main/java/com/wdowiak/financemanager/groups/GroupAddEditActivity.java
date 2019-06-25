@@ -101,10 +101,23 @@ public class GroupAddEditActivity extends CommonAddEditActivity<Group, GroupAddE
             return null;
         }
 
-        return new Group(
-                getViewModel().getItemId(),
-                groupName.getText().toString(),
-                groupDescription.getText().toString());
+        // todo, redo somehow else?
+        Group newGroup = null;
+        if(isEdit())
+        {
+            newGroup = new Group(
+                    getViewModel().getItemId(),
+                    groupName.getText().toString(),
+                    groupDescription.getText().toString());
+        }
+        else
+        {
+            newGroup = new Group(
+                    groupName.getText().toString(),
+                    groupDescription.getText().toString());
+        }
+
+        return newGroup;
     }
 
     protected void onFormStateChanged(GroupAddEditFormState formState)
