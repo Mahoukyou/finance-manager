@@ -17,8 +17,7 @@ public class TransactionStatusesDetailActivity extends CommonDetailViewActivity<
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transactionstatus_detail);
 
-        // todo, no aaddedit for account just yet
-        addEditClass = GroupAddEditActivity.class;
+        addEditClass = TransactionStatusAddEditActivity.class;
         itemType = IItem.Type.TransactionStatus;
 
         afterCreate();

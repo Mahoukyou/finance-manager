@@ -39,6 +39,9 @@ public class TransactionStatus implements IItem
     {
         HashMap<String, String> params = new HashMap<>();
         params.put("name", getName());
+        params.put("Ordinal", "4");
+        params.put("Class", "tralala");
+        params.put("Color", "aaa");
         // todo, do we need the color && ordinal since its not required in api??
 
         return new JSONObject(params);
