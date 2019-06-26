@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -65,6 +64,10 @@ abstract public class CommonAddEditActivity<ItemType extends IItem, FormState ex
         {
             viewModel.setItemId(getIntent().getExtras().getLong(INTENT_EXTRA_ITEM_ID));
             queryItem();
+        }
+        else
+        {
+            queryLocalItems();
         }
     }
 
@@ -256,5 +259,9 @@ abstract public class CommonAddEditActivity<ItemType extends IItem, FormState ex
     protected CommonAddEditViewModel<ItemType, FormState> getViewModel()
     {
         return viewModel;
+    }
+    protected void queryLocalItems()
+    {
+        // unused by default -- used by these who need to query db for additional info (eg group when adding account)
     }
 }

@@ -34,7 +34,7 @@ public class AccountsDisplayFragment extends CommonDisplayFragment<Account, Acco
     {
         itemType = IItem.Type.Account;
         detailClass = AccountDetailActivity.class;
-        addEditClass = AccountDetailActivity.class; // todo
+        addEditClass = AccountAddEditActivity.class;
 
         return super.onCreateView(inflater, container, savedInstanceState);
     }

@@ -61,13 +61,29 @@ public class Account implements IItem
     @Override
     public final JSONObject createJSONObject()
     {
-        HashMap<String, String> params = new HashMap<>();
-        params.put("name", getName());
-        params.put("groupId", String.valueOf(getGroup().getId()));
-        params.put("currencyId", String.valueOf(getCurrency().getId()));
-        params.put("startingAmount", "0");
+        JSONObject jsonObject = new JSONObject();
+        try
+        {
+            jsonObject.put("name", getName());
 
-        return new JSONObject(params);
+            final JSONObject groupJSONObject = new JSONObject();
+            groupJSONObject.put("groupId", getGroup().getId());
+            jsonObject.put("group",groupJSONObject);
+
+            final JSONObject currencyJSONObject = new JSONObject();
+            currencyJSONObject.put("currencyId", getCurrency().getId());
+            jsonObject.put("currency", currencyJSONObject);
+
+            jsonObject.put("startAmount", "0"); // unused atm
+
+        }
+        catch (JSONException ex)
+        {
+            /// .... gotta catch the json or it wont compile...
+            throw new RuntimeException(ex);
+        }
+
+        return jsonObject;
     }
 
     @Contract(pure = true)

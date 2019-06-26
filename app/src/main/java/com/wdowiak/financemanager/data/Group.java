@@ -70,6 +70,7 @@ public class Group implements IItem
 
     @Contract(pure = true)
     @NotNull
+    @Override
     public final long getId()
     {
         return id;
@@ -77,6 +78,7 @@ public class Group implements IItem
 
     @Contract(pure = true)
     @NotNull
+    @Override
     public final String getName()
     {
         return name;

@@ -28,6 +28,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity android:name=".accounts.AccountDetailActivity" />
+        <activity android:name=".accounts.AccountAddEditActivity" />
         <activity android:name=".categories.CategoryAddEditActivity" />
         <activity android:name=".categories.CategoryDetailActivity" />
         <activity android:name=".currencies.CurrencyAddEditActivity" />

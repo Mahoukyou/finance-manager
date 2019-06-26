@@ -17,8 +17,7 @@ public class AccountDetailActivity extends CommonDetailViewActivity<Account>
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_detail);
 
-        // todo, no aaddedit for account just yet
-        addEditClass = GroupAddEditActivity.class;
+        addEditClass = AccountAddEditActivity.class;
         itemType = IItem.Type.Account;
 
         afterCreate();
