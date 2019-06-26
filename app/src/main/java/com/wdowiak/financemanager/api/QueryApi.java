@@ -2,7 +2,6 @@ package com.wdowiak.financemanager.api;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
-import com.wdowiak.financemanager.data.Category;
 import com.wdowiak.financemanager.data.IItem;
 import com.wdowiak.financemanager.data.ItemFactory;
 
@@ -18,6 +17,40 @@ public class QueryApi
     public static <T extends IItem> void getItems(final IItem.Type itemType, final Api.IQueryCallback<ArrayList<T>> callback)
     {
         Api.asyncQuery(Request.Method.GET, Api.getQueryUrl(itemType), new JSONObject(), new Api.IApiCallback()
+        {
+            @Override
+            public void onResponse(JSONObject response)
+            {
+                try
+                {
+                    final JSONArray itemsJSONArray = response.getJSONArray("Items");
+
+                    ArrayList<T> categories = new ArrayList<>();
+                    for(int i = 0; i < itemsJSONArray.length(); ++i)
+                    {
+                        categories.add(ItemFactory.createItem(itemType, itemsJSONArray.getJSONObject(i)));
+                    }
+
+                    callback.onSuccess(categories);
+                }
+                catch (JSONException error)
+                {
+                    callback.onError(error);
+                }
+            }
+
+            @Override
+            public void onErrorResponse(VolleyError error)
+            {
+                callback.onError(error);
+            }
+        });
+    }
+
+    public static <T extends IItem> void getItemsFiltered(final IItem.Type itemType, String filter, final Api.IQueryCallback<ArrayList<T>> callback)
+    {
+        // todo
+        Api.asyncQuery(Request.Method.GET, Api.getQueryUrl(itemType) + "?" + filter, new JSONObject(), new Api.IApiCallback()
         {
             @Override
             public void onResponse(JSONObject response)

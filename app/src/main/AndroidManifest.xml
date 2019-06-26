@@ -37,6 +37,7 @@
         <activity android:name=".groups.GroupDetailActivity" />
         <activity android:name=".transactions.TransactionAddEditActivity" />
         <activity android:name=".transactions.TransactionDetailActivity" />
+        <activity android:name=".transactions_filter.TransactionsFilterActivity" />
         <activity android:name=".transaction_statuses.TransactionStatusAddEditActivity" />
         <activity android:name=".transaction_statuses.TransactionStatusesDetailActivity" />
     </application>

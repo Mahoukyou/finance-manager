@@ -151,7 +151,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         finish();
     }
 
-
     final void displayFragment(final Fragment instance)
     {
         getSupportFragmentManager().beginTransaction().replace(R.id.container, instance).commitNow();

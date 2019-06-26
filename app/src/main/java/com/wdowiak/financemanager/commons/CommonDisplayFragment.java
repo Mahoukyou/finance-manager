@@ -152,6 +152,11 @@ abstract public class CommonDisplayFragment<T extends IItem, ItemAdapter extends
         startActivityForResult(intent, ADD_ITEM_REQUEST);
     }
 
+    protected final ListView getItemsListView()
+    {
+        return itemsListView;
+    }
+
     protected DisplayFragmentViewModel<T, ItemAdapter> getViewModel()
     {
         return viewModel;
