@@ -46,7 +46,7 @@ public class TransactionFilter implements Parcelable
         this.statusId = statusId;
         this.description = description;
         this.minAmount = minAmount;
-        this.minAmount = maxAmount;
+        this.maxAmount = maxAmount;
     }
 
     @Nullable
@@ -108,7 +108,7 @@ public class TransactionFilter implements Parcelable
         String queryString = parameterToString(true, "SourceAccountId", getSourceAccountId());
         queryString += parameterToString(queryString.isEmpty(), "TargetAccountId", getTargetAccountId());
         queryString += parameterToString(queryString.isEmpty(), "CategoryId", getCategoryId());
-        queryString += parameterToString(queryString.isEmpty(), "StatusId", getStatusId());
+        queryString += parameterToString(queryString.isEmpty(), "TransactionStatusId", getStatusId());
         queryString += parameterToString(queryString.isEmpty(), "Description", getDescription());
         queryString += parameterToString(queryString.isEmpty(), "MinAmount", getMinAmount());
         queryString += parameterToString(queryString.isEmpty(), "MaxAmount", getMaxAmount());
