@@ -37,6 +37,8 @@ abstract public class CommonAddEditActivity<ItemType extends IItem, FormState ex
             throw new RuntimeException("itemType cannot be null");
         }
 
+        setButtonsText();
+
         viewModel = createViewModel();
         if(viewModel == null)
         {
@@ -249,6 +251,15 @@ abstract public class CommonAddEditActivity<ItemType extends IItem, FormState ex
 
         final Button btn_cancel = findViewById(R.id.cancel_action);
         btn_cancel.setEnabled(!disable);
+    }
+
+    protected void setButtonsText()
+    {
+        final Button btn_add_edit = findViewById(R.id.add_save_action);
+        btn_add_edit.setText(isEdit() ? "Save" : "Create");
+
+        final Button btn_cancel = findViewById(R.id.cancel_action);
+        btn_cancel.setText(isEdit() ? "Cancel" : "Discard");
     }
 
     abstract protected CommonAddEditViewModel<ItemType, FormState> createViewModel();

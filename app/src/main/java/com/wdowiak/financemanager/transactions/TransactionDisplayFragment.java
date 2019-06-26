@@ -8,9 +8,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.wdowiak.financemanager.R;
 import com.wdowiak.financemanager.commons.CommonDisplayFragment;
 import com.wdowiak.financemanager.data.IItem;
 import com.wdowiak.financemanager.data.Transaction;
@@ -38,6 +41,8 @@ public class TransactionDisplayFragment extends CommonDisplayFragment<Transactio
         detailClass = TransactionDetailActivity.class;
         addEditClass = TransactionAddEditActivity.class;
 
+        setHasOptionsMenu(true);
+
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
@@ -49,6 +54,14 @@ public class TransactionDisplayFragment extends CommonDisplayFragment<Transactio
 
         queryAndDisplayItems();
     }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
+    {
+        inflater.inflate(R.menu.transactions_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
 
     @Override
     protected TransactionDisplayFragmentViewModel getViewModel()
