@@ -8,8 +8,7 @@
         android:id="@+id/view_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:visibility="gone">
+        android:orientation="vertical">
 
         <!-- Amount linear layout -->
         <LinearLayout
@@ -32,13 +31,6 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_weight="1"/>
-
-            <TextView
-                android:id="@+id/transaction_currency_sign"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="$ "
-                android:gravity="right|center"/>
 
             <TextView
                 android:id="@+id/transaction_amount"
@@ -161,6 +153,34 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Pending"
+                    android:gravity="right|center" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/view_layout_item_top_padding">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Date"
+                    android:gravity="left|center"
+                    android:layout_gravity="left"/>
+
+                <!-- Dummy view -->
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/transaction_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1994/04/04"
                     android:gravity="right|center" />
 
             </LinearLayout>

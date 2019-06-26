@@ -1,11 +1,17 @@
 package com.wdowiak.financemanager.data;
 
+import com.wdowiak.financemanager.commons.Helpers;
+
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 public final class Transaction implements IItem
@@ -16,7 +22,8 @@ public final class Transaction implements IItem
             @Nullable Account sourceAccount,
             @Nullable Account targetAccount,
             @NotNull Category category,
-            @NotNull TransactionStatus status)
+            @NotNull TransactionStatus status,
+            @NotNull Date date)
     {
         this.amount = amount;
         this.description = description;
@@ -24,6 +31,7 @@ public final class Transaction implements IItem
         this.targetAccount = targetAccount;
         this.category = category;
         this.transactionStatus = status;
+        this.date = date;
     }
 
     public Transaction(
@@ -33,9 +41,10 @@ public final class Transaction implements IItem
             @Nullable Account sourceAccount,
             @Nullable Account targetAccount,
             @NotNull Category category,
-            @NotNull TransactionStatus status)
+            @NotNull TransactionStatus status,
+            @NotNull Date date)
     {
-        this(amount, description, sourceAccount, targetAccount, category, status);;
+        this(amount, description, sourceAccount, targetAccount, category, status, date);
         this.id = id;
     }
 
@@ -71,6 +80,16 @@ public final class Transaction implements IItem
             transaction.transactionStatus = TransactionStatus.createFromJSONObject(jsonObject.getJSONObject("TransactionStatus"));
         }
 
+        final String stringDate = jsonObject.getString("EntryDate");
+        try
+        {
+            transaction.date = Helpers.getSimpleDateFormatToParse().parse(stringDate);
+        }
+        catch (ParseException e)
+        {
+            throw new RuntimeException(e);
+        }
+
         return transaction;
     }
 
@@ -79,10 +98,52 @@ public final class Transaction implements IItem
     @Override
     public final JSONObject createJSONObject()
     {
-        HashMap<String, String> params = new HashMap<>();
-        // todo
+        JSONObject jsonObject = new JSONObject();
+        try
+        {
+            jsonObject.put("amount", String.valueOf(getAmount()));
+            jsonObject.put("description", getDescription());
 
-        return new JSONObject(params);
+            if(getSourceAccount() != null)
+            {
+                final JSONObject sourceAccountJson = new JSONObject();
+                sourceAccountJson.put("accountId", getSourceAccount().getId());
+                jsonObject.put("sourceAccount", sourceAccountJson);
+            }
+            else
+            {
+                jsonObject.put("sourceAccount", JSONObject.NULL);
+            }
+
+
+            if(getTargetAccount() != null)
+            {
+                final JSONObject targetAccountJson = new JSONObject();
+                targetAccountJson.put("accountId", getTargetAccount().getId());
+                jsonObject.put("targetAccount", targetAccountJson);
+            }
+            else
+            {
+                jsonObject.put("targetAccount", JSONObject.NULL);
+            }
+
+            final JSONObject categoryJson = new JSONObject();
+            categoryJson.put("categoryId", getCategory().getId());
+            jsonObject.put("category", categoryJson);
+
+            final JSONObject statusJson = new JSONObject();
+            statusJson.put("transactionStatusId", getStatus().getId());
+            jsonObject.put("transactionStatus", statusJson);
+
+            jsonObject.put("EntryDate", Helpers.getSimpleDateFormatToFormat().format(date));
+        }
+        catch (JSONException ex)
+        {
+            /// .... gotta catch the json or it wont compile...
+            throw new RuntimeException(ex);
+        }
+
+        return jsonObject;
     }
 
     @Contract(pure = true)
@@ -135,6 +196,12 @@ public final class Transaction implements IItem
         return transactionStatus;
     }
 
+    @Contract(pure = true)
+    public final Date getDate()
+    {
+        return date;
+    }
+
     long id;
     double amount;
     String description;
@@ -143,4 +210,6 @@ public final class Transaction implements IItem
     Account targetAccount;
     Category category;
     TransactionStatus transactionStatus;
+
+    Date date;
 }

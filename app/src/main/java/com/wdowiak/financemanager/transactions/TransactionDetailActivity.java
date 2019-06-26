@@ -5,6 +5,8 @@ import android.widget.TextView;
 
 import com.wdowiak.financemanager.commons.CommonDetailViewActivity;
 import com.wdowiak.financemanager.R;
+import com.wdowiak.financemanager.commons.Helpers;
+import com.wdowiak.financemanager.data.Account;
 import com.wdowiak.financemanager.data.IItem;
 import com.wdowiak.financemanager.data.Transaction;
 
@@ -42,7 +44,17 @@ public class TransactionDetailActivity extends CommonDetailViewActivity<Transact
         textView.setText(transaction.getDescription());
 
         textView = findViewById(R.id.transaction_amount);
-        textView.setText(String.valueOf(transaction.getAmount()));
+
+        Account account = transaction.getSourceAccount();
+        account = account == null ? transaction.getTargetAccount() : account;
+        if(account != null)
+        {
+            final boolean isPrefix = account.getCurrency().getPrefix();
+            final String currencySymbol = account.getCurrency().getSymbol();
+            final String amount = String.valueOf(transaction.getAmount());
+
+            textView.setText(isPrefix ? currencySymbol + " " + amount : amount + " " + currencySymbol );
+        }
 
         textView = findViewById(R.id.transaction_status);
         textView.setText(transaction.getStatus() != null ? transaction.getStatus().getName() : null);
@@ -50,5 +62,7 @@ public class TransactionDetailActivity extends CommonDetailViewActivity<Transact
         textView = findViewById(R.id.transaction_category);
         textView.setText(transaction.getCategory() != null ? transaction.getCategory().getName() : null);
 
+        textView = findViewById(R.id.transaction_date);
+        textView.setText(Helpers.getSimpleDateFormatToFormat().format(transaction.getDate()));
     }
 }

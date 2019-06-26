@@ -28,6 +28,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class TransactionAddEditActivity extends CommonAddEditActivity<Transaction, TransactionAddEditFormState>
@@ -216,7 +217,8 @@ public class TransactionAddEditActivity extends CommonAddEditActivity<Transactio
                     getSelectedSourceAccount(),
                     getSelectedTargetAccount(),
                     getSelectedCategory(),
-                    getSelectedStatus());
+                    getSelectedStatus(),
+                    Calendar.getInstance().getTime());
         }
         else
         {
@@ -226,7 +228,8 @@ public class TransactionAddEditActivity extends CommonAddEditActivity<Transactio
                     getSelectedSourceAccount(),
                     getSelectedTargetAccount(),
                     getSelectedCategory(),
-                    getSelectedStatus());
+                    getSelectedStatus(),
+                    Calendar.getInstance().getTime());
         }
 
         return newTransaction;
