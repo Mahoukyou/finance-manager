@@ -10,6 +10,38 @@ import java.util.HashMap;
 
 public final class Transaction implements IItem
 {
+    public Transaction(
+            double amount,
+            @NotNull String description,
+            @Nullable Account sourceAccount,
+            @Nullable Account targetAccount,
+            @NotNull Category category,
+            @NotNull TransactionStatus status)
+    {
+        this.amount = amount;
+        this.description = description;
+        this.sourceAccount = sourceAccount;
+        this.targetAccount = targetAccount;
+        this.category = category;
+        this.transactionStatus = status;
+    }
+
+    public Transaction(
+            long id,
+            double amount,
+            @NotNull String description,
+            @Nullable Account sourceAccount,
+            @Nullable Account targetAccount,
+            @NotNull Category category,
+            @NotNull TransactionStatus status)
+    {
+        this(amount, description, sourceAccount, targetAccount, category, status);;
+        this.id = id;
+    }
+
+    private Transaction() {}
+
+
     public static final Transaction createFromJSONObject(final JSONObject jsonObject) throws JSONException
     {
         final Transaction transaction = new Transaction();

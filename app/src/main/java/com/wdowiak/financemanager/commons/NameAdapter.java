@@ -67,7 +67,7 @@ public class NameAdapter<T extends IItem> extends ArrayAdapter<T>
         }
 
         T item = getItem(position);
-        viewHolder.name.setText(item.getName());
+        viewHolder.name.setText(item != null ? item.getName() : "");
 
         return result;
     }
@@ -75,9 +75,27 @@ public class NameAdapter<T extends IItem> extends ArrayAdapter<T>
     @Override
     public View getDropDownView(int position, View convertView, ViewGroup parent)
     {
-        final TextView label = (TextView) super.getDropDownView(position, convertView, parent);
-        label.setText(getItem(position).getName());
+        ViewHolder viewHolder;
+        View result;
 
-        return label;
+        if(convertView == null)
+        {
+            viewHolder = new ViewHolder();
+            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.spinner_item, parent, false);
+            viewHolder.name = convertView.findViewById(R.id.spinner_text);
+
+            result = convertView;
+            convertView.setTag(viewHolder);
+        }
+        else
+        {
+            viewHolder = (ViewHolder) convertView.getTag();
+            result = convertView;
+        }
+
+        T item = getItem(position);
+        viewHolder.name.setText(item != null ? item.getName() : "");
+
+        return result;
     }
 }

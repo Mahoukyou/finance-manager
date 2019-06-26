@@ -1,35 +1,45 @@
 package com.wdowiak.financemanager.transactions;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Toast;
+
+import androidx.lifecycle.ViewModelProviders;
 
 import com.wdowiak.financemanager.R;
-import com.wdowiak.financemanager.api.QueryApi;
-import com.wdowiak.financemanager.data.IItem;
-import com.wdowiak.financemanager.data.Transaction;
 import com.wdowiak.financemanager.api.Api;
+import com.wdowiak.financemanager.api.QueryApi;
+import com.wdowiak.financemanager.categories.AdapterDataModel;
+import com.wdowiak.financemanager.commons.CommonAddEditActivity;
+import com.wdowiak.financemanager.commons.NameAdapter;
 import com.wdowiak.financemanager.data.Account;
 import com.wdowiak.financemanager.data.Category;
+import com.wdowiak.financemanager.data.Currency;
+import com.wdowiak.financemanager.data.Group;
+import com.wdowiak.financemanager.data.IItem;
+import com.wdowiak.financemanager.data.Transaction;
 import com.wdowiak.financemanager.data.TransactionStatus;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 
-import static com.wdowiak.financemanager.commons.IntentExtras.INTENT_EXTRA_ITEM_ID;
+public class TransactionAddEditActivity extends CommonAddEditActivity<Transaction, TransactionAddEditFormState>
+{
+    interface ILocalQuerySuccess<T extends IItem>
+    {
+        void onSuccess(ArrayList<T> result);
+    }
 
-public class TransactionAddEditActivity extends AppCompatActivity {
-
-    Long transactionId = null;
-
-    Transaction transaction;
-
-    ArrayList<Account> accounts;
-    ArrayList<Category> categories;
-    ArrayList<TransactionStatus> transactionStatuses;
+    EditText transactionDescription, transactionAmount;
+    Spinner sourceAccountSpinner, targetAccountSpinner, categorySpinner, statusSpinner;
+    AtomicInteger queryCounter = new AtomicInteger(-1); // Could be done better, but time is pressing
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -37,207 +47,299 @@ public class TransactionAddEditActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transaction_add_edit);
 
-        if(getIntent().hasExtra(INTENT_EXTRA_ITEM_ID))
+        itemType = IItem.Type.Transaction;
+
+        transactionDescription = findViewById(R.id.transaction_description);
+        transactionAmount = findViewById(R.id.transaction_amount);
+        sourceAccountSpinner = findViewById(R.id.transaction_source_account);
+        targetAccountSpinner = findViewById(R.id.transaction_target_account);
+        categorySpinner = findViewById(R.id.transaction_category);
+        statusSpinner = findViewById(R.id.transaction_status);
+
+        transactionDescription.addTextChangedListener(afterTextChangedListener);
+        transactionAmount.addTextChangedListener(afterTextChangedListener);
+        sourceAccountSpinner.setOnItemSelectedListener(afterSelectionChangedListener);
+        targetAccountSpinner.setOnItemSelectedListener(afterSelectionChangedListener);
+        categorySpinner.setOnItemSelectedListener(afterSelectionChangedListener);
+        statusSpinner.setOnItemSelectedListener(afterSelectionChangedListener);
+
+        afterCreate();
+    }
+
+    TextWatcher afterTextChangedListener = new TextWatcher()
+    {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after)
         {
-            transactionId = getIntent().getExtras().getLong(INTENT_EXTRA_ITEM_ID);
-            getTransaction();
+            // ignore
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count)
+        {
+            // ignore
+        }
+
+        @Override
+        public void afterTextChanged(Editable s)
+        {
+            onDataChanged();
+        }
+    };
+
+    void onDataChanged()
+    {
+        double amount = 0.0;
+        final String amountString = transactionAmount.getText().toString();
+        if(!amountString.isEmpty())
+        {
+            amount = Double.valueOf(amountString);
+        }
+
+        getViewModel().dataChanged(
+            amount,
+            transactionDescription.getText().toString(),
+            getSelectedSourceAccount(),
+            getSelectedTargetAccount(),
+            getSelectedCategory(),
+            getSelectedStatus());
+    }
+
+    AdapterView.OnItemSelectedListener afterSelectionChangedListener = new AdapterView.OnItemSelectedListener()
+    {
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l)
+        {
+            onDataChanged();
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView)
+        {
+            onDataChanged();
+        }
+    };
+
+
+    protected TransactionAddEditViewModel createViewModel()
+    {
+        return ViewModelProviders.of(this).get(TransactionAddEditViewModel.class);
+    }
+
+    @Override
+    protected void afterSuccessfulItemQuery()
+    {
+        queryLocalItems();
+    }
+
+    @Override
+    protected void queryLocalItems()
+    {
+        showProgressBar(true);
+
+        final int queriesToFinish = 3; // 1xAccount && Group && Currency
+        queryCounter.set(queriesToFinish);
+
+        queryLocalItem(IItem.Type.Account, getViewModel().getSourceAccountsDataModel(), new ILocalQuerySuccess()
+        {
+            @Override
+            public void onSuccess(ArrayList result)
+            {
+                // add the null option
+                result.add(0, null);
+
+                // populate the target data model (since its using the same data as source)
+                getViewModel().getTargetAccountsDataModel().setData(result);
+            }
+        });
+
+        queryLocalItem(IItem.Type.Category, getViewModel().getCategoriesAdapterDataModel(), null);
+        queryLocalItem(IItem.Type.TransactionStatus, getViewModel().getStatusesAdapterDataModel(), null);
+    }
+
+    protected void updateAddEditView()
+    {
+        final Transaction transaction = getViewModel().getQueriedItem();
+        if(transaction == null)
+        {
+            throw new RuntimeException("Transaction should not be null");
+        }
+
+        EditText editText = findViewById(R.id.transaction_description);
+        editText.setText(transaction.getDescription());
+
+        editText = findViewById(R.id.transaction_amount);
+        editText.setText(String.valueOf(transaction.getAmount()));
+
+        if(transaction.getSourceAccount() != null)
+        {
+            final int sourceAccountToSelect = getViewModel().getSourceAccountsDataModel().getData().indexOf(transaction.getSourceAccount());
+            sourceAccountSpinner.setSelection(sourceAccountToSelect);
+        }
+
+        if(transaction.getTargetAccount() != null)
+        {
+            final int targetAccountToSelect = getViewModel().getTargetAccountsDataModel().getData().indexOf(transaction.getTargetAccount());
+            targetAccountSpinner.setSelection(targetAccountToSelect);
+        }
+
+        final int categoryToSelect = getViewModel().getCategoriesAdapterDataModel().getData().indexOf(transaction.getCategory());
+        categorySpinner.setSelection(categoryToSelect);
+
+        final int statusToSelect = getViewModel().getCategoriesAdapterDataModel().getData().indexOf(transaction.getStatus());
+        statusSpinner.setSelection(statusToSelect);
+    }
+
+    protected void populateSpinners()
+    {
+        createOrRefreshAdapter(getViewModel().getSourceAccountsDataModel(), sourceAccountSpinner);
+        createOrRefreshAdapter(getViewModel().getTargetAccountsDataModel(), targetAccountSpinner);
+        createOrRefreshAdapter(getViewModel().getCategoriesAdapterDataModel(), categorySpinner);
+        createOrRefreshAdapter(getViewModel().getStatusesAdapterDataModel(), statusSpinner);
+    }
+
+    protected Transaction createItemFromInput()
+    {
+        if(!getViewModel().getFormState().getValue().isDataValid())
+        {
+            return null;
+        }
+
+        // todo, redo somehow else?
+        Transaction newTransaction = null;
+        if(isEdit())
+        {
+            newTransaction = new Transaction(
+                    getViewModel().getItemId(),
+                    Double.valueOf(transactionAmount.getText().toString()),
+                    transactionDescription.getText().toString(),
+                    getSelectedSourceAccount(),
+                    getSelectedTargetAccount(),
+                    getSelectedCategory(),
+                    getSelectedStatus());
         }
         else
         {
-            getAccounts();
-            getCategories();
-            getTransactionStatuses();
+            newTransaction = new Transaction(
+                    Double.valueOf(transactionAmount.getText().toString()),
+                    transactionDescription.getText().toString(),
+                    getSelectedSourceAccount(),
+                    getSelectedTargetAccount(),
+                    getSelectedCategory(),
+                    getSelectedStatus());
         }
+
+        return newTransaction;
     }
 
-    private final void getAccounts()
+    protected void onFormStateChanged(TransactionAddEditFormState formState)
     {
-        QueryApi.getItems(IItem.Type.Account,new Api.IQueryCallback<ArrayList<Account>>()
+        transactionAmount.setError(formState.getAmountError() != null ? getString(formState.getAmountError()) : null);
+        transactionDescription.setError(formState.getDescriptionError() != null ? getString(formState.getDescriptionError()) : null);
+
+        // other erros? for spinners?
+    }
+
+    protected TransactionAddEditViewModel getViewModel()
+    {
+        return (TransactionAddEditViewModel) super.getViewModel();
+    }
+
+    @Nullable
+    private <T extends IItem> T getSelectedItem(@NotNull AdapterDataModel<T, NameAdapter<T>> dataModel, Spinner spinner)
+    {
+        final int selectedIndex = spinner.getSelectedItemPosition();
+        if(selectedIndex < 0)
+        {
+            return null;
+        }
+
+        final ArrayList<T> items = dataModel.getData();
+        if(items == null || items.size() <= selectedIndex)
+        {
+            return null;
+        }
+
+        return items.get(selectedIndex);
+    }
+
+    private Account getSelectedSourceAccount()
+    {
+        return getSelectedItem(getViewModel().getSourceAccountsDataModel(), sourceAccountSpinner);
+    }
+
+    private Account getSelectedTargetAccount()
+    {
+        return getSelectedItem(getViewModel().getTargetAccountsDataModel(), targetAccountSpinner);
+    }
+
+    private Category getSelectedCategory()
+    {
+        return getSelectedItem(getViewModel().getCategoriesAdapterDataModel(), categorySpinner);
+    }
+
+    private TransactionStatus getSelectedStatus()
+    {
+        return getSelectedItem(getViewModel().getStatusesAdapterDataModel(), statusSpinner);
+    }
+
+    private <T extends IItem> void queryLocalItem(
+            IItem.Type itemType,
+            @NotNull AdapterDataModel<T, NameAdapter<T>> dataModel,
+            ILocalQuerySuccess localQueryCallback)
+    {
+        QueryApi.getItems(itemType, new Api.IQueryCallback<ArrayList<T>>()
         {
             @Override
-            public void onSuccess(ArrayList<Account> result)
+            public void onSuccess(ArrayList<T> result)
             {
-                accounts = result;
-                if (accounts == null || accounts.isEmpty())
+                if(localQueryCallback != null)
                 {
-                    return;
+                    localQueryCallback.onSuccess(result);
                 }
 
-                final Spinner sourceAccountSpinner = findViewById(R.id.transaction_source_account);
-                final Spinner targetAccountSpinner = findViewById(R.id.transaction_target_account);
+                dataModel.setData(result);
+                queryCounter.decrementAndGet();
 
-                final ArrayList<String> accountsSpinnerData = accountNamesToArrayList(accounts);
-                accountsSpinnerData.add(0, "[None]"); // todo, use account spinner data
-                sourceAccountSpinner.setAdapter(new ArrayAdapter<>(getApplicationContext(), R.layout.spinner_item, accountsSpinnerData));
-                targetAccountSpinner.setAdapter(new ArrayAdapter<>(getApplicationContext(), R.layout.spinner_item, accountsSpinnerData));
-
-                if(transaction != null)
-                {
-                    if (transaction.getSourceAccount() != null)
-                    {
-                        final int sourceAccountToSelect = accounts.indexOf(transaction.getSourceAccount()) + 1;
-                        sourceAccountSpinner.setSelection(sourceAccountToSelect);
-                    }
-
-                    if (transaction.getTargetAccount() != null)
-                    {
-                        final int targetAccountToSelect = accounts.indexOf(transaction.getTargetAccount()) + 1;
-                        targetAccountSpinner.setSelection(targetAccountToSelect);
-                    }
-                }
+                onLocalQueryFinished();
             }
 
             @Override
             public void onError(Exception error)
             {
-                error.printStackTrace();
-                Toast.makeText(TransactionAddEditActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
-                finish();
+                // todo
             }
         });
     }
 
-    private final void getCategories()
+    private void onLocalQueryFinished()
     {
-        QueryApi.getItems(IItem.Type.Category, new Api.IQueryCallback<ArrayList<Category>>()
+        if(queryCounter.get() != 0)
         {
-            @Override
-            public void onSuccess(ArrayList<Category> result)
-            {
-                categories = result;
-                if(categories == null || categories.isEmpty())
-                {
-                    return;
-                }
-
-                final Spinner categorySpinner = findViewById(R.id.transaction_category);
-
-                final ArrayList<String> categorySpinnerData = categoryNamesToArrayList(categories);
-                categorySpinnerData.add(0, "[None]"); // add cat spin adapter
-                categorySpinner.setAdapter(new ArrayAdapter<>(getApplicationContext(), R.layout.spinner_item, categorySpinnerData));
-
-                if(transaction != null && transaction.getCategory() != null)
-                {
-                    final int categoryToSelect = categories.indexOf(transaction.getCategory()) + 1;
-                    categorySpinner.setSelection(categoryToSelect);
-                }
-            }
-
-            @Override
-            public void onError(Exception error)
-            {
-                error.printStackTrace();
-                Toast.makeText(TransactionAddEditActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
-                finish();
-            }
-        });
-    }
-
-    private final void getTransactionStatuses()
-    {
-        QueryApi.getItems(IItem.Type.TransactionStatus, new Api.IQueryCallback<ArrayList<TransactionStatus>>()
-        {
-            @Override
-            public void onSuccess(ArrayList<TransactionStatus> result)
-            {
-                transactionStatuses = result;
-                if(transactionStatuses == null || transactionStatuses.isEmpty())
-                {
-                    return;
-                }
-
-                final Spinner transactionStatusSpinner = findViewById(R.id.transaction_status);
-
-                final ArrayList<String> statusesSpinnerData = transactionStatusNamesToArrayList(transactionStatuses);
-                statusesSpinnerData.add(0, "[None]");
-                transactionStatusSpinner.setAdapter(new ArrayAdapter<>(getApplicationContext(), R.layout.spinner_item, statusesSpinnerData));
-
-                if(transaction != null)
-                {
-                    final int statusToSelect = transactionStatuses.indexOf(transaction.getStatus()) + 1;
-                    transactionStatusSpinner.setSelection(statusToSelect);
-                }
-            }
-
-            @Override
-            public void onError(Exception error)
-            {
-                error.printStackTrace();
-                Toast.makeText(TransactionAddEditActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
-                finish();
-            }
-        });
-    }
-
-    final void getTransaction()
-    {
-        QueryApi.getItemById(transactionId, IItem.Type.Transaction, new Api.IQueryCallback<Transaction>()
-        {
-            @Override
-            public void onSuccess(Transaction result)
-            {
-                transaction = result;
-                if(transaction == null)
-                {
-                    Toast.makeText(getApplicationContext(), "Transaction[id= " + transactionId + "] does not exist", Toast.LENGTH_SHORT);
-                    finish();
-                }
-
-                getAccounts();
-                getCategories();
-                getTransactionStatuses();
-
-                EditText editText = findViewById(R.id.transaction_description);
-                editText.setText(transaction.getDescription());
-
-                editText = findViewById(R.id.transaction_amount);
-                editText.setText(String.valueOf(transaction.getAmount()));
-            }
-
-            @Override
-            public void onError(Exception error)
-            {
-                error.printStackTrace();
-                Toast.makeText(TransactionAddEditActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
-                finish();
-            }
-        });
-    }
-
-    // Todo, there is got to be a better way (other tahn implementic a common interfacewith getname)
-    ArrayList<String> accountNamesToArrayList(ArrayList<Account> accounts)
-    {
-        ArrayList<String> retVal = new ArrayList<>();
-
-        for(Account account : accounts)
-        {
-            retVal.add(account.getName());
+            return;
         }
 
-        return retVal;
-    }
-
-    ArrayList<String> categoryNamesToArrayList(ArrayList<Category> categories)
-    {
-        ArrayList<String> retVal = new ArrayList<>();
-
-        for(Category category : categories)
+        populateSpinners();
+        if(isEdit())
         {
-            retVal.add(category.getName());
+            updateAddEditView();
         }
 
-        return retVal;
+        showProgressBar(false);
     }
 
-    ArrayList<String> transactionStatusNamesToArrayList(ArrayList<TransactionStatus> transactionStatuses)
+    private <T extends IItem> void createOrRefreshAdapter(@NotNull AdapterDataModel<T, NameAdapter<T>> dataModel, Spinner spinner)
     {
-        ArrayList<String> retVal = new ArrayList<>();
-
-        for(TransactionStatus transactionStatus : transactionStatuses)
+        NameAdapter<T> adapter = dataModel.getAdapter();
+        if(adapter == null)
         {
-            retVal.add(transactionStatus.getName());
+            adapter = new NameAdapter<>(dataModel.getData(), getApplicationContext());
+            dataModel.setAdapter(adapter);
+            spinner.setAdapter(adapter);
         }
-
-        return retVal;
+        else
+        {
+            dataModel.replaceAdaptersDataAndNotify();
+        }
     }
 }
