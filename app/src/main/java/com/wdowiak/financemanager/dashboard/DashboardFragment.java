@@ -20,16 +20,6 @@ import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
-import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.components.AxisBase;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.formatter.IAxisValueFormatter;
-import com.github.mikephil.charting.formatter.ValueFormatter;
-import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
-import com.github.mikephil.charting.utils.ColorTemplate;
 import com.wdowiak.financemanager.R;
 import com.wdowiak.financemanager.api.Api;
 import com.wdowiak.financemanager.api.QueryApi;
@@ -44,6 +34,14 @@ import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
+
+import lecho.lib.hellocharts.model.Axis;
+import lecho.lib.hellocharts.model.Column;
+import lecho.lib.hellocharts.model.ColumnChartData;
+import lecho.lib.hellocharts.model.SubcolumnValue;
+import lecho.lib.hellocharts.util.ChartUtils;
+import lecho.lib.hellocharts.view.ColumnChartView;
 
 import static com.wdowiak.financemanager.commons.IntentExtras.GET_FILTER_REQUEST;
 import static com.wdowiak.financemanager.commons.IntentExtras.INTENT_EXTRA_TRANSACTION_FILTER_PARCELABLE;
@@ -52,7 +50,7 @@ public class DashboardFragment extends Fragment
 {
     private DashboardFragmentViewModel viewModel;
 
-    private BarChart chart;
+    private ColumnChartView chart;
 
     LinearLayout viewLayout, progressBarLayout;
 
@@ -72,7 +70,7 @@ public class DashboardFragment extends Fragment
         setHasOptionsMenu(true);
 
         View view =  inflater.inflate(R.layout.dashboard_fragment, container, false);
-        chart = view.findViewById(R.id.barchart);
+        chart = view.findViewById(R.id.chart);
         viewLayout = view.findViewById(R.id.view_layout);
         progressBarLayout = view.findViewById(R.id.progress_bar_layout);
 
@@ -220,49 +218,40 @@ public class DashboardFragment extends Fragment
     private CustomDate[] x_axis;
     private void populateGraphWithData(ArrayList<Transaction> transactions)
     {
-        chart.clear();
-        chart.setData(null);
-        chart.invalidate();
+
         TimelyData timelyData = DashboardUtilities.createTimelyData(transactions, DataSpanSettings.EType.Monthly);
 
-
-        x_axis = new CustomDate[timelyData.timelyDataHashMap.size()];
-        ArrayList<BarEntry> entries = new ArrayList<>();
-
-        int i = 0;
+        List<Column> columns = new ArrayList<>();
         for(SingleTimelyData singleTimelyData : timelyData.timelyDataHashMap.values())
         {
-            x_axis[i] = singleTimelyData.date;
-            entries.add(new BarEntry(i++, (float)singleTimelyData.amount));
+            List<SubcolumnValue> subcolumnValues = new ArrayList<>();
+
+            subcolumnValues.add(new SubcolumnValue((float)singleTimelyData.amount, ChartUtils.pickColor()));
+
+
+            Column column = new Column(subcolumnValues);
+            column.setHasLabels(true);
+            columns.add(column);
         }
 
-        BarDataSet ds = new BarDataSet(entries, String.valueOf("TEST"));
-        ds.setColors(ColorTemplate.VORDIPLOM_COLORS);
-       // sets.add(ds);
-        XAxis axis = chart.getXAxis();
-        axis.setValueFormatter(new IAxisValueFormatter()
-        {
-            @Override
-            public String getFormattedValue(float value, AxisBase axis)
-            {
-                try
-                {
-                    return x_axis[(int)value].getMonthYear();
-                }
-                catch(ArrayIndexOutOfBoundsException e)
-                {
-                    e.printStackTrace();
-                }
-
-                return "";
+        ColumnChartData data = new ColumnChartData(columns);
+        if (true) {
+            Axis axisX = new Axis();
+            Axis axisY = new Axis().setHasLines(true);
+            if (true) {
+                axisX.setName("Axis X");
+                axisY.setName("Axis Y");
             }
-        });
-        axis.setGranularity(1);
+            data.setAxisXBottom(axisX);
+            data.setAxisYLeft(axisY);
+        } else {
+            data.setAxisXBottom(null);
+            data.setAxisYLeft(null);
+        }
 
-        BarData d = new BarData(ds);
-        chart.setData(d);
-
+        chart.setColumnChartData(data);
         chart.invalidate();
+
 
         showProgressBar(false);
     }
