@@ -12,6 +12,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.wdowiak.financemanager.accounts.AccountsDisplayFragment;
 import com.wdowiak.financemanager.categories.CategoriesDisplayFragment;
 import com.wdowiak.financemanager.currencies.CurrenciesDisplayFragment;
+import com.wdowiak.financemanager.dashboard.DashboardFragment;
 import com.wdowiak.financemanager.data.LoggedInUser;
 import com.wdowiak.financemanager.data.LoginRepository;
 import com.wdowiak.financemanager.groups.GroupsDisplayFragment;
@@ -87,6 +88,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     {
         switch (item.getItemId())
         {
+            case R.id.nav_dashboard:
+                displayFragment(DashboardFragment.newInstance());
+                break;
+
             case R.id.nav_accounts:
                 displayFragment(AccountsDisplayFragment.newInstance());
                 break;
