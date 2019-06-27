@@ -1,181 +1,270 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#eeeeee">
 
     <LinearLayout
-        android:id="@+id/view_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
-
         <LinearLayout
+            android:id="@+id/view_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/layout_background"
-            android:orientation="vertical"
-            android:padding="@dimen/view_layout_padding"
-            android:layout_margin="@dimen/view_layout_margin">
+            android:orientation="vertical">
+
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:background="@drawable/layout_background"
+                android:orientation="vertical"
+                android:padding="@dimen/view_layout_padding"
+                android:layout_margin="@dimen/view_layout_margin">
 
-                <TextView
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="From account"/>
+                    android:orientation="horizontal">
 
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="0.25"/>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="From account"/>
 
-                <Spinner
-                    android:id="@+id/transaction_source_account"
-                    android:layout_width="0dp"
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="0.25"/>
+
+                    <Spinner
+                        android:id="@+id/transaction_source_account"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:autofillHints="TO"
+                        android:gravity="center"
+                        android:layout_weight="3"></Spinner>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:autofillHints="TO"
-                    android:gravity="center"
-                    android:layout_weight="3"></Spinner>
+                    android:orientation="horizontal"
+                    android:layout_marginTop="@dimen/view_layout_item_top_padding">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_gravity="center_vertical"
+                        android:text="To account"/>
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="0.25"/>
+
+                    <Spinner
+                        android:id="@+id/transaction_target_account"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:autofillHints="TO"
+                        android:layout_weight="3"></Spinner>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="@dimen/view_layout_item_top_padding">
+
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Category"/>
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="0.25"/>
+
+                    <Spinner
+                        android:id="@+id/transaction_category"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:autofillHints="TO"
+                        android:layout_weight="3"></Spinner>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="@dimen/view_layout_item_top_padding">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Status"/>
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="0.25"/>
+
+                    <Spinner
+                        android:id="@+id/transaction_status"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:autofillHints="TO"
+                        android:layout_weight="3"></Spinner>
+                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="@dimen/view_layout_item_top_padding">
+                android:background="@drawable/layout_background"
+                android:orientation="vertical"
+                android:padding="@dimen/view_layout_padding"
+                android:layout_margin="@dimen/view_layout_margin">
 
-                <TextView
+                <EditText
+                    android:id="@+id/transaction_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="14dp"
+                    android:hint="Description"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/layout_background"
+                android:orientation="horizontal"
+                android:padding="@dimen/view_layout_padding"
+                android:layout_margin="@dimen/view_layout_margin">
+
+                <EditText
+                    android:id="@+id/transaction_min_amount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="14dp"
+                    android:inputType="numberDecimal"
+                    android:hint="Min amount"/>
+
+                <EditText
+                    android:id="@+id/transaction_max_amount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="14dp"
+                    android:inputType="numberDecimal"
+                    android:hint="Max amount"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/layout_background"
+                android:orientation="horizontal"
+                android:padding="@dimen/view_layout_padding"
+                android:layout_margin="@dimen/view_layout_margin">
+
+                <EditText
+                    android:id="@+id/filter_begin_date"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:textSize="14dp"
+                    android:hint="Begin date"
+                    android:inputType="none"
+                    android:editable="false" />
+
+                <ImageButton
+                    android:id="@+id/filter_begin_date_set_date"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
                     android:layout_gravity="center_vertical"
-                    android:text="To account"/>
+                    android:background="@drawable/date_icon"/>
 
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="0.25"/>
+                <ImageButton
+                    android:id="@+id/filter_begin_date_set_time"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/time_icon"/>
 
-                <Spinner
-                    android:id="@+id/transaction_target_account"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:autofillHints="TO"
-                    android:layout_weight="3"></Spinner>
+                <ImageButton
+                    android:id="@+id/filter_begin_date_reset"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/reset_icon"/>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/layout_background"
                 android:orientation="horizontal"
-                android:layout_marginTop="@dimen/view_layout_item_top_padding">
+                android:padding="@dimen/view_layout_padding"
+                android:layout_margin="@dimen/view_layout_margin">
 
-
-                <TextView
+                <EditText
+                    android:id="@+id/filter_end_date"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Category"/>
+                    android:textSize="14dp"
+                    android:hint="End date"
+                    android:inputType="none"
+                    android:editable="false"/>
+                
+                <ImageButton
+                    android:id="@+id/filter_end_date_set_date"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/date_icon"/>
 
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="0.25"/>
+                <ImageButton
+                    android:id="@+id/filter_end_date_set_time"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/time_icon"/>
 
-                <Spinner
-                    android:id="@+id/transaction_category"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:autofillHints="TO"
-                    android:layout_weight="3"></Spinner>
+                <ImageButton
+                    android:id="@+id/filter_end_date_reset"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/reset_icon"/>
             </LinearLayout>
 
-            <LinearLayout
+
+            <include
+                layout="@layout/add_edit_buttons"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="@dimen/view_layout_item_top_padding">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Status"/>
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="0.25"/>
-
-                <Spinner
-                    android:id="@+id/transaction_status"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:autofillHints="TO"
-                    android:layout_weight="3"></Spinner>
-            </LinearLayout>
+                android:layout_height="match_parent" />
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/layout_background"
-            android:orientation="vertical"
-            android:padding="@dimen/view_layout_padding"
-            android:layout_margin="@dimen/view_layout_margin">
-
-            <EditText
-                android:id="@+id/transaction_description"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textSize="14dp"
-                android:hint="Description"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/layout_background"
-            android:orientation="horizontal"
-            android:padding="@dimen/view_layout_padding"
-            android:layout_margin="@dimen/view_layout_margin">
-
-            <EditText
-                android:id="@+id/transaction_min_amount"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textSize="14dp"
-                android:inputType="numberDecimal"
-                android:hint="Min amount"/>
-
-            <EditText
-                android:id="@+id/transaction_max_amount"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textSize="14dp"
-                android:inputType="numberDecimal"
-                android:hint="Max amount"/>
-
-        </LinearLayout>
         <include
-            layout="@layout/add_edit_buttons"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </LinearLayout>
+        layout="@layout/progress_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
-    <include
-    layout="@layout/progress_bar_layout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" />
-</LinearLayout>
+    </LinearLayout>
+</ScrollView>

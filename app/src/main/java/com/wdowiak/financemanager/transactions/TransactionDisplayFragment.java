@@ -23,7 +23,6 @@ import com.wdowiak.financemanager.R;
 import com.wdowiak.financemanager.api.Api;
 import com.wdowiak.financemanager.api.QueryApi;
 import com.wdowiak.financemanager.commons.CommonDisplayFragment;
-import com.wdowiak.financemanager.commons.IntentExtras;
 import com.wdowiak.financemanager.data.IItem;
 import com.wdowiak.financemanager.data.Transaction;
 import com.wdowiak.financemanager.transactions_filter.TransactionFilter;
@@ -34,9 +33,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
-import static com.wdowiak.financemanager.commons.IntentExtras.EDIT_ITEM_REQUEST;
 import static com.wdowiak.financemanager.commons.IntentExtras.GET_FILTER_REQUEST;
-import static com.wdowiak.financemanager.commons.IntentExtras.INTENT_EXTRA_RESULT_ITEM_WAS_UPDATED;
 import static com.wdowiak.financemanager.commons.IntentExtras.INTENT_EXTRA_TRANSACTION_FILTER_PARCELABLE;
 
 public class TransactionDisplayFragment extends CommonDisplayFragment<Transaction, TransactionsAdapter>
@@ -125,6 +122,11 @@ public class TransactionDisplayFragment extends CommonDisplayFragment<Transactio
                 switch(item.getItemId())
                 {
                     case R.id.filter_reset:
+                        if(getViewModel().getTransactionFilter() != null)
+                        {
+                            getViewModel().setTransactionFilter(null);
+                            queryAndDisplayItems();
+                        }
                         break;
 
                     case R.id.filter_settings:

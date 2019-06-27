@@ -2,17 +2,23 @@ package com.wdowiak.financemanager.transactions_filter;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TimePicker;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
@@ -23,6 +29,7 @@ import com.wdowiak.financemanager.api.QueryApi;
 import com.wdowiak.financemanager.categories.AdapterDataModel;
 import com.wdowiak.financemanager.commons.CommonAddEditActivity;
 import com.wdowiak.financemanager.commons.CommonAddEditViewModel;
+import com.wdowiak.financemanager.commons.Helpers;
 import com.wdowiak.financemanager.commons.IntentExtras;
 import com.wdowiak.financemanager.commons.NameAdapter;
 import com.wdowiak.financemanager.data.Account;
@@ -36,6 +43,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.wdowiak.financemanager.commons.IntentExtras.INTENT_EXTRA_TRANSACTION_FILTER_PARCELABLE;
@@ -50,7 +58,7 @@ public class TransactionsFilterActivity extends AppCompatActivity
     private TransactionsFilterViewModel viewModel = null;
 
 
-    EditText transactionDescription, transactionAmountMin, transactionAmountMax;
+    EditText transactionDescription, transactionAmountMin, transactionAmountMax, beginDate, endDate;
     Spinner sourceAccountSpinner, targetAccountSpinner, categorySpinner, statusSpinner;
     AtomicInteger queryCounter = new AtomicInteger(-1); // Could be done better, but time is pressing
 
@@ -67,10 +75,15 @@ public class TransactionsFilterActivity extends AppCompatActivity
         targetAccountSpinner = findViewById(R.id.transaction_target_account);
         categorySpinner = findViewById(R.id.transaction_category);
         statusSpinner = findViewById(R.id.transaction_status);
+        beginDate = findViewById(R.id.filter_begin_date);
+        endDate = findViewById(R.id.filter_end_date);
 
         viewModel = ViewModelProviders.of(this).get(TransactionsFilterViewModel.class);
 
         setButtonsText();
+        setDateListeners();
+        setTimeListeners();
+        setResetListeners();
 
         queryLocalItems();
     }
@@ -119,6 +132,10 @@ public class TransactionsFilterActivity extends AppCompatActivity
         final String minAmountString = transactionAmountMin.getText().toString();
         final String maxAmountString = transactionAmountMax.getText().toString();
 
+        final Date beginDate = viewModel.getBeginDate().get();
+        final Date endDate = viewModel.getEndDate().get();
+
+
         return new TransactionFilter(
                 sourceAccount != null ? sourceAccount.getId() : null,
                 targetAccount != null ? targetAccount.getId() : null,
@@ -126,7 +143,9 @@ public class TransactionsFilterActivity extends AppCompatActivity
                 status != null ? status.getId() : null,
                 transactionDescription.getText().toString(),
                 !minAmountString.isEmpty() ? Double.valueOf(minAmountString) : null,
-                !maxAmountString.isEmpty() ? Double.valueOf(maxAmountString) : null);
+                !maxAmountString.isEmpty() ? Double.valueOf(maxAmountString) : null,
+                beginDate != null ? Helpers.getSimpleDateFormatToFormat().format(beginDate) : null,
+                endDate != null ? Helpers.getSimpleDateFormatToFormat().format(endDate) : null);
     }
 
     @Nullable
@@ -267,5 +286,110 @@ public class TransactionsFilterActivity extends AppCompatActivity
 
         final Button btn_cancel = findViewById(R.id.cancel_action);
         btn_cancel.setText("Cancel");
+    }
+
+    private void setDateListeners()
+    {
+        setDateListener(beginDate, findViewById(R.id.filter_begin_date_set_date), viewModel.getBeginDate());
+        setDateListener(endDate, findViewById(R.id.filter_end_date_set_date), viewModel.getEndDate());
+    }
+
+    private void setTimeListeners()
+    {
+        setTimeListener(beginDate, findViewById(R.id.filter_begin_date_set_time), viewModel.getBeginDate());
+        setTimeListener(endDate, findViewById(R.id.filter_end_date_set_time), viewModel.getEndDate());
+    }
+
+    private void setResetListeners()
+    {
+        setResetListener(beginDate, findViewById(R.id.filter_begin_date_reset), viewModel.getBeginDate());
+        setResetListener(endDate, findViewById(R.id.filter_end_date_reset), viewModel.getEndDate());
+    }
+
+    private void setDateListener(@NotNull EditText editText, @NotNull ImageButton button, TransactionsFilterViewModel.DateContainer dateContainer)
+    {
+        final Calendar c = Calendar.getInstance();
+        final int year = c.get(Calendar.YEAR);
+        final int month = c.get(Calendar.MONTH);
+        final int day = c.get(Calendar.DAY_OF_MONTH);
+
+        button.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                DatePickerDialog datePickerDialog = new DatePickerDialog(TransactionsFilterActivity.this, new DatePickerDialog.OnDateSetListener()
+                {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int year, int month, int day)
+                    {
+                        Calendar calendar = Calendar.getInstance();
+                        if(dateContainer.get() != null)
+                        {
+                            calendar.setTime(dateContainer.get());
+                        }
+
+                        calendar.set(Calendar.YEAR, year);
+                        calendar.set(Calendar.MONTH, month);
+                        calendar.set(Calendar.DATE, day);
+
+                        dateContainer.set(calendar.getTime());
+
+                        editText.setText(Helpers.getSimpleDateFormatToFormat().format(dateContainer.get()));
+                    }
+                }, year, month, day);
+
+                datePickerDialog.show();
+            }
+        });
+    }
+
+    private void setTimeListener(@NotNull EditText editText, @NotNull ImageButton button, TransactionsFilterViewModel.DateContainer dateContainer)
+    {
+        final Calendar c = Calendar.getInstance();
+        final int hours = c.get(Calendar.HOUR);
+        final int minutes = c.get(Calendar.MINUTE);
+
+        button.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                TimePickerDialog timePickerDialog = new TimePickerDialog(TransactionsFilterActivity.this, new TimePickerDialog.OnTimeSetListener()
+                {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int hour, int minute)
+                    {
+                        Calendar calendar = Calendar.getInstance();
+                        if(dateContainer.get() != null)
+                        {
+                            calendar.setTime(dateContainer.get());
+                        }
+
+                        calendar.set(Calendar.HOUR, hour);
+                        calendar.set(Calendar.MINUTE, minute);
+
+                        dateContainer.set(calendar.getTime());
+
+                        editText.setText(Helpers.getSimpleDateFormatToFormat().format(dateContainer.get()));
+                    }
+                }, hours, minutes, false);
+
+                timePickerDialog.show();
+            }
+        });
+    }
+
+    private void setResetListener(@NotNull EditText editText, @NotNull ImageButton button, TransactionsFilterViewModel.DateContainer dateContainer)
+    {
+        button.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                editText.setText("");
+                dateContainer.set(null);
+            }
+        });
     }
 }

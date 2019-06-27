@@ -31,6 +31,12 @@ public class TransactionFilter implements Parcelable
     @Nullable
     Double maxAmount;
 
+    @Nullable
+    String dateBegin;
+
+    @Nullable
+    String dateEnd;
+
     public TransactionFilter(
             @Nullable Long sourceAccountId,
             @Nullable Long targetAccountId,
@@ -38,7 +44,9 @@ public class TransactionFilter implements Parcelable
             @Nullable Long statusId,
             @Nullable String description,
             @Nullable Double minAmount,
-            @Nullable Double maxAmount)
+            @Nullable Double maxAmount,
+            @Nullable String dateBegin,
+            @Nullable String dateEnd)
     {
         this.sourceAccountId = sourceAccountId;
         this.targetAccountId = targetAccountId;
@@ -47,6 +55,8 @@ public class TransactionFilter implements Parcelable
         this.description = description;
         this.minAmount = minAmount;
         this.maxAmount = maxAmount;
+        this.dateBegin = dateBegin;
+        this.dateEnd = dateEnd;
     }
 
     @Nullable
@@ -91,6 +101,17 @@ public class TransactionFilter implements Parcelable
         return maxAmount;
     }
 
+    @Nullable
+    String getDateBegin()
+    {
+        return dateBegin;
+    }
+
+    @Nullable
+    String getDateEnd()
+    {
+        return dateEnd;
+    }
 
     protected TransactionFilter(@NotNull Parcel in)
     {
@@ -101,6 +122,8 @@ public class TransactionFilter implements Parcelable
         description = in.readString();
         minAmount = in.readByte() == 0x00 ? null : in.readDouble();
         maxAmount = in.readByte() == 0x00 ? null : in.readDouble();
+        dateBegin = in.readString();
+        dateEnd = in.readString();
     }
 
     public String getFilterString()
@@ -112,6 +135,8 @@ public class TransactionFilter implements Parcelable
         queryString += parameterToString(queryString.isEmpty(), "Description", getDescription());
         queryString += parameterToString(queryString.isEmpty(), "MinAmount", getMinAmount());
         queryString += parameterToString(queryString.isEmpty(), "MaxAmount", getMaxAmount());
+        queryString += parameterToString(queryString.isEmpty(), "BeginDate", getDateBegin());
+        queryString += parameterToString(queryString.isEmpty(), "EndDate", getDateEnd());
 
         // single &
         if(queryString.length() == 1)
@@ -220,6 +245,10 @@ public class TransactionFilter implements Parcelable
             dest.writeByte((byte) (0x01));
             dest.writeDouble(maxAmount);
         }
+
+        dest.writeString(dateBegin);
+        dest.writeString(dateEnd);
+
     }
 
     @SuppressWarnings("unused")
