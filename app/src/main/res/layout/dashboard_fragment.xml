@@ -5,9 +5,20 @@
     android:layout_height="match_parent"
     tools:context=".dashboard.DashboardFragment">
 
-    <TextView
+    <LinearLayout
+        android:id="@+id/view_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Hello" />
+        android:layout_height="match_parent">
+
+        <com.github.mikephil.charting.charts.BarChart
+            android:id="@+id/barchart"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></com.github.mikephil.charting.charts.BarChart>
+
+    </LinearLayout>
+
+    <include layout="@layout/progress_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
 </FrameLayout>

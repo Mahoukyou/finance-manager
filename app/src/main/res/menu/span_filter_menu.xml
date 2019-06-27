@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/span_daily"
+        android:title="Daily"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/span_monthly"
+        android:title="Monthly"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/span_yearly"
+        android:title="Yearly"
+        app:showAsAction="never" />
+</menu>

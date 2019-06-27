@@ -2,7 +2,6 @@ package com.wdowiak.financemanager.dashboard;
 
 import com.wdowiak.financemanager.dashboard.category.CategoriesData;
 import com.wdowiak.financemanager.dashboard.category.CategoryData;
-import com.wdowiak.financemanager.data.Category;
 import com.wdowiak.financemanager.data.Transaction;
 
 import org.jetbrains.annotations.NotNull;
@@ -14,7 +13,6 @@ import java.util.Map;
 
 public class DashboardUtilities
 {
-
     public static CategoriesData createCategoriesData(@NotNull ArrayList<Transaction> transactions)
     {
         CategoriesData categoriesData = new CategoriesData();
@@ -79,5 +77,38 @@ public class DashboardUtilities
         }
 
         return newCategoriesData;
+    }
+
+    public static TimelyData createTimelyData(
+            @NotNull final ArrayList<Transaction> transactions,
+            @NotNull final DataSpanSettings.EType span)
+    {
+        TimelyData timelyData = new TimelyData();
+        timelyData.timelyDataHashMap = new HashMap<>();
+
+        for(Transaction transaction : transactions)
+        {
+            final CustomDate date = new CustomDate(transaction.getDate(), span);
+            if(timelyData.timelyDataHashMap.containsKey(date))
+            {
+                final SingleTimelyData singleTimelyData = timelyData.timelyDataHashMap.get(date);
+                singleTimelyData.amount += transaction.getAmount();
+                ++singleTimelyData.transactionCount;
+            }
+            else
+            {
+                final SingleTimelyData singleTimelyData = new SingleTimelyData();
+                singleTimelyData.amount = transaction.getAmount();
+                singleTimelyData.transactionCount = 1;
+                singleTimelyData.date = date;
+
+                timelyData.timelyDataHashMap.put(date, singleTimelyData);
+            }
+
+            timelyData.totalAmount += transaction.getAmount();
+            ++timelyData.totalTransactions;
+        }
+
+        return timelyData;
     }
 }
