@@ -25,6 +25,7 @@ import com.wdowiak.financemanager.api.QueryApi;
 import com.wdowiak.financemanager.commons.CommonDisplayFragment;
 import com.wdowiak.financemanager.data.IItem;
 import com.wdowiak.financemanager.data.Transaction;
+import com.wdowiak.financemanager.transaction_sorting.TransactionSortSettings;
 import com.wdowiak.financemanager.transactions_filter.TransactionFilter;
 import com.wdowiak.financemanager.transactions_filter.TransactionsFilterActivity;
 
@@ -145,7 +146,7 @@ public class TransactionDisplayFragment extends CommonDisplayFragment<Transactio
     private void showSortingPopupMenu()
     {
         PopupMenu popup = new PopupMenu(getActivity().getApplicationContext(), getActivity().findViewById(R.id.menu_sort));
-        popup.getMenuInflater().inflate(R.menu.default_sort_menu, popup.getMenu());
+        popup.getMenuInflater().inflate(R.menu.transactions_sort_menu, popup.getMenu());
 
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener()
         {
@@ -154,10 +155,20 @@ public class TransactionDisplayFragment extends CommonDisplayFragment<Transactio
             {
                 switch(item.getItemId())
                 {
-                    case R.id.sort_ascending:
+                    case R.id.sort_ascending_by_date:
+                        if(getViewModel().getTransactionSortSettings().getSortType() != TransactionSortSettings.ESortType.ASCENDING)
+                        {
+                            getViewModel().getTransactionSortSettings().setSortType(TransactionSortSettings.ESortType.ASCENDING);
+                            queryWithFilterAndDisplay();
+                        }
                         break;
 
-                    case R.id.sort_descending:
+                    case R.id.sort_descending_by_date:
+                        if(getViewModel().getTransactionSortSettings().getSortType() != TransactionSortSettings.ESortType.DESCENDING)
+                        {
+                            getViewModel().getTransactionSortSettings().setSortType(TransactionSortSettings.ESortType.DESCENDING);
+                            queryWithFilterAndDisplay();
+                        }
                         break;
                 }
 
@@ -168,17 +179,29 @@ public class TransactionDisplayFragment extends CommonDisplayFragment<Transactio
         popup.show();
     }
 
+    protected void onSortSettingChanged()
+    {
+
+    }
+
+    protected String getQueryString()
+    {
+        String queryString = "";
+        if(getViewModel().getTransactionFilter() != null)
+        {
+            queryString = getViewModel().getTransactionFilter().getFilterString();
+        }
+
+        queryString += "&" + getViewModel().getTransactionSortSettings().getSortingString(); // additional/unused & wont do any harm
+
+        return queryString;
+    }
+
     protected void queryWithFilterAndDisplay()
     {
         showProgressBar(true);
 
-        String filterString = "";
-        if(getViewModel().getTransactionFilter() != null)
-        {
-            filterString = getViewModel().getTransactionFilter().getFilterString();
-        }
-
-        QueryApi.getItemsFiltered(itemType, filterString, new Api.IQueryCallback<ArrayList<Transaction>>()
+        QueryApi.getItemsFiltered(itemType, getQueryString(), new Api.IQueryCallback<ArrayList<Transaction>>()
         {
             @Override
             public void onSuccess(ArrayList<Transaction> items)

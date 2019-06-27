@@ -2,6 +2,7 @@ package com.wdowiak.financemanager.transactions;
 
 import com.wdowiak.financemanager.commons.DisplayFragmentViewModel;
 import com.wdowiak.financemanager.data.Transaction;
+import com.wdowiak.financemanager.transaction_sorting.TransactionSortSettings;
 import com.wdowiak.financemanager.transactions_filter.TransactionFilter;
 
 // since we cannot get .class of templated type CommonViewModel<TYPE, AdAPTER>
@@ -10,6 +11,7 @@ public class TransactionDisplayFragmentViewModel
         extends DisplayFragmentViewModel<Transaction, TransactionsAdapter>
 {
     private TransactionFilter transactionFilter;
+    private TransactionSortSettings transactionSortSettings = new TransactionSortSettings();
 
     void setTransactionFilter(TransactionFilter filter)
     {
@@ -19,5 +21,10 @@ public class TransactionDisplayFragmentViewModel
     TransactionFilter getTransactionFilter()
     {
         return transactionFilter;
+    }
+
+    TransactionSortSettings getTransactionSortSettings()
+    {
+        return transactionSortSettings;
     }
 }
