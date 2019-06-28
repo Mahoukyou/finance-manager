@@ -4,12 +4,14 @@ import androidx.lifecycle.ViewModelProviders;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.wdowiak.financemanager.R;
@@ -32,11 +35,11 @@ import com.wdowiak.financemanager.transactions_filter.TransactionsFilterActivity
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
 import lecho.lib.hellocharts.model.Axis;
+import lecho.lib.hellocharts.model.AxisValue;
 import lecho.lib.hellocharts.model.Column;
 import lecho.lib.hellocharts.model.ColumnChartData;
 import lecho.lib.hellocharts.model.SubcolumnValue;
@@ -53,6 +56,7 @@ public class DashboardFragment extends Fragment
     private ColumnChartView chart;
 
     LinearLayout viewLayout, progressBarLayout;
+    TextView totalAmount;
 
     @NotNull
     @Contract(" -> new")
@@ -73,6 +77,7 @@ public class DashboardFragment extends Fragment
         chart = view.findViewById(R.id.chart);
         viewLayout = view.findViewById(R.id.view_layout);
         progressBarLayout = view.findViewById(R.id.progress_bar_layout);
+        totalAmount = view.findViewById(R.id.dashboard_total);
 
         getActivity().setTitle("Dashboard");
 
@@ -192,15 +197,29 @@ public class DashboardFragment extends Fragment
                 switch(item.getItemId())
                 {
                     case R.id.span_daily:
+                        if(viewModel.getSpanType() != DataSpanSettings.EType.Daily)
+                        {
+                            viewModel.setSpanType(DataSpanSettings.EType.Daily);
+                            queryWithFilter();
+                        }
                         break;
 
                     case R.id.span_monthly:
+                        if(viewModel.getSpanType() != DataSpanSettings.EType.Monthly)
+                        {
+                            viewModel.setSpanType(DataSpanSettings.EType.Monthly);
+                            queryWithFilter();
+                        }
                         break;
 
                     case R.id.span_yearly:
+                        if(viewModel.getSpanType() != DataSpanSettings.EType.Yearly)
+                        {
+                            viewModel.setSpanType(DataSpanSettings.EType.Yearly);
+                            queryWithFilter();
+                        }
                         break;
                 }
-
                 return true;
             }
         });
@@ -218,40 +237,42 @@ public class DashboardFragment extends Fragment
     private CustomDate[] x_axis;
     private void populateGraphWithData(ArrayList<Transaction> transactions)
     {
+        TimelyData timelyData = DashboardUtilities.createTimelyData(transactions, viewModel.getSpanType());
 
-        TimelyData timelyData = DashboardUtilities.createTimelyData(transactions, DataSpanSettings.EType.Monthly);
-
+        List<AxisValue> xAxisValues = new ArrayList<>();
         List<Column> columns = new ArrayList<>();
-        for(SingleTimelyData singleTimelyData : timelyData.timelyDataHashMap.values())
+        int counter = 0;
+        for(SingleTimelyData singleTimelyData : timelyData.sortedTimelyData)
         {
-            List<SubcolumnValue> subcolumnValues = new ArrayList<>();
+            List<SubcolumnValue> subColumn = new ArrayList<>();
+            subColumn.add(new SubcolumnValue((float)singleTimelyData.amount, ChartUtils.pickColor()));
 
-            subcolumnValues.add(new SubcolumnValue((float)singleTimelyData.amount, ChartUtils.pickColor()));
+            xAxisValues.add(new AxisValue(counter++).setLabel(singleTimelyData.date.toString()));
 
-
-            Column column = new Column(subcolumnValues);
-            column.setHasLabels(true);
+            Column column = new Column(subColumn);
+            column.setHasLabelsOnlyForSelected(true);
             columns.add(column);
         }
 
         ColumnChartData data = new ColumnChartData(columns);
-        if (true) {
-            Axis axisX = new Axis();
-            Axis axisY = new Axis().setHasLines(true);
-            if (true) {
-                axisX.setName("Axis X");
-                axisY.setName("Axis Y");
-            }
-            data.setAxisXBottom(axisX);
-            data.setAxisYLeft(axisY);
-        } else {
-            data.setAxisXBottom(null);
-            data.setAxisYLeft(null);
-        }
+
+        Axis axisX = new Axis(xAxisValues);
+        axisX.setHasTiltedLabels(true);
+        axisX.setTextColor(Color.BLACK);
+        axisX.setMaxLabelChars(10);
+        data.setAxisXBottom(axisX);
+
+        Axis axisY = new Axis().setHasLines(true);
+        axisY.setMaxLabelChars(6);
+        axisY.setTextColor(Color.BLACK);
+        axisY.setName("Amount");
+        data.setAxisYLeft(axisY);
 
         chart.setColumnChartData(data);
         chart.invalidate();
 
+
+        totalAmount.setText(String.valueOf(timelyData.totalAmount));
 
         showProgressBar(false);
     }

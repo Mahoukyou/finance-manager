@@ -7,6 +7,7 @@ import com.wdowiak.financemanager.data.Transaction;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -109,6 +110,21 @@ public class DashboardUtilities
             ++timelyData.totalTransactions;
         }
 
+        timelyData.sortedTimelyData = new ArrayList<>();
+        // No time for efficiency atm
+        timelyData.sortedTimelyData.addAll(timelyData.timelyDataHashMap.values());
+        timelyData.sortedTimelyData.sort(new Comparator<SingleTimelyData>() {
+            @Override
+            public int compare(SingleTimelyData lhs, SingleTimelyData rhs) {
+                return lhs.date.lessThan(rhs.date) ? -1 : 0;
+            }
+        });
+
         return timelyData;
+    }
+
+    private void sortHashMap()
+    {
+
     }
 }

@@ -10,6 +10,7 @@ public class CustomDate
 {
     CustomDate(Date date, DataSpanSettings.EType spanType)
     {
+        this.spanType = spanType;
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
 
@@ -58,9 +59,25 @@ public class CustomDate
         return Objects.hash(year, month, day);
     }
 
-    public String getDayMonth()
+    @Override
+    public String toString()
     {
-        return day + "/" + month;
+        switch (spanType)
+        {
+            case Daily:
+                return getDayMonthYear();
+            case Monthly:
+                return getMonthYear();
+            case Yearly:
+                return getYear();
+            default:
+                throw new RuntimeException("Span type not implemented");
+        }
+    }
+
+    public String getDayMonthYear()
+    {
+        return day + "/" + (month+1) + "/" + year;
     }
 
     public String getMonthYear()
@@ -68,5 +85,32 @@ public class CustomDate
         return month + "/" + year;
     }
 
-    public int year, month = 0, day = 1;
+    public String getYear()
+    {
+        return String.valueOf(year);
+    }
+
+    /* returns true if lhs < rhs */
+    public boolean lessThan(CustomDate rhs)
+    {
+        if(year < rhs.year)
+        {
+            return true;
+        }
+
+        if(month < rhs.month)
+        {
+            return true;
+        }
+
+        if(day < rhs.day)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    private int year, month = 0, day = 1;
+    private DataSpanSettings.EType spanType;
 }
