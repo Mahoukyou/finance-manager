@@ -22,6 +22,8 @@ import com.wdowiak.financemanager.api.Api;
 import com.wdowiak.financemanager.api.QueryApi;
 import com.wdowiak.financemanager.data.IItem;
 
+import org.jetbrains.annotations.Contract;
+
 import java.util.ArrayList;
 
 import static com.wdowiak.financemanager.commons.IntentExtras.*;
@@ -152,6 +154,7 @@ abstract public class CommonDisplayFragment<T extends IItem, ItemAdapter extends
         startActivityForResult(intent, ADD_ITEM_REQUEST);
     }
 
+    @Contract(pure = true)
     protected final ListView getItemsListView()
     {
         return itemsListView;

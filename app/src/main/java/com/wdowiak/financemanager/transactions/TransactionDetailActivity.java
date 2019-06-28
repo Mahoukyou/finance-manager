@@ -1,16 +1,23 @@
 package com.wdowiak.financemanager.transactions;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
+import com.wdowiak.financemanager.attachments.AttachmentsAdapter;
+import com.wdowiak.financemanager.attachments.AttachmentsViewActivity;
 import com.wdowiak.financemanager.commons.CommonDetailViewActivity;
 import com.wdowiak.financemanager.R;
 import com.wdowiak.financemanager.commons.Helpers;
+import com.wdowiak.financemanager.commons.IntentExtras;
 import com.wdowiak.financemanager.data.Account;
 import com.wdowiak.financemanager.data.IItem;
 import com.wdowiak.financemanager.data.Transaction;
 
 import org.jetbrains.annotations.Contract;
+
+import static com.wdowiak.financemanager.commons.IntentExtras.INTENT_EXTRA_ITEM_ID;
 
 public class TransactionDetailActivity extends CommonDetailViewActivity<Transaction>
 {
@@ -64,5 +71,12 @@ public class TransactionDetailActivity extends CommonDetailViewActivity<Transact
 
         textView = findViewById(R.id.transaction_date);
         textView.setText(Helpers.getSimpleDateFormatToFormat().format(transaction.getDate()));
+    }
+
+    public void displayAttachments(View view)
+    {
+        Intent intent = new Intent(getApplicationContext(), AttachmentsViewActivity.class);
+        intent.putExtra(INTENT_EXTRA_ITEM_ID, getItemId());
+        startActivity(intent);
     }
 }

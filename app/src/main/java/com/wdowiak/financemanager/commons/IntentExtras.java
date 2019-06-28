@@ -10,4 +10,6 @@ public class IntentExtras
     public static final int ADD_ITEM_REQUEST = 2;
     public static final int EDIT_ITEM_REQUEST = 3;
     public static final int GET_FILTER_REQUEST = 4;
+    public static final int ADD_ATTACHMENT_FROM_STORAGE_REQUEST = 5;
+    public static final int ADD_ATTACHMENT_FROM_CAMERA_REQUEST = 6;
 }

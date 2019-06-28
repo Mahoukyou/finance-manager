@@ -89,12 +89,10 @@ public class AuthApi
 
     public static Result<LoggedInUser> getUser(final String login)
     {
-        Map<String, String> params = new HashMap<>();
-        params.put("", login); // empty key name
-
         RequestFuture<JSONObject> future = RequestFuture.newFuture();
 
-        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, queryUserUrl, new JSONObject(params), future, future) {
+        final String queryUserByNameUrl = queryUserUrl + login;
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, queryUserByNameUrl, new JSONObject(), future, future) {
 
             @Override
             public Map<String, String> getHeaders()
@@ -130,13 +128,11 @@ public class AuthApi
 
             try
             {
-                final JSONObject userJSONObject= result.getJSONArray("Items").getJSONObject(0);
-
-                final int userId = userJSONObject.getInt("UserId");
-                final String firstName = userJSONObject.getString("Firstname");
-                final String lastName = userJSONObject.getString("Lastname");
-                final String email = userJSONObject.getString("Email");
-                final String avatarPath = userJSONObject.getString("AvatarPath");
+                final int userId = result.getInt("UserId");
+                final String firstName = result.getString("Firstname");
+                final String lastName = result.getString("Lastname");
+                final String email = result.getString("Email");
+                final String avatarPath = result.getString("AvatarPath");
 
                 LoggedInUser user = new LoggedInUser(userId, login, firstName, lastName, email);
                 return new Result.Success<>(user);
@@ -195,6 +191,6 @@ public class AuthApi
         });
     }
 
-    final static String authUrl = EndpointUrl.url + "v1/users/authenticate";
-    final static String queryUserUrl = EndpointUrl.url + "v1/users";
+    final static String authUrl = EndpointUrl.url + "v1/users/authenticate/";
+    final static String queryUserUrl = EndpointUrl.url + "v1/users/";
 }

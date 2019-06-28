@@ -12,6 +12,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.wdowiak.financemanager.R;
@@ -99,9 +100,11 @@ public class RegisterActivity extends AppCompatActivity
     {
         if(!viewModel.getRegisterFormState().getValue().isDataValid())
         {
+            registerButton.setEnabled(false);
             return;
         }
 
+        showProgressBar(true);
         AuthApi.createUser(createUserFromInput(), new Api.IQueryCallback<NewUser>()
         {
             @Override
@@ -112,7 +115,7 @@ public class RegisterActivity extends AppCompatActivity
                     return;
                 }
 
-                Toast.makeText(getApplicationContext(), "Registered successfully, you can login now", Toast.LENGTH_SHORT);
+                Toast.makeText(getApplicationContext(), "Registered successfully, you can login now", Toast.LENGTH_SHORT).show();
                 finish();
             }
 
@@ -124,7 +127,10 @@ public class RegisterActivity extends AppCompatActivity
                     return;
                 }
 
-                Toast.makeText(getApplicationContext(), "Could not register an user: " + error.getMessage(), Toast.LENGTH_SHORT);
+                registerButton.setEnabled(viewModel.getRegisterFormState().getValue().isDataValid());
+                showProgressBar(false);
+
+                Toast.makeText(getApplicationContext(), "Could not register an user: " + error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -139,4 +145,12 @@ public class RegisterActivity extends AppCompatActivity
                 password.getText().toString());
     }
 
+    protected final void showProgressBar(final boolean show)
+    {
+        final LinearLayout detailViewLayout = findViewById(R.id.view_layout);
+        detailViewLayout.setVisibility(show ? View.GONE : View.VISIBLE);
+
+        final LinearLayout progressBarLayout = findViewById(R.id.progress_bar_layout);
+        progressBarLayout.setVisibility(show ? View.VISIBLE : View.GONE);
+    }
 }
