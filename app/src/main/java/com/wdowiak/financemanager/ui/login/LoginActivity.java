@@ -28,6 +28,7 @@ import com.wdowiak.financemanager.MainActivity;
 import com.wdowiak.financemanager.R;
 import com.wdowiak.financemanager.api.NetworkManager;
 import com.wdowiak.financemanager.data.LoggedInUser;
+import com.wdowiak.financemanager.registration.RegisterActivity;
 import com.wdowiak.financemanager.ui.login.LoginViewModel;
 import com.wdowiak.financemanager.ui.login.LoginViewModelFactory;
 
@@ -48,7 +49,10 @@ public class LoginActivity extends AppCompatActivity
         final EditText usernameEditText = findViewById(R.id.username);
         final EditText passwordEditText = findViewById(R.id.password);
         final Button loginButton = findViewById(R.id.login);
+        final Button registerButton = findViewById(R.id.register_instead);
         final ProgressBar loadingProgressBar = findViewById(R.id.loading);
+
+        registerButton.setOnClickListener(this::registerInstead);
 
         loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>()
         {
@@ -154,6 +158,12 @@ public class LoginActivity extends AppCompatActivity
                         passwordEditText.getText().toString());
             }
         });
+    }
+
+    private void registerInstead(View view)
+    {
+        Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
+        startActivity(intent);
     }
 
     private void updateUiWithUser(LoggedInUser model)

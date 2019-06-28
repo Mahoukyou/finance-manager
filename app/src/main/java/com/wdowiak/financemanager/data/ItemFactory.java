@@ -28,6 +28,9 @@ public class ItemFactory
             case TransactionStatus:
                 return (T)TransactionStatus.createFromJSONObject(jsonObject);
 
+            case User:
+                return null;
+
             default:
                 throw new RuntimeException("Invalid item type");
         }

@@ -71,7 +71,7 @@ public class Api
             @Override
             public Map<String, String> getHeaders()
             {
-                return Api.getHeaders();
+                return Api.getHeadersWithToken();
             }
         };
 
@@ -104,6 +104,40 @@ public class Api
             @Override
             public Map<String, String> getHeaders()
             {
+                return Api.getHeadersWithToken();
+            }
+        };
+
+        final RequestQueue requestQueue = Volley.newRequestQueue(NetworkManager.getInstance().getContext());
+        requestQueue.add(request);
+    }
+
+    public static void asyncNoAuthQuery(final int method, final String queryUrl, JSONObject params, final IApiCallback callback)
+    {
+        final JsonObjectRequest request = new JsonObjectRequest(
+                method,
+                queryUrl,
+                params,
+                new Response.Listener<JSONObject>()
+                {
+                    @Override
+                    public void onResponse(JSONObject response)
+                    {
+                        callback.onResponse(response);
+                    }
+                }, new Response.ErrorListener()
+        {
+            @Override
+            public void onErrorResponse(VolleyError error)
+            {
+                callback.onErrorResponse(error);
+            }
+        }
+        )
+        {
+            @Override
+            public Map<String, String> getHeaders()
+            {
                 return Api.getHeaders();
             }
         };
@@ -113,6 +147,15 @@ public class Api
     }
 
     private static Map<String, String> getHeaders()
+    {
+        Map<String, String>  params = new HashMap<>();
+        params.put("User-Agent", "Finance Manager");
+        params.put("Accept-Language", "en");
+
+        return params;
+    }
+
+    private static Map<String, String> getHeadersWithToken()
     {
         Map<String, String>  params = new HashMap<>();
         params.put("User-Agent", "Finance Manager");
@@ -143,6 +186,9 @@ public class Api
             case TransactionStatus:
                 return transactionStatusesUrl;
 
+            case User:
+                return usersUrl;
+
             default:
                 throw new RuntimeException("Invalid item type");
         }
@@ -154,4 +200,5 @@ public class Api
     public final static String groupsUrl = EndpointUrl.url + "v1/groups/";
     public final static String transactionsUrl = EndpointUrl.url + "v1/transactions/";
     public final static String transactionStatusesUrl = EndpointUrl.url + "v1/transactionstatuses/";
+    public final static String usersUrl = EndpointUrl.url + "v1/users/";
 }

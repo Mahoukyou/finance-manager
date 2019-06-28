@@ -13,7 +13,8 @@ public interface IItem
         Currency,
         Group,
         Transaction,
-        TransactionStatus
+        TransactionStatus,
+        User
     }
 
     long getId();
