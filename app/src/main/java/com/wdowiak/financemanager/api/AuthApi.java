@@ -2,14 +2,19 @@ package com.wdowiak.financemanager.api;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.Volley;
 import com.wdowiak.financemanager.data.AuthToken;
+import com.wdowiak.financemanager.data.IItem;
+import com.wdowiak.financemanager.data.ItemFactory;
 import com.wdowiak.financemanager.data.LoggedInUser;
 import com.wdowiak.financemanager.data.LoginRepository;
+import com.wdowiak.financemanager.data.NewUser;
 import com.wdowiak.financemanager.data.Result;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -153,6 +158,41 @@ public class AuthApi
 
             return new Result.Error(error);
         }
+    }
+
+    public static <T extends IItem> void createUser(
+            @NotNull final NewUser newUser,
+            final Api.IQueryCallback<NewUser> callback)
+    {
+        final JSONObject params = newUser.createJSONObject();
+
+        Api.asyncNoAuthQuery(Request.Method.POST, Api.getQueryUrl(IItem.Type.User), params, new Api.IApiCallback()
+        {
+            @Override
+            public void onResponse(JSONObject response)
+            {
+                try
+                {
+                    if(response == null)
+                    {
+                        callback.onSuccess(null);
+                        return;
+                    }
+
+                    callback.onSuccess(ItemFactory.createItem(IItem.Type.User, response));
+                }
+                catch (JSONException error)
+                {
+                    callback.onError(error);
+                }
+            }
+
+            @Override
+            public void onErrorResponse(VolleyError error)
+            {
+                callback.onError(error);
+            }
+        });
     }
 
     final static String authUrl = EndpointUrl.url + "v1/users/authenticate";

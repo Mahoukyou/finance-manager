@@ -179,11 +179,6 @@ public class TransactionDisplayFragment extends CommonDisplayFragment<Transactio
         popup.show();
     }
 
-    protected void onSortSettingChanged()
-    {
-
-    }
-
     protected String getQueryString()
     {
         String queryString = "";
