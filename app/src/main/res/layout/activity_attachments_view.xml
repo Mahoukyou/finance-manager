@@ -6,12 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".attachments.AttachmentsViewActivity">
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="D"
-        android:onClick="onAddImageFromStorageIntent"/>
-
     <GridView
         android:id="@+id/attachments"
         android:layout_width="match_parent"
@@ -26,6 +20,5 @@
     <include layout="@layout/progress_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

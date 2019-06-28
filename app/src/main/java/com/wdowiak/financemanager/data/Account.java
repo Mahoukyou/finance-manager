@@ -143,5 +143,4 @@ public class Account implements IItem
     Group group = null; // todo not null
     Currency currency = null; // todo ,not nulls
     double startingAmount = 0.0;
-
 }

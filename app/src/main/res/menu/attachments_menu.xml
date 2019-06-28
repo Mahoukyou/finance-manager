@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/add_from_camera"
+        android:title="Add from camera"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/add_from_storage"
+        android:title="Add from storage"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/remove_all_attachments"
+        android:title="Remove all attachments"
+        app:showAsAction="never" />
+</menu>
