@@ -4,6 +4,7 @@ import com.wdowiak.financemanager.dashboard.category.CategoriesData;
 import com.wdowiak.financemanager.dashboard.category.CategoryData;
 import com.wdowiak.financemanager.data.Transaction;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -113,12 +114,8 @@ public class DashboardUtilities
         timelyData.sortedTimelyData = new ArrayList<>();
         // No time for efficiency atm
         timelyData.sortedTimelyData.addAll(timelyData.timelyDataHashMap.values());
-        timelyData.sortedTimelyData.sort(new Comparator<SingleTimelyData>() {
-            @Override
-            public int compare(SingleTimelyData lhs, SingleTimelyData rhs) {
-                return lhs.date.lessThan(rhs.date) ? -1 : 0;
-            }
-        });
+        timelyData.sortedTimelyData.sort((lhs, rhs) ->
+                ObjectUtils.compare(lhs.date, rhs.date));
 
         return timelyData;
     }

@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.Calendar;
 import java.util.Objects;
 
-public class CustomDate
+public class CustomDate implements Comparable<CustomDate>
 {
     CustomDate(Date date, DataSpanSettings.EType spanType)
     {
@@ -65,50 +65,70 @@ public class CustomDate
         switch (spanType)
         {
             case Daily:
-                return getDayMonthYear();
+                return getDayMonthYearString();
             case Monthly:
-                return getMonthYear();
+                return getMonthYearString();
             case Yearly:
-                return getYear();
+                return getYearString();
             default:
                 throw new RuntimeException("Span type not implemented");
         }
     }
 
-    public String getDayMonthYear()
+    public String getDayMonthYearString()
     {
-        return day + "/" + (month+1) + "/" + year;
+        return getDay() + "/" + getMonthYearString();
     }
 
-    public String getMonthYear()
+    public String getMonthYearString()
     {
-        return month + "/" + year;
+        return (getMonth()+1) + "/" + getYearString();
     }
 
-    public String getYear()
+    public String getYearString()
     {
-        return String.valueOf(year);
+        return String.valueOf(getYear());
     }
 
-    /* returns true if lhs < rhs */
-    public boolean lessThan(CustomDate rhs)
+    public int getYear()
     {
-        if(year < rhs.year)
+        return year;
+    }
+
+    public int getMonth()
+    {
+        return month;
+    }
+
+    public int getDay()
+    {
+        return day;
+    }
+
+    public DataSpanSettings.EType getSpanType()
+    {
+        return spanType;
+    }
+
+    @Override
+    public int compareTo(CustomDate customDate)
+    {
+        if(getYear() != customDate.getYear())
         {
-            return true;
+            return getYear() < customDate.getYear() ? -1 : 1;
         }
 
-        if(month < rhs.month)
+        if(getMonth() != customDate.getMonth())
         {
-            return true;
+            return getMonth() < customDate.getMonth() ? -1 : 1;
         }
 
-        if(day < rhs.day)
+        if(getDay() != customDate.getDay())
         {
-            return true;
+            return getDay() < customDate.getDay() ? -1 : 1;
         }
 
-        return false;
+        return 0;
     }
 
     private int year, month = 0, day = 1;
