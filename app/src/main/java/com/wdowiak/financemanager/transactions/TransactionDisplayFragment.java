@@ -22,6 +22,7 @@ import com.wdowiak.financemanager.R;
 import com.wdowiak.financemanager.api.Api;
 import com.wdowiak.financemanager.api.QueryApi;
 import com.wdowiak.financemanager.commons.CommonDisplayFragment;
+import com.wdowiak.financemanager.commons.CommonSortSettings;
 import com.wdowiak.financemanager.data.IItem;
 import com.wdowiak.financemanager.data.Transaction;
 import com.wdowiak.financemanager.transaction_sorting.TransactionSortSettings;
@@ -157,47 +158,49 @@ public class TransactionDisplayFragment extends CommonDisplayFragment<Transactio
                 switch(item.getItemId())
                 {
                     case R.id.sort_date:
-                        getViewModel().getTransactionSortSettings().setSortBy(TransactionSortSettings.ESortBy.Date);
+                        getViewModel().getSortSettings().setSortBy(TransactionSortSettings.ESortBy.Date);
                         break;
 
                     case R.id.sort_source_account:
-                        getViewModel().getTransactionSortSettings().setSortBy(TransactionSortSettings.ESortBy.SourceAccount);
+                        getViewModel().getSortSettings().setSortBy(TransactionSortSettings.ESortBy.SourceAccount);
                         break;
 
                     case R.id.sort_target_account:
-                        getViewModel().getTransactionSortSettings().setSortBy(TransactionSortSettings.ESortBy.TargetAccount);
+                        getViewModel().getSortSettings().setSortBy(TransactionSortSettings.ESortBy.TargetAccount);
                         break;
 
                     case R.id.sort_category:
-                        getViewModel().getTransactionSortSettings().setSortBy(TransactionSortSettings.ESortBy.Category);
+                        getViewModel().getSortSettings().setSortBy(TransactionSortSettings.ESortBy.Category);
                         break;
 
                     case R.id.sort_source_group:
-                        getViewModel().getTransactionSortSettings().setSortBy(TransactionSortSettings.ESortBy.SourceGroup);
+                        getViewModel().getSortSettings().setSortBy(TransactionSortSettings.ESortBy.SourceGroup);
                         break;
 
                     case R.id.sort_target_group:
-                        getViewModel().getTransactionSortSettings().setSortBy(TransactionSortSettings.ESortBy.TargetGroup);
+                        getViewModel().getSortSettings().setSortBy(TransactionSortSettings.ESortBy.TargetGroup);
                         break;
 
                     case R.id.sort_source_currency:
-                        getViewModel().getTransactionSortSettings().setSortBy(TransactionSortSettings.ESortBy.SourceCurrency);
+                        getViewModel().getSortSettings().setSortBy(TransactionSortSettings.ESortBy.SourceCurrency);
                         break;
 
                     case R.id.sort_target_currency:
-                        getViewModel().getTransactionSortSettings().setSortBy(TransactionSortSettings.ESortBy.TargetAccount);
+                        getViewModel().getSortSettings().setSortBy(TransactionSortSettings.ESortBy.TargetAccount);
                         break;
 
                     case R.id.sort_description:
-                        getViewModel().getTransactionSortSettings().setSortBy(TransactionSortSettings.ESortBy.Description);
+                        getViewModel().getSortSettings().setSortBy(TransactionSortSettings.ESortBy.Description);
                         break;
 
                     case R.id.sort_amount:
-                        getViewModel().getTransactionSortSettings().setSortBy(TransactionSortSettings.ESortBy.Amount);
+                        getViewModel().getSortSettings().setSortBy(TransactionSortSettings.ESortBy.Amount);
                         break;
 
                 }
-                sortTransactions();
+
+                sortItems();
+                createOrUpdateAdapter();
 
                 return true;
             }
@@ -229,7 +232,7 @@ public class TransactionDisplayFragment extends CommonDisplayFragment<Transactio
                 }
 
                 viewModel.setData(items);
-                sortTransactions();
+                sortItems();
 
                 showProgressBar(false);
             }
@@ -257,9 +260,10 @@ public class TransactionDisplayFragment extends CommonDisplayFragment<Transactio
         return new TransactionsAdapter(viewModel.getData(), getActivity().getApplicationContext());
     }
 
-    protected void sortTransactions()
+    @Override
+    protected void sortItems()
     {
-        switch(getViewModel().getTransactionSortSettings().getSortBy())
+        switch(getViewModel().getSortSettings().getSortBy())
         {
             case Date:
                 getViewModel().getData().sort((lhs, rhs) -> modifySortResultOnSortType(
@@ -324,33 +328,6 @@ public class TransactionDisplayFragment extends CommonDisplayFragment<Transactio
 
             default:
                 throw new RuntimeException("Sort by not implemented");
-
-
         }
-
-        createOrUpdateAdapter();
-    }
-
-    private void createOrUpdateAdapter()
-    {
-        if(viewModel.getAdapter() == null)
-        {
-            viewModel.setAdapter(createItemAdapter());
-            getItemsListView().setAdapter(viewModel.getAdapter());
-        }
-        else
-        {
-            viewModel.populateAdapterWithDataAndNotify();
-        }
-    }
-
-    private int modifySortResultOnSortType(final int result)
-    {
-        if(getViewModel().getTransactionSortSettings().getSortType() == TransactionSortSettings.ESortType.Descending)
-        {
-            return result * -1;
-        }
-
-        return result;
     }
 }

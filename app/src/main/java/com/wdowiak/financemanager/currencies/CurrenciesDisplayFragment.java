@@ -9,14 +9,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.wdowiak.financemanager.commons.CommonDisplayFragment;
+import com.wdowiak.financemanager.commons.OnlyNameSortableDisplayFragment;
 import com.wdowiak.financemanager.data.Currency;
 import com.wdowiak.financemanager.data.IItem;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-public class CurrenciesDisplayFragment extends CommonDisplayFragment<Currency, CurrenciesAdapter>
+public class CurrenciesDisplayFragment extends OnlyNameSortableDisplayFragment<Currency, CurrenciesAdapter>
 {
     @NotNull
     @Contract(" -> new")

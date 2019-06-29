@@ -118,15 +118,9 @@ abstract public class CommonDisplayFragment<T extends IItem, ItemAdapter extends
                 }
 
                 viewModel.setData(items);
-                if(viewModel.getAdapter() == null)
-                {
-                    viewModel.setAdapter(createItemAdapter());
-                    itemsListView.setAdapter(viewModel.getAdapter());
-                }
-                else
-                {
-                    viewModel.populateAdapterWithDataAndNotify();
-                }
+
+                sortItems();
+                createOrUpdateAdapter();
 
                 showProgressBar(false);
             }
@@ -152,6 +146,31 @@ abstract public class CommonDisplayFragment<T extends IItem, ItemAdapter extends
     {
         Intent intent = new Intent(getActivity().getApplicationContext(), addEditClass);
         startActivityForResult(intent, ADD_ITEM_REQUEST);
+    }
+
+    abstract protected void sortItems();
+
+    protected void createOrUpdateAdapter()
+    {
+        if(viewModel.getAdapter() == null)
+        {
+            viewModel.setAdapter(createItemAdapter());
+            getItemsListView().setAdapter(viewModel.getAdapter());
+        }
+        else
+        {
+            viewModel.populateAdapterWithDataAndNotify();
+        }
+    }
+
+    protected int modifySortResultOnSortType(final int result)
+    {
+        if(getViewModel().getSortSettings().getSortType() == CommonSortSettings.ESortType.Descending)
+        {
+            return result * -1;
+        }
+
+        return result;
     }
 
     @Contract(pure = true)

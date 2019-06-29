@@ -10,13 +10,14 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.wdowiak.financemanager.commons.CommonDisplayFragment;
+import com.wdowiak.financemanager.commons.OnlyNameSortableDisplayFragment;
 import com.wdowiak.financemanager.data.IItem;
 import com.wdowiak.financemanager.data.TransactionStatus;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-public class TransactionStatusesDisplayFragment extends CommonDisplayFragment<TransactionStatus, TransactionStatusesAdapter>
+public class TransactionStatusesDisplayFragment extends OnlyNameSortableDisplayFragment<TransactionStatus, TransactionStatusesAdapter>
 {
     @NotNull
     @Contract(" -> new")

@@ -10,13 +10,14 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.wdowiak.financemanager.commons.CommonDisplayFragment;
+import com.wdowiak.financemanager.commons.OnlyNameSortableDisplayFragment;
 import com.wdowiak.financemanager.data.Group;
 import com.wdowiak.financemanager.data.IItem;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-public class GroupsDisplayFragment extends CommonDisplayFragment<Group, GroupsAdapter>
+public class GroupsDisplayFragment extends OnlyNameSortableDisplayFragment<Group, GroupsAdapter>
 {
     @NotNull
     @Contract(" -> new")

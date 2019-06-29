@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.wdowiak.financemanager.data.IItem;
 import com.wdowiak.financemanager.data.Transaction;
+import com.wdowiak.financemanager.transaction_sorting.TransactionSortSettings;
 
 import java.util.ArrayList;
 
@@ -15,6 +16,10 @@ import java.util.ArrayList;
 public class DisplayFragmentViewModel<ItemType extends IItem, AdapterType extends ArrayAdapter>
     extends ViewModel
 {
+    private ArrayList<ItemType> data;
+    private AdapterType adapter;
+    protected CommonSortSettings sortSettings = new CommonSortSettings();
+
     public ArrayList<ItemType> getData()
     {
         return data;
@@ -43,6 +48,9 @@ public class DisplayFragmentViewModel<ItemType extends IItem, AdapterType extend
         getAdapter().notifyDataSetChanged();
     }
 
-    private ArrayList<ItemType> data;
-    private AdapterType adapter;
+    public CommonSortSettings getSortSettings()
+    {
+        return sortSettings;
+    }
+
 }
