@@ -233,6 +233,7 @@ public class TransactionDisplayFragment extends CommonDisplayFragment<Transactio
 
                 viewModel.setData(items);
                 sortItems();
+                createOrUpdateAdapter();
 
                 showProgressBar(false);
             }

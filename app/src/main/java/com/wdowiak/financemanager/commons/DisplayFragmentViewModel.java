@@ -42,9 +42,10 @@ public class DisplayFragmentViewModel<ItemType extends IItem, AdapterType extend
 
     public void populateAdapterWithDataAndNotify()
     {
-        final ArrayList<Transaction> clonedData = (ArrayList<Transaction>) getData().clone();
+        final ArrayList<ItemType> clone = (ArrayList<ItemType>)getData().clone();
         getAdapter().clear(); // todo, clears all the data(getdata) before setting ti
-        getAdapter().addAll(clonedData);
+        setData(clone);
+        getAdapter().addAll(getData());
         getAdapter().notifyDataSetChanged();
     }
 
