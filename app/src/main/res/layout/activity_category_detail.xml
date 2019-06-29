@@ -76,68 +76,11 @@
                     android:layout_weight="1"/>
 
                 <TextView
-                    android:id="@+id/account_transactions_count"
+                    android:id="@+id/transaction_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="45"
                     android:gravity="right|center" />
-
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="@dimen/view_layout_item_top_padding">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Transactions in"
-                    android:gravity="left|center"
-                    android:layout_gravity="left"/>
-
-                <!-- Dummy view -->
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"/>
-
-                <TextView
-                    android:id="@+id/account_transactions_in"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="32"
-                    android:gravity="right|center"
-                    android:textColor="#00ff00"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="@dimen/view_layout_item_top_padding">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Transactions out"
-                    android:gravity="left|center"
-                    android:layout_gravity="left"/>
-
-                <!-- Dummy view -->
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"/>
-
-                <TextView
-                    android:id="@+id/account_transactions_out"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="11"
-                    android:gravity="right|center"
-                    android:textColor="#ff0000"/>
 
             </LinearLayout>
         </LinearLayout>

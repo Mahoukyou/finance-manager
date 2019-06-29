@@ -1,6 +1,5 @@
 package com.wdowiak.financemanager.transactions;
 
-import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.app.Activity;
@@ -29,10 +28,12 @@ import com.wdowiak.financemanager.transaction_sorting.TransactionSortSettings;
 import com.wdowiak.financemanager.transactions_filter.TransactionFilter;
 import com.wdowiak.financemanager.transactions_filter.TransactionsFilterActivity;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 import static com.wdowiak.financemanager.commons.IntentExtras.GET_FILTER_REQUEST;
 import static com.wdowiak.financemanager.commons.IntentExtras.INTENT_EXTRA_TRANSACTION_FILTER_PARCELABLE;
@@ -72,7 +73,7 @@ public class TransactionDisplayFragment extends CommonDisplayFragment<Transactio
             {
                 final TransactionFilter filter = data.getExtras().getParcelable(INTENT_EXTRA_TRANSACTION_FILTER_PARCELABLE);
                 getViewModel().setTransactionFilter(filter);
-                queryWithFilterAndDisplay();
+                queryAndDisplayItems();
             }
         }
     }
@@ -155,22 +156,48 @@ public class TransactionDisplayFragment extends CommonDisplayFragment<Transactio
             {
                 switch(item.getItemId())
                 {
-                    case R.id.sort_ascending_by_date:
-                        if(getViewModel().getTransactionSortSettings().getSortType() != TransactionSortSettings.ESortType.ASCENDING)
-                        {
-                            getViewModel().getTransactionSortSettings().setSortType(TransactionSortSettings.ESortType.ASCENDING);
-                            queryWithFilterAndDisplay();
-                        }
+                    case R.id.sort_date:
+                        getViewModel().getTransactionSortSettings().setSortBy(TransactionSortSettings.ESortBy.Date);
                         break;
 
-                    case R.id.sort_descending_by_date:
-                        if(getViewModel().getTransactionSortSettings().getSortType() != TransactionSortSettings.ESortType.DESCENDING)
-                        {
-                            getViewModel().getTransactionSortSettings().setSortType(TransactionSortSettings.ESortType.DESCENDING);
-                            queryWithFilterAndDisplay();
-                        }
+                    case R.id.sort_source_account:
+                        getViewModel().getTransactionSortSettings().setSortBy(TransactionSortSettings.ESortBy.SourceAccount);
                         break;
+
+                    case R.id.sort_target_account:
+                        getViewModel().getTransactionSortSettings().setSortBy(TransactionSortSettings.ESortBy.TargetAccount);
+                        break;
+
+                    case R.id.sort_category:
+                        getViewModel().getTransactionSortSettings().setSortBy(TransactionSortSettings.ESortBy.Category);
+                        break;
+
+                    case R.id.sort_source_group:
+                        getViewModel().getTransactionSortSettings().setSortBy(TransactionSortSettings.ESortBy.SourceGroup);
+                        break;
+
+                    case R.id.sort_target_group:
+                        getViewModel().getTransactionSortSettings().setSortBy(TransactionSortSettings.ESortBy.TargetGroup);
+                        break;
+
+                    case R.id.sort_source_currency:
+                        getViewModel().getTransactionSortSettings().setSortBy(TransactionSortSettings.ESortBy.SourceCurrency);
+                        break;
+
+                    case R.id.sort_target_currency:
+                        getViewModel().getTransactionSortSettings().setSortBy(TransactionSortSettings.ESortBy.TargetAccount);
+                        break;
+
+                    case R.id.sort_description:
+                        getViewModel().getTransactionSortSettings().setSortBy(TransactionSortSettings.ESortBy.Description);
+                        break;
+
+                    case R.id.sort_amount:
+                        getViewModel().getTransactionSortSettings().setSortBy(TransactionSortSettings.ESortBy.Amount);
+                        break;
+
                 }
+                sortTransactions();
 
                 return true;
             }
@@ -181,18 +208,12 @@ public class TransactionDisplayFragment extends CommonDisplayFragment<Transactio
 
     protected String getQueryString()
     {
-        String queryString = "";
-        if(getViewModel().getTransactionFilter() != null)
-        {
-            queryString = getViewModel().getTransactionFilter().getFilterString();
-        }
-
-        queryString += "&" + getViewModel().getTransactionSortSettings().getSortingString(); // additional/unused & wont do any harm
-
-        return queryString;
+        return getViewModel().getTransactionFilter() != null ?
+                getViewModel().getTransactionFilter().getFilterString() : "";
     }
 
-    protected void queryWithFilterAndDisplay()
+    @Override
+    protected void queryAndDisplayItems()
     {
         showProgressBar(true);
 
@@ -208,15 +229,7 @@ public class TransactionDisplayFragment extends CommonDisplayFragment<Transactio
                 }
 
                 viewModel.setData(items);
-                if(viewModel.getAdapter() == null)
-                {
-                    viewModel.setAdapter(createItemAdapter());
-                    getItemsListView().setAdapter(viewModel.getAdapter());
-                }
-                else
-                {
-                    viewModel.populateAdapterWithDataAndNotify();
-                }
+                sortTransactions();
 
                 showProgressBar(false);
             }
@@ -242,5 +255,102 @@ public class TransactionDisplayFragment extends CommonDisplayFragment<Transactio
     protected TransactionsAdapter createItemAdapter()
     {
         return new TransactionsAdapter(viewModel.getData(), getActivity().getApplicationContext());
+    }
+
+    protected void sortTransactions()
+    {
+        switch(getViewModel().getTransactionSortSettings().getSortBy())
+        {
+            case Date:
+                getViewModel().getData().sort((lhs, rhs) -> modifySortResultOnSortType(
+                        ObjectUtils.compare(lhs.getDate(), rhs.getDate())));
+                break;
+
+            case SourceAccount:
+                getViewModel().getData().sort((lhs, rhs) -> modifySortResultOnSortType(
+                            ObjectUtils.compare(lhs.getSourceAccount(), rhs.getSourceAccount(), true)));
+                break;
+
+            case TargetAccount:
+                getViewModel().getData().sort((lhs, rhs) -> modifySortResultOnSortType(
+                        ObjectUtils.compare(lhs.getTargetAccount(), rhs.getTargetAccount(), true)));
+                break;
+
+            case Category:
+                getViewModel().getData().sort((lhs, rhs) -> modifySortResultOnSortType(
+                        ObjectUtils.compare(lhs.getCategory(), rhs.getCategory(), true)));
+                break;
+
+            case SourceCurrency:
+                getViewModel().getData().sort((lhs, rhs) -> modifySortResultOnSortType(
+                        // Oh boy, god help the reader
+                        lhs.getSourceAccount() == null ? (rhs.getSourceAccount() == null ? 0 : 1) : // if lhs is null and/or rhs
+                            rhs.getSourceAccount() == null ?  -1 : // if only rhs is null
+                                    ObjectUtils.compare(lhs.getSourceAccount().getCurrency(), rhs.getSourceAccount().getCurrency(), true)));
+            break;
+
+            case TargetCurrency:
+                getViewModel().getData().sort((lhs, rhs) -> modifySortResultOnSortType(
+                        // Oh boy, god help the reader
+                        lhs.getTargetAccount() == null ? (rhs.getTargetAccount() == null ? 0 : 1) :
+                                rhs.getTargetAccount() == null ?  -1 :
+                                        ObjectUtils.compare(lhs.getTargetAccount().getCurrency(), rhs.getTargetAccount().getCurrency(), true)));
+                break;
+
+            case SourceGroup:
+                getViewModel().getData().sort((lhs, rhs) -> modifySortResultOnSortType(
+                        // Oh boy, god help the reader
+                        lhs.getSourceAccount() == null ? (rhs.getSourceAccount() == null ? 0 : 1) :
+                                rhs.getSourceAccount() == null ?  -1 :
+                                        ObjectUtils.compare(lhs.getSourceAccount().getGroup(), rhs.getSourceAccount().getGroup(), true)));
+                break;
+
+            case TargetGroup:
+                getViewModel().getData().sort((lhs, rhs) -> modifySortResultOnSortType(
+                        // Oh boy, god help the reader
+                        lhs.getTargetAccount() == null ? (rhs.getTargetAccount() == null ? 0 : 1) :
+                                rhs.getTargetAccount() == null ?  -1 :
+                                        ObjectUtils.compare(lhs.getTargetAccount().getGroup(), rhs.getTargetAccount().getGroup(), true)));
+                break;
+            case Description:
+                getViewModel().getData().sort((lhs, rhs) -> modifySortResultOnSortType(
+                        ObjectUtils.compare(lhs.getDescription(), rhs.getDescription(), true)));
+                break;
+
+            case Amount:
+                getViewModel().getData().sort((lhs, rhs) -> modifySortResultOnSortType(
+                        ObjectUtils.compare(lhs.getAmount(), rhs.getAmount())));
+                break;
+
+            default:
+                throw new RuntimeException("Sort by not implemented");
+
+
+        }
+
+        createOrUpdateAdapter();
+    }
+
+    private void createOrUpdateAdapter()
+    {
+        if(viewModel.getAdapter() == null)
+        {
+            viewModel.setAdapter(createItemAdapter());
+            getItemsListView().setAdapter(viewModel.getAdapter());
+        }
+        else
+        {
+            viewModel.populateAdapterWithDataAndNotify();
+        }
+    }
+
+    private int modifySortResultOnSortType(final int result)
+    {
+        if(getViewModel().getTransactionSortSettings().getSortType() == TransactionSortSettings.ESortType.Descending)
+        {
+            return result * -1;
+        }
+
+        return result;
     }
 }

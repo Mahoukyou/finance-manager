@@ -7,7 +7,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
-public class Currency implements IItem
+public class Currency implements IItem, Comparable<Currency>
 {
     private Currency() {}
 
@@ -69,6 +69,12 @@ public class Currency implements IItem
     {
         Long lId = id;
         return lId.hashCode();
+    }
+
+    @Override
+    public int compareTo(Currency currency)
+    {
+        return getName().compareTo(currency.getName());
     }
 
     @Contract(pure = true)

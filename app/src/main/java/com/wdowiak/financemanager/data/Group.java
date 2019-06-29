@@ -1,5 +1,7 @@
 package com.wdowiak.financemanager.data;
 
+import android.widget.GridView;
+
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -8,7 +10,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
-public class Group implements IItem
+public class Group implements IItem, Comparable<Group>
 {
     private Group() {}
 
@@ -66,6 +68,12 @@ public class Group implements IItem
     {
         Long lId = id;
         return lId.hashCode();
+    }
+
+    @Override
+    public int compareTo(Group group)
+    {
+        return getName().compareTo(group.getName());
     }
 
     @Contract(pure = true)

@@ -17,6 +17,10 @@ import com.wdowiak.financemanager.R;
 import com.wdowiak.financemanager.api.Api;
 import com.wdowiak.financemanager.api.QueryApi;
 import com.wdowiak.financemanager.data.IItem;
+import com.wdowiak.financemanager.data.Transaction;
+import com.wdowiak.financemanager.transactions_filter.TransactionFilter;
+
+import java.util.ArrayList;
 
 import static com.wdowiak.financemanager.commons.IntentExtras.EDIT_ITEM_REQUEST;
 import static com.wdowiak.financemanager.commons.IntentExtras.INTENT_EXTRA_ITEM_ID;
@@ -94,6 +98,33 @@ abstract public class CommonDetailViewActivity<T extends IItem> extends AppCompa
                 }
 
                 updateDetailViewInfo(item);
+                queryTransactionsFiltered();
+            }
+
+            @Override
+            public void onError(final Exception error)
+            {
+                Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        });
+    }
+
+    protected void queryTransactionsFiltered()
+    {
+        final TransactionFilter filter = getTransactionFilter();
+        if (filter == null)
+        {
+            showProgressBar(false);
+            return;
+        }
+
+        QueryApi.getItemsFiltered(IItem.Type.Transaction, filter.getFilterString(), new Api.IQueryCallback<ArrayList<Transaction>>()
+        {
+            @Override
+            public void onSuccess(final ArrayList<Transaction> result)
+            {
+                filteredTransactionsResult(result);
                 showProgressBar(false);
             }
 
@@ -104,6 +135,11 @@ abstract public class CommonDetailViewActivity<T extends IItem> extends AppCompa
                 finish();
             }
         });
+    }
+
+    protected void filteredTransactionsResult(ArrayList<Transaction> transaction)
+    {
+        // unused
     }
 
     protected final void showProgressBar(final boolean show)
@@ -189,5 +225,10 @@ abstract public class CommonDetailViewActivity<T extends IItem> extends AppCompa
     protected long getItemId()
     {
         return itemId;
+    }
+
+    protected TransactionFilter getTransactionFilter()
+    {
+        return null;
     }
 }

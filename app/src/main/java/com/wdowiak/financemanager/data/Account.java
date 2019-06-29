@@ -8,9 +8,9 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
-public class Account implements IItem
+public class Account implements IItem, Comparable<Account>
 {
-    private Account() {}
+    private Account() { }
 
     public Account(
             @NotNull final String name,
@@ -43,12 +43,12 @@ public class Account implements IItem
         account.name = jsonObject.getString("Name");
         account.startingAmount = jsonObject.getDouble("StartAmount");
 
-        if(!jsonObject.isNull("Group"))
+        if (!jsonObject.isNull("Group"))
         {
             account.group = Group.createFromJSONObject(jsonObject.getJSONObject("Group"));
         }
 
-        if(!jsonObject.isNull("Currency"))
+        if (!jsonObject.isNull("Currency"))
         {
             account.currency = Currency.createFromJSONObject(jsonObject.getJSONObject("Currency"));
         }
@@ -68,7 +68,7 @@ public class Account implements IItem
 
             final JSONObject groupJSONObject = new JSONObject();
             groupJSONObject.put("groupId", getGroup().getId());
-            jsonObject.put("group",groupJSONObject);
+            jsonObject.put("group", groupJSONObject);
 
             final JSONObject currencyJSONObject = new JSONObject();
             currencyJSONObject.put("currencyId", getCurrency().getId());
@@ -123,13 +123,19 @@ public class Account implements IItem
     @Contract(value = "null -> false", pure = true)
     public final boolean equals(Object object)
     {
-        if(!(object instanceof Account))
+        if (!(object instanceof Account))
         {
             return false;
         }
 
-        Account account = (Account)object;
+        Account account = (Account) object;
         return getId() == account.getId();
+    }
+
+    @Override
+    public int compareTo(final Account account)
+    {
+        return getName().compareTo(account.getName());
     }
 
     public final int hashCode()

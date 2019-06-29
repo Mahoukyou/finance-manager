@@ -51,7 +51,7 @@ public final class Transaction implements IItem
     private Transaction() {}
 
 
-    public static final Transaction createFromJSONObject(final JSONObject jsonObject) throws JSONException
+    public static final Transaction createFromJSONObject(@NotNull final JSONObject jsonObject) throws JSONException
     {
         final Transaction transaction = new Transaction();
 

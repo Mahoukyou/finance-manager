@@ -7,7 +7,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
-public class TransactionStatus implements IItem
+public class TransactionStatus implements IItem, Comparable<TransactionStatus>
 {
     private TransactionStatus() {}
 
@@ -22,7 +22,7 @@ public class TransactionStatus implements IItem
         this.id = id;
     }
 
-    public static final TransactionStatus createFromJSONObject(final JSONObject jsonObject) throws JSONException
+    public static final TransactionStatus createFromJSONObject(@NotNull final JSONObject jsonObject) throws JSONException
     {
         final TransactionStatus transactionStatus = new TransactionStatus();
 
@@ -64,6 +64,12 @@ public class TransactionStatus implements IItem
     {
         Long lId = id;
         return lId.hashCode();
+    }
+
+    @Override
+    public int compareTo(TransactionStatus transactionStatus)
+    {
+        return getName().compareTo(transactionStatus.getName());
     }
 
     @Contract(pure = true)

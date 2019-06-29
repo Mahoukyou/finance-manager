@@ -7,7 +7,11 @@ import com.wdowiak.financemanager.commons.CommonDetailViewActivity;
 import com.wdowiak.financemanager.R;
 import com.wdowiak.financemanager.data.Category;
 import com.wdowiak.financemanager.data.IItem;
+import com.wdowiak.financemanager.data.Transaction;
 import com.wdowiak.financemanager.groups.GroupAddEditActivity;
+import com.wdowiak.financemanager.transactions_filter.TransactionFilter;
+
+import java.util.ArrayList;
 
 public class CategoryDetailActivity extends CommonDetailViewActivity<Category>
 {
@@ -35,6 +39,28 @@ public class CategoryDetailActivity extends CommonDetailViewActivity<Category>
         textView.setText(category.getName());
 
         // todo, transactions info
+    }
+
+    @Override
+    protected void filteredTransactionsResult(final ArrayList<Transaction> transactions)
+    {
+        TextView textView = findViewById(R.id.transaction_count);
+        textView.setText(String.valueOf(transactions.size()));
+    }
+
+    @Override
+    protected TransactionFilter getTransactionFilter()
+    {
+        return new TransactionFilter(
+                null,
+                null,
+                getItemId(),
+                null,
+                null,
+                null,
+                null,
+                null,
+                null);
     }
 
 }

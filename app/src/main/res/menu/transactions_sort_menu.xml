@@ -2,13 +2,55 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+
     <item
-        android:id="@+id/sort_ascending_by_date"
-        android:title="Ascending by date"
+        android:id="@+id/sort_date"
+        android:title="Date"
+        app:showAsAction="never" />
+
+
+    <item
+        android:id="@+id/sort_description"
+        android:title="Description"
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/sort_descending_by_date"
-        android:title="Descending by date"
+        android:id="@+id/sort_amount"
+        android:title="Amount"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/sort_category"
+        android:title="Category"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/sort_source_account"
+        android:title="Source account"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/sort_target_account"
+        android:title="Target account"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/sort_source_currency"
+        android:title="Source currency"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/sort_target_currency"
+        android:title="Target currency"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/sort_source_group"
+        android:title="Source group"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/sort_target_group"
+        android:title="Target group"
         app:showAsAction="never" />
 </menu>

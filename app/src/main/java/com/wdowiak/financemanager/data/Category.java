@@ -7,7 +7,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
-public class Category implements IItem
+public class Category implements IItem, Comparable<Category>
 {
     private Category() {}
 
@@ -64,6 +64,12 @@ public class Category implements IItem
         return lId.hashCode();
     }
 
+    @Override
+    public int compareTo(Category category)
+    {
+        return getName().compareTo(category.getName());
+    }
+
 
     @Contract(pure = true)
     @Override
@@ -81,5 +87,4 @@ public class Category implements IItem
 
     long id;
     String name;
-
 }

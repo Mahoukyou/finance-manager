@@ -1,19 +1,37 @@
 package com.wdowiak.financemanager.transaction_sorting;
 
 // for now, might be expanded later
-public class TransactionSortSettings
-{
-    public enum ESortType
-    {
-        ASCENDING,
-        DESCENDING
+public class TransactionSortSettings {
+    public enum ESortType {
+        Ascending,
+        Descending
     }
 
-    ESortType sortType = ESortType.DESCENDING;
+    public enum ESortBy {
+        Date,
+        SourceAccount,
+        TargetAccount,
+        Category,
+        SourceCurrency,
+        TargetCurrency,
+        SourceGroup,
+        TargetGroup,
+        Description,
+        Amount
+    }
 
-    public void setSortType(ESortType sortType)
-    {
+    public static ESortType defaultSortType = ESortType.Descending;
+
+    ESortType sortType = defaultSortType;
+    ESortBy sortBy = ESortBy.Date;
+
+    public void setSortType(ESortType sortType) {
         this.sortType = sortType;
+    }
+
+    public void toggleSortType()
+    {
+        setSortType(getSortType() == ESortType.Ascending ? ESortType.Descending : ESortType.Ascending);
     }
 
     public ESortType getSortType()
@@ -21,9 +39,20 @@ public class TransactionSortSettings
         return sortType;
     }
 
-    public String getSortingString()
+    public ESortBy getSortBy()
     {
-        String sortValue = getSortType() == ESortType.ASCENDING ? "true" : "false";
-        return "SortAscending=" + sortValue;
+        return sortBy;
+    }
+
+    public void setSortBy(final ESortBy sortBy)
+    {
+        if(getSortBy() == sortBy)
+        {
+            toggleSortType();
+            return;
+        }
+
+        this.sortBy = sortBy;
+        setSortType(defaultSortType);
     }
 }
