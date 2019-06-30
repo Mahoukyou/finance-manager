@@ -1,12 +1,17 @@
 package com.wdowiak.financemanager.transactions;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.TimePicker;
 
 import androidx.lifecycle.ViewModelProviders;
 
@@ -15,11 +20,10 @@ import com.wdowiak.financemanager.api.Api;
 import com.wdowiak.financemanager.api.QueryApi;
 import com.wdowiak.financemanager.categories.AdapterDataModel;
 import com.wdowiak.financemanager.commons.CommonAddEditActivity;
+import com.wdowiak.financemanager.commons.Helpers;
 import com.wdowiak.financemanager.commons.NameAdapter;
 import com.wdowiak.financemanager.data.Account;
 import com.wdowiak.financemanager.data.Category;
-import com.wdowiak.financemanager.data.Currency;
-import com.wdowiak.financemanager.data.Group;
 import com.wdowiak.financemanager.data.IItem;
 import com.wdowiak.financemanager.data.Transaction;
 import com.wdowiak.financemanager.data.TransactionStatus;
@@ -27,8 +31,10 @@ import com.wdowiak.financemanager.data.TransactionStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class TransactionAddEditActivity extends CommonAddEditActivity<Transaction, TransactionAddEditFormState>
@@ -38,9 +44,10 @@ public class TransactionAddEditActivity extends CommonAddEditActivity<Transactio
         void onSuccess(ArrayList<T> result);
     }
 
-    EditText transactionDescription, transactionAmount;
+    EditText transactionDescription, transactionAmount, transactionDate;
     Spinner sourceAccountSpinner, targetAccountSpinner, categorySpinner, statusSpinner;
     AtomicInteger queryCounter = new AtomicInteger(-1); // Could be done better, but time is pressing
+    ImageButton setDate, setTime, resetDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -56,6 +63,10 @@ public class TransactionAddEditActivity extends CommonAddEditActivity<Transactio
         targetAccountSpinner = findViewById(R.id.transaction_target_account);
         categorySpinner = findViewById(R.id.transaction_category);
         statusSpinner = findViewById(R.id.transaction_status);
+        transactionDate = findViewById(R.id.transaction_date);
+        setDate = findViewById(R.id.transaction_date_set_date);
+        setTime = findViewById(R.id.transaction_date_set_time);
+        resetDate = findViewById(R.id.transaction_date_reset);
 
         transactionDescription.addTextChangedListener(afterTextChangedListener);
         transactionAmount.addTextChangedListener(afterTextChangedListener);
@@ -63,6 +74,11 @@ public class TransactionAddEditActivity extends CommonAddEditActivity<Transactio
         targetAccountSpinner.setOnItemSelectedListener(afterSelectionChangedListener);
         categorySpinner.setOnItemSelectedListener(afterSelectionChangedListener);
         statusSpinner.setOnItemSelectedListener(afterSelectionChangedListener);
+        transactionDate.addTextChangedListener(afterTextChangedListener);
+
+        setDateListener();
+        setTimeListener();
+        resetDate.setOnClickListener(this::onResetDate);
 
         afterCreate();
     }
@@ -103,7 +119,8 @@ public class TransactionAddEditActivity extends CommonAddEditActivity<Transactio
             getSelectedSourceAccount(),
             getSelectedTargetAccount(),
             getSelectedCategory(),
-            getSelectedStatus());
+            getSelectedStatus(),
+            getViewModel().getDate());
     }
 
     AdapterView.OnItemSelectedListener afterSelectionChangedListener = new AdapterView.OnItemSelectedListener()
@@ -189,6 +206,15 @@ public class TransactionAddEditActivity extends CommonAddEditActivity<Transactio
 
         final int statusToSelect = getViewModel().getCategoriesAdapterDataModel().getData().indexOf(transaction.getStatus());
         statusSpinner.setSelection(statusToSelect);
+
+        if(transaction.getDate() != null)
+        {
+            setNewDate(transaction.getDate());
+        }
+        else
+        {
+            onResetDate(null);
+        }
     }
 
     protected void populateSpinners()
@@ -218,7 +244,7 @@ public class TransactionAddEditActivity extends CommonAddEditActivity<Transactio
                     getSelectedTargetAccount(),
                     getSelectedCategory(),
                     getSelectedStatus(),
-                    Calendar.getInstance().getTime());
+                    getViewModel().getDate());
         }
         else
         {
@@ -229,7 +255,7 @@ public class TransactionAddEditActivity extends CommonAddEditActivity<Transactio
                     getSelectedTargetAccount(),
                     getSelectedCategory(),
                     getSelectedStatus(),
-                    Calendar.getInstance().getTime());
+                    getViewModel().getDate());
         }
 
         return newTransaction;
@@ -249,7 +275,7 @@ public class TransactionAddEditActivity extends CommonAddEditActivity<Transactio
     }
 
     @Nullable
-    private <T extends IItem> T getSelectedItem(@NotNull AdapterDataModel<T, NameAdapter<T>> dataModel, Spinner spinner)
+    private <T extends IItem> T getSelectedItem(@NotNull AdapterDataModel<T, NameAdapter<T>> dataModel, @NotNull Spinner spinner)
     {
         final int selectedIndex = spinner.getSelectedItemPosition();
         if(selectedIndex < 0)
@@ -344,5 +370,98 @@ public class TransactionAddEditActivity extends CommonAddEditActivity<Transactio
         {
             dataModel.replaceAdaptersDataAndNotify();
         }
+    }
+
+    private void setDateListener()
+    {
+        setDate.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                final Calendar c = Calendar.getInstance();
+                if(getViewModel().getDate() != null)
+                {
+                    c.setTime(getViewModel().getDate());
+                }
+
+                final int year = c.get(Calendar.YEAR);
+                final int month = c.get(Calendar.MONTH);
+                final int day = c.get(Calendar.DAY_OF_MONTH);
+
+
+                DatePickerDialog datePickerDialog = new DatePickerDialog(TransactionAddEditActivity.this, new DatePickerDialog.OnDateSetListener()
+                {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int year, int month, int day)
+                    {
+                        Calendar calendar = Calendar.getInstance();
+                        if(getViewModel().getDate() != null)
+                        {
+                            calendar.setTime(getViewModel().getDate());
+                        }
+
+                        calendar.set(Calendar.YEAR, year);
+                        calendar.set(Calendar.MONTH, month);
+                        calendar.set(Calendar.DATE, day);
+
+                        setNewDate(calendar.getTime());
+                    }
+                }, year, month, day);
+
+                datePickerDialog.show();
+            }
+        });
+    }
+
+    private void setTimeListener()
+    {
+        setTime.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                final Calendar c = Calendar.getInstance();
+                if(getViewModel().getDate() != null)
+                {
+                    c.setTime(getViewModel().getDate());
+                }
+
+                final int hours = c.get(Calendar.HOUR);
+                final int minutes = c.get(Calendar.MINUTE);
+
+
+                TimePickerDialog timePickerDialog = new TimePickerDialog(TransactionAddEditActivity.this, new TimePickerDialog.OnTimeSetListener()
+                {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int hour, int minute)
+                    {
+                        Calendar calendar = Calendar.getInstance();
+                        if(getViewModel().getDate() != null)
+                        {
+                            calendar.setTime(getViewModel().getDate());
+                        }
+
+                        calendar.set(Calendar.HOUR, hour);
+                        calendar.set(Calendar.MINUTE, minute);
+
+                        setNewDate(calendar.getTime());
+                    }
+                }, hours, minutes, false);
+
+                timePickerDialog.show();
+            }
+        });
+    }
+
+    private void onResetDate(final View view)
+    {
+        setNewDate(Calendar.getInstance().getTime());
+    }
+
+    private void setNewDate(Date date)
+    {
+        getViewModel().setDate(date);
+        transactionDate.setText(Helpers.getSimpleDateFormatToFormat().format(getViewModel().getDate()));
     }
 }

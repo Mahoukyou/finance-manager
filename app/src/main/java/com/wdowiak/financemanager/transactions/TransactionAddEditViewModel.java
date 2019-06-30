@@ -11,14 +11,18 @@ import com.wdowiak.financemanager.data.Group;
 import com.wdowiak.financemanager.data.Transaction;
 import com.wdowiak.financemanager.data.TransactionStatus;
 
+import java.util.Date;
+
 public class TransactionAddEditViewModel
     extends CommonAddEditViewModel<Transaction, TransactionAddEditFormState>
 {
     // We could use same adapter for accounts, but we would need another data, its easier this way, than deriving yet another class
-    AdapterDataModel<Account, NameAdapter<Account>> sourceAccountsDataModel = new AdapterDataModel<>();
-    AdapterDataModel<Account, NameAdapter<Account>> targetAccountsDataModel = new AdapterDataModel<>();
-    AdapterDataModel<Category, NameAdapter<Category>> categoriesAdapterDataModel = new AdapterDataModel<>();
-    AdapterDataModel<TransactionStatus, NameAdapter<TransactionStatus>> statusesAdapterDataModel = new AdapterDataModel<>();
+    private AdapterDataModel<Account, NameAdapter<Account>> sourceAccountsDataModel = new AdapterDataModel<>();
+    private AdapterDataModel<Account, NameAdapter<Account>> targetAccountsDataModel = new AdapterDataModel<>();
+    private AdapterDataModel<Category, NameAdapter<Category>> categoriesAdapterDataModel = new AdapterDataModel<>();
+    private AdapterDataModel<TransactionStatus, NameAdapter<TransactionStatus>> statusesAdapterDataModel = new AdapterDataModel<>();
+
+    private Date date;
 
     public AdapterDataModel<Account, NameAdapter<Account>> getSourceAccountsDataModel()
     {
@@ -56,12 +60,14 @@ public class TransactionAddEditViewModel
             Account sourceAccount,
             Account targetAccount,
             Category category,
-            TransactionStatus status)
+            TransactionStatus status,
+            Date date)
     {
         Integer amountError = null;
         Integer descriptionError = null;
         Integer categoryError = null;
         Integer statusError = null;
+        Integer dateError = null;
 
         if(amount <= 0)
         {
@@ -83,12 +89,29 @@ public class TransactionAddEditViewModel
             statusError = R.string.app_name;
         }
 
+        if(date == null)
+        {
+            dateError = R.string.action_register_instead;
+        }
+
         setFormState(new TransactionAddEditFormState(
                 amountError,
                 descriptionError,
                 null,
                 null,
                 categoryError,
-                statusError));
+                statusError,
+                dateError));
     }
+
+    public Date getDate()
+    {
+        return date;
+    }
+
+    public void setDate(Date date)
+    {
+        this.date = date;
+    }
+
 }

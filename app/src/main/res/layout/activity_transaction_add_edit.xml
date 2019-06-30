@@ -160,6 +160,46 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/layout_background"
+            android:orientation="horizontal"
+            android:padding="@dimen/view_layout_padding"
+            android:layout_margin="@dimen/view_layout_margin">
+
+            <EditText
+                android:id="@+id/transaction_date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="14dp"
+                android:hint="Date"
+                android:inputType="none"
+                android:editable="false"/>
+
+            <ImageButton
+                android:id="@+id/transaction_date_set_date"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/date_icon"/>
+
+            <ImageButton
+                android:id="@+id/transaction_date_set_time"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/time_icon"/>
+
+            <ImageButton
+                android:id="@+id/transaction_date_reset"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/reset_icon"/>
+        </LinearLayout>
+
         <include
             layout="@layout/add_edit_buttons"
             android:layout_width="match_parent"

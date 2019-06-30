@@ -135,7 +135,7 @@ public final class Transaction implements IItem
             statusJson.put("transactionStatusId", getStatus().getId());
             jsonObject.put("transactionStatus", statusJson);
 
-            jsonObject.put("EntryDate", Helpers.getSimpleDateFormatToFormat().format(date));
+            jsonObject.put("EntryDate", Helpers.getSimpleDateFormatToFormat().format(getDate()));
         }
         catch (JSONException ex)
         {

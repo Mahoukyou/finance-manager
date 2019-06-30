@@ -25,13 +25,16 @@ public class TransactionAddEditFormState
     @Nullable
     private Integer statusError;
 
+    @Nullable Integer dateError;
+
     TransactionAddEditFormState(
             @Nullable Integer amountError,
             @Nullable Integer descriptionError,
             @Nullable Integer sourceAccountError,
             @Nullable Integer targetAccountError,
             @Nullable Integer categoryError,
-            @Nullable Integer statusError)
+            @Nullable Integer statusError,
+            @Nullable Integer dateError)
     {
         this.amountError = amountError;
         this.descriptionError = descriptionError;
@@ -39,6 +42,7 @@ public class TransactionAddEditFormState
         this.targetAccountError = targetAccountError;
         this.categoryError = categoryError;
         this.statusError = statusError;
+        this.dateError = dateError;
     }
 
     @Nullable
@@ -77,6 +81,12 @@ public class TransactionAddEditFormState
         return statusError;
     }
 
+    @Nullable
+    public Integer getDateError()
+    {
+        return dateError;
+    }
+
     @Override
     public boolean isDataValid()
     {
@@ -85,6 +95,7 @@ public class TransactionAddEditFormState
                 getSourceAccountError() == null &&
                 getTargetAccountError() == null &&
                 getCategoryError() == null &&
-                getStatusError() == null;
+                getStatusError() == null &&
+                getDateError() == null;
     }
 }

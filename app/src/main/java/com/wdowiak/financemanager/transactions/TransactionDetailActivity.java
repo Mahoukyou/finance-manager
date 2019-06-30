@@ -54,13 +54,17 @@ public class TransactionDetailActivity extends CommonDetailViewActivity<Transact
 
         Account account = transaction.getSourceAccount();
         account = account == null ? transaction.getTargetAccount() : account;
+        final String amount = String.valueOf(transaction.getAmount());
         if(account != null)
         {
             final boolean isPrefix = account.getCurrency().getPrefix();
             final String currencySymbol = account.getCurrency().getSymbol();
-            final String amount = String.valueOf(transaction.getAmount());
 
             textView.setText(isPrefix ? currencySymbol + " " + amount : amount + " " + currencySymbol );
+        }
+        else
+        {
+            textView.setText(amount);
         }
 
         textView = findViewById(R.id.transaction_status);
