@@ -24,7 +24,7 @@ public class TransactionStatusAddEditViewModel
 
         if(name == null || name.isEmpty())
         {
-            nameError = R.string.app_name;
+            nameError = R.string.cannot_be_empty;
         }
 
         setFormState(new TransactionStatusAddEditFormState(nameError));

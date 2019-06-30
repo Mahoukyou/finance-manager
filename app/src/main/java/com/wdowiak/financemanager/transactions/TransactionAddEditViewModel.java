@@ -71,27 +71,27 @@ public class TransactionAddEditViewModel
 
         if(amount <= 0)
         {
-            amountError = R.string.app_name;
+            amountError = R.string.amount_less_than_zero;
         }
 
         if(description == null || description.isEmpty())
         {
-            descriptionError = R.string.app_name;
+            descriptionError = R.string.cannot_be_empty;
         }
 
         if(category == null)
         {
-            categoryError = R.string.app_name;
+            categoryError = R.string.cannot_be_empty;
         }
 
         if(status == null)
         {
-            statusError = R.string.app_name;
+            statusError = R.string.cannot_be_empty;
         }
 
         if(date == null)
         {
-            dateError = R.string.action_register_instead;
+            dateError = R.string.cannot_be_empty;
         }
 
         setFormState(new TransactionAddEditFormState(

@@ -24,12 +24,12 @@ public class GroupAddEditViewModel
 
         if(name == null || name.isEmpty())
         {
-            nameError = R.string.app_name;
+            nameError = R.string.cannot_be_empty;
         }
 
         if(description == null || description.isEmpty())
         {
-            descriptionError = R.string.app_name;
+            descriptionError = R.string.cannot_be_empty;
         }
 
         setFormState(new GroupAddEditFormState(nameError, descriptionError));

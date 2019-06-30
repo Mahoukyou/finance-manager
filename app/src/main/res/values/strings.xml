@@ -23,6 +23,8 @@
     <string name="action_sign_in">Sign in</string>
     <string name="welcome">"Welcome !"</string>
     <string name="invalid_username">Not a valid username</string>
-    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="invalid_password">Password must be >2 characters</string>
     <string name="login_failed">"Login failed"</string>
+    <string name="cannot_be_empty">Can not be empty</string>
+    <string name="amount_less_than_zero">Amount can not be 0 or less than 0</string>
 </resources>

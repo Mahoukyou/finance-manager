@@ -22,7 +22,7 @@
         android:id="@+id/attachment_deleteButton"
         android:layout_width="35dp"
         android:layout_height="35dp"
-        android:background="@drawable/date_icon"
+        android:background="@drawable/delete_icon"
         android:layout_marginStart="-35dp"
         android:onClick="onDeleteAttachment"/>
 </LinearLayout>

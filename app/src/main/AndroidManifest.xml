@@ -16,7 +16,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".attachments.AttachmentsViewActivity"></activity>
         <activity android:name=".registration.RegisterActivity" />
         <activity
             android:name=".ui.login.LoginActivity"
@@ -33,6 +32,8 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".accounts.AccountDetailActivity" />
         <activity android:name=".accounts.AccountAddEditActivity" />
+        <activity android:name=".attachments.AttachmentsViewActivity"></activity>
+        <activity android:name=".attachments.AttachmentDetailActivity" />
         <activity android:name=".categories.CategoryAddEditActivity" />
         <activity android:name=".categories.CategoryDetailActivity" />
         <activity android:name=".currencies.CurrencyAddEditActivity" />

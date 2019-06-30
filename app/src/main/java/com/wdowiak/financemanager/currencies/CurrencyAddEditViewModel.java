@@ -26,17 +26,17 @@ public class CurrencyAddEditViewModel
 
         if(name == null || name.isEmpty())
         {
-            nameError = R.string.app_name;
+            nameError = R.string.cannot_be_empty;
         }
 
         if(acronym == null || acronym.isEmpty())
         {
-            acronymError = R.string.app_name;
+            acronymError = R.string.cannot_be_empty;
         }
 
         if(symbol == null || symbol.isEmpty())
         {
-            symbolError = R.string.app_name;
+            symbolError = R.string.cannot_be_empty;
         }
 
         setFormState(new CurrencyAddEditFormState(nameError, acronymError, symbolError));

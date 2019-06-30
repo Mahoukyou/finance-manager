@@ -8,7 +8,9 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.wdowiak.financemanager.R;
+import com.wdowiak.financemanager.commons.Helpers;
 import com.wdowiak.financemanager.data.Account;
+import com.wdowiak.financemanager.data.Currency;
 import com.wdowiak.financemanager.data.Transaction;
 
 import java.util.ArrayList;
@@ -23,12 +25,14 @@ public class TransactionsAdapter extends ArrayAdapter
         TextView sourceAccount;
         TextView targetAccount;
         TextView description;
+        TextView category;
+        TextView date;
         TextView amount;
     }
 
     public TransactionsAdapter(ArrayList<Transaction> data, Context context)
     {
-        super(context, R.layout.transaction_listview_item, data);
+        super(context, R.layout.transaction_listview_new_item, data);
         this.data = data;
         this.context = context;
     }
@@ -54,10 +58,12 @@ public class TransactionsAdapter extends ArrayAdapter
         if(convertView == null)
         {
             viewHolder = new ViewHolder();
-            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.transaction_listview_item, parent, false);
+            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.transaction_listview_new_item, parent, false);
             viewHolder.sourceAccount = convertView.findViewById(R.id.transaction_item_source_account);
             viewHolder.targetAccount = convertView.findViewById(R.id.transaction_item_target_account);
             viewHolder.description = convertView.findViewById(R.id.transaction_item_description);
+            viewHolder.category = convertView.findViewById(R.id.transaction_item_category);
+            viewHolder.date  = convertView.findViewById(R.id.transaction_item_date);
             viewHolder.amount = convertView.findViewById(R.id.transaction_item_amount);
 
             result = convertView;
@@ -78,8 +84,24 @@ public class TransactionsAdapter extends ArrayAdapter
         viewHolder.targetAccount.setText(targetAccount != null ? targetAccount.getName() : null);
 
         viewHolder.description.setText(transaction.getDescription());
-        viewHolder.amount.setText(String.valueOf(transaction.getAmount()));
 
+        viewHolder.category.setText(transaction.getCategory().getName());
+        viewHolder.date.setText(Helpers.getSimpleDateFormatToFormat().format(transaction.getDate()));
+
+        Currency currency = transaction.getLeadingCurrency();
+        if(currency != null)
+        {
+            final boolean isPrefix = currency.getPrefix();
+            final String currencySymbol = currency.getSymbol();
+
+            viewHolder.amount.setText(isPrefix ?
+                    currencySymbol + " " + transaction.getAmount() :
+                    transaction.getAmount() + " " + currencySymbol );
+        }
+        else
+        {
+            viewHolder.amount.setText(String.valueOf(transaction.getAmount()));
+        }
         return result;
     }
 }

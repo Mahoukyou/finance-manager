@@ -202,6 +202,21 @@ public final class Transaction implements IItem
         return date;
     }
 
+    public Currency getLeadingCurrency()
+    {
+        if(getSourceAccount() != null)
+        {
+            return getSourceAccount().getCurrency();
+        }
+
+        if(getTargetAccount() != null)
+        {
+            return getTargetAccount().getCurrency();
+        }
+
+        return null;
+    }
+
     long id;
     double amount;
     String description;

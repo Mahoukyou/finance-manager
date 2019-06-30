@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,8 +20,10 @@ import com.wdowiak.financemanager.R;
 import com.wdowiak.financemanager.api.Api;
 import com.wdowiak.financemanager.api.QueryApi;
 import com.wdowiak.financemanager.categories.AdapterDataModel;
+import com.wdowiak.financemanager.commons.AmountInputFilter;
 import com.wdowiak.financemanager.commons.CommonAddEditActivity;
 import com.wdowiak.financemanager.commons.Helpers;
+import com.wdowiak.financemanager.commons.IntentExtras;
 import com.wdowiak.financemanager.commons.NameAdapter;
 import com.wdowiak.financemanager.data.Account;
 import com.wdowiak.financemanager.data.Category;
@@ -76,11 +79,17 @@ public class TransactionAddEditActivity extends CommonAddEditActivity<Transactio
         statusSpinner.setOnItemSelectedListener(afterSelectionChangedListener);
         transactionDate.addTextChangedListener(afterTextChangedListener);
 
+        transactionAmount.setFilters(new InputFilter[] {new AmountInputFilter(25, 2)});
+
         setDateListener();
         setTimeListener();
         resetDate.setOnClickListener(this::onResetDate);
 
         afterCreate();
+        if(!getIntent().hasExtra(IntentExtras.INTENT_EXTRA_ITEM_ID))
+        {
+            onResetDate(null);
+        }
     }
 
     TextWatcher afterTextChangedListener = new TextWatcher()

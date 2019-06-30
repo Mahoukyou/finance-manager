@@ -19,11 +19,13 @@ import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.wdowiak.financemanager.R;
+import com.wdowiak.financemanager.commons.IntentExtras;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -48,6 +50,7 @@ public class AttachmentsViewActivity extends AppCompatActivity
         setContentView(R.layout.activity_attachments_view);
 
         attachments = findViewById(R.id.attachments);
+        attachments.setOnItemClickListener(this::onAttachmentClicked);
 
         viewModel = ViewModelProviders.of(this).get(AttachmentViewModel.class);
         viewModel.setDb(new AttachmentsDB(this));
@@ -127,6 +130,13 @@ public class AttachmentsViewActivity extends AppCompatActivity
     {
         showProgressBar(true);
         new AsyncAttachmentsQuery().execute();
+    }
+
+    public void onAttachmentClicked(AdapterView<?> adapterView, View view, int i, long l)
+    {
+        Intent intent = new Intent(getApplicationContext(), AttachmentDetailActivity.class);
+        intent.putExtra(INTENT_EXTRA_ITEM_ID, viewModel.getAttachmentsData().get(i).getId());
+        startActivity(intent);
     }
 
     private void displayAttachments()

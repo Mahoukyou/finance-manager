@@ -43,4 +43,6 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.github.lecho:hellocharts-android:v1.5.8'
     implementation 'org.apache.commons:commons-lang3:3.6'
+    implementation 'com.github.chrisbanes:PhotoView:latest.release'
+
 }
