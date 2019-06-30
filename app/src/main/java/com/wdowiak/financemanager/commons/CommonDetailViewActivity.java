@@ -193,7 +193,7 @@ abstract public class CommonDetailViewActivity<T extends IItem> extends AppCompa
         };
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Are you sure you want to delete this <<<ITEM>>>?")
+        builder.setMessage("Are you sure you want to delete this item?")
                 .setPositiveButton("Yes", dialogClickListener)
                 .setNegativeButton("No", dialogClickListener).show();
 
@@ -206,7 +206,7 @@ abstract public class CommonDetailViewActivity<T extends IItem> extends AppCompa
             @Override
             public void onSuccess(String  result)
             {
-                Toast.makeText(getApplicationContext(), "<<<ITEM>>> was deleted successfully", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Item was deleted successfully", Toast.LENGTH_SHORT).show();
 
                 Intent resultIntent = new Intent();
                 resultIntent.putExtra(INTENT_EXTRA_RESULT_ITEM_WAS_DELETED, INTENT_EXTRA_RESULT_ITEM_WAS_DELETED);
@@ -217,7 +217,7 @@ abstract public class CommonDetailViewActivity<T extends IItem> extends AppCompa
             @Override
             public void onError(Exception error)
             {
-                Toast.makeText(getApplicationContext(), "<<<ITEM>>> could not be deleted. Is there any account using it?", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Item could not be deleted. Is there any other element using it?", Toast.LENGTH_SHORT).show();
             }
         });
     }

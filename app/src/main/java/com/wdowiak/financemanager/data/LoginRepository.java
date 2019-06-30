@@ -64,6 +64,7 @@ public class LoginRepository
 
     public Result<LoggedInUser> login(final String username, final String password)
     {
+        logout();
         Result<LoggedInUser> result = dataSource.login(username, password);
         if (result instanceof Result.Success)
         {

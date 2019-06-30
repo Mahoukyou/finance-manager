@@ -33,34 +33,34 @@ public class RegisterViewModel extends ViewModel
         @Nullable Integer passwordError = null;
         @Nullable Integer repeatPasswordError = null;
 
-        if(login == null || login.length() < 3)
+        if(login == null || login.length() < 2)
         {
-            loginError = R.string.title_activity_login;
+            loginError = R.string.morethan1char;
         }
 
         if(firstName == null || firstName.length() < 2)
         {
-            firstNameError = R.string.title_activity_login;
+            firstNameError = R.string.morethan1char;
         }
 
         if(lastName == null || firstName.length() < 2)
         {
-            lastNameError = R.string.title_activity_login;
+            lastNameError = R.string.morethan1char;
         }
 
         if(email == null || !Patterns.EMAIL_ADDRESS.matcher(email).matches())
         {
-            emailError = R.string.title_activity_login;
+            emailError = R.string.invalid_email;
         }
 
-        if(password == null || password.length() < 5)
+        if(password == null || password.length() < 3)
         {
             passwordError = R.string.invalid_password;
         }
 
         if(repeatPassword == null || !repeatPassword.equals(password))
         {
-            repeatPasswordError = R.string.invalid_password;
+            repeatPasswordError = R.string.pass_match;
         }
 
         registerFormState.setValue(new RegisterFormState(

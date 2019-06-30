@@ -8,7 +8,7 @@ public class DashboardFragmentViewModel extends ViewModel
 {
     private TransactionFilter transactionFilter;
 
-    DataSpanSettings.EType spanType = DataSpanSettings.EType.Monthly;
+    DataSpanSettings.EType spanType = DataSpanSettings.EType.Daily;
 
     void setTransactionFilter(TransactionFilter filter)
     {

@@ -28,6 +28,7 @@ public class TransactionsAdapter extends ArrayAdapter
         TextView category;
         TextView date;
         TextView amount;
+        TextView status;
     }
 
     public TransactionsAdapter(ArrayList<Transaction> data, Context context)
@@ -65,6 +66,7 @@ public class TransactionsAdapter extends ArrayAdapter
             viewHolder.category = convertView.findViewById(R.id.transaction_item_category);
             viewHolder.date  = convertView.findViewById(R.id.transaction_item_date);
             viewHolder.amount = convertView.findViewById(R.id.transaction_item_amount);
+            viewHolder.status = convertView.findViewById(R.id.transaction_item_status);
 
             result = convertView;
             convertView.setTag(viewHolder);
@@ -102,6 +104,9 @@ public class TransactionsAdapter extends ArrayAdapter
         {
             viewHolder.amount.setText(String.valueOf(transaction.getAmount()));
         }
+
+        viewHolder.status.setText(transaction.getStatus().getName());
+
         return result;
     }
 }

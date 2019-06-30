@@ -323,7 +323,7 @@ public class AttachmentsViewActivity extends AppCompatActivity
         };
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Are you sure you want to delete all attachments?")
+        builder.setMessage("Are you sure you want to delete this attachment?")
                 .setPositiveButton("Yes", dialogClickListener)
                 .setNegativeButton("No", dialogClickListener).show();
     }
@@ -351,7 +351,7 @@ public class AttachmentsViewActivity extends AppCompatActivity
         };
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Are you sure you want to delete this attachment?")
+        builder.setMessage("Are you sure you want to delete all attachments?")
                 .setPositiveButton("Yes", dialogClickListener)
                 .setNegativeButton("No", dialogClickListener).show();
     }

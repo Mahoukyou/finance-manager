@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
@@ -27,6 +28,7 @@ import com.wdowiak.financemanager.R;
 import com.wdowiak.financemanager.api.Api;
 import com.wdowiak.financemanager.api.QueryApi;
 import com.wdowiak.financemanager.categories.AdapterDataModel;
+import com.wdowiak.financemanager.commons.AmountInputFilter;
 import com.wdowiak.financemanager.commons.CommonAddEditActivity;
 import com.wdowiak.financemanager.commons.CommonAddEditViewModel;
 import com.wdowiak.financemanager.commons.Helpers;
@@ -77,6 +79,9 @@ public class TransactionsFilterActivity extends AppCompatActivity
         statusSpinner = findViewById(R.id.transaction_status);
         beginDate = findViewById(R.id.filter_begin_date);
         endDate = findViewById(R.id.filter_end_date);
+
+        transactionAmountMin.setFilters(new InputFilter[] {new AmountInputFilter(25, 2)});
+        transactionAmountMax.setFilters(new InputFilter[] {new AmountInputFilter(25, 2)});
 
         viewModel = ViewModelProviders.of(this).get(TransactionsFilterViewModel.class);
 

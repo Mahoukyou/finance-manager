@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.wdowiak.financemanager.R;
 import com.wdowiak.financemanager.api.Api;
 import com.wdowiak.financemanager.api.QueryApi;
+import com.wdowiak.financemanager.commons.Helpers;
 import com.wdowiak.financemanager.commons.IntentExtras;
 import com.wdowiak.financemanager.data.IItem;
 import com.wdowiak.financemanager.data.Transaction;
@@ -36,6 +37,8 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import lecho.lib.hellocharts.model.Axis;
@@ -92,16 +95,21 @@ public class DashboardFragment extends Fragment
 
         showProgressBar(true);
 
+        Calendar calendar = Calendar.getInstance();
+        Date currentDate = calendar.getTime();
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        Date beginDate = calendar.getTime();
+
         TransactionFilter defaultFilter = new TransactionFilter(
                 null,
                 null,
                 null,
                 null ,
                 null,
-                100.0,
-                1000.0,
-                null, // last month todo
-                null);
+                null,
+                null,
+                Helpers.getSimpleDateFormatToFormat().format(beginDate), // last month todo
+                Helpers.getSimpleDateFormatToFormat().format(currentDate));
 
         viewModel.setTransactionFilter(defaultFilter);
         queryWithFilter();
@@ -272,7 +280,7 @@ public class DashboardFragment extends Fragment
         chart.invalidate();
 
 
-        totalAmount.setText(String.valueOf(timelyData.totalAmount));
+        totalAmount.setText(String.format("%.2f", timelyData.totalAmount));
 
         showProgressBar(false);
     }

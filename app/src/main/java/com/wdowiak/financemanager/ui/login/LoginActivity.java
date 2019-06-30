@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,9 +33,17 @@ import com.wdowiak.financemanager.registration.RegisterActivity;
 import com.wdowiak.financemanager.ui.login.LoginViewModel;
 import com.wdowiak.financemanager.ui.login.LoginViewModelFactory;
 
+import lecho.lib.hellocharts.model.Line;
+
 public class LoginActivity extends AppCompatActivity
 {
     private LoginViewModel loginViewModel;
+
+    EditText usernameEditText;
+    EditText passwordEditText;
+    Button loginButton;
+    Button registerButton;
+    LinearLayout loadingProgressBar;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -46,33 +55,28 @@ public class LoginActivity extends AppCompatActivity
 
         loginViewModel = ViewModelProviders.of(this, new LoginViewModelFactory()).get(LoginViewModel.class);
 
-        final EditText usernameEditText = findViewById(R.id.username);
-        final EditText passwordEditText = findViewById(R.id.password);
-        final Button loginButton = findViewById(R.id.login);
-        final Button registerButton = findViewById(R.id.register_instead);
-        final ProgressBar loadingProgressBar = findViewById(R.id.loading);
+        usernameEditText = findViewById(R.id.username);
+        passwordEditText = findViewById(R.id.password);
+        loginButton = findViewById(R.id.login);
+        registerButton = findViewById(R.id.register_instead);
+        loadingProgressBar = findViewById(R.id.progress_bar_layout);
 
         registerButton.setOnClickListener(this::registerInstead);
 
-        loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>()
-        {
+        loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
             @Override
-            public void onChanged(@Nullable LoginFormState loginFormState)
-            {
-                if (loginFormState == null)
-                {
+            public void onChanged(@Nullable LoginFormState loginFormState) {
+                if (loginFormState == null) {
                     return;
                 }
 
                 loginButton.setEnabled(loginFormState.isDataValid());
 
-                if (loginFormState.getUsernameError() != null)
-                {
+                if (loginFormState.getUsernameError() != null) {
                     usernameEditText.setError(getString(loginFormState.getUsernameError()));
                 }
 
-                if (loginFormState.getPasswordError() != null)
-                {
+                if (loginFormState.getPasswordError() != null) {
                     passwordEditText.setError(getString(loginFormState.getPasswordError()));
                 }
             }
@@ -83,15 +87,15 @@ public class LoginActivity extends AppCompatActivity
             @Override
             public void onChanged(@Nullable LoginResult loginResult)
             {
-                if (loginResult == null)
-                {
+                if (loginResult == null) {
+
                     return;
                 }
 
-                loadingProgressBar.setVisibility(View.GONE);
-
                 if (loginResult.getError() != null)
                 {
+                    showProgessBar(false);
+                    loginButton.setEnabled(loginViewModel.getLoginFormState().getValue().isDataValid());
                     showLoginFailed(loginResult.getError());
                 }
                 if (loginResult.getSuccess() != null)
@@ -138,6 +142,7 @@ public class LoginActivity extends AppCompatActivity
             {
                 if (actionId == EditorInfo.IME_ACTION_DONE)
                 {
+                    showProgessBar(true);
                     loginViewModel.login(
                             usernameEditText.getText().toString(),
                             passwordEditText.getText().toString());
@@ -151,7 +156,9 @@ public class LoginActivity extends AppCompatActivity
             @Override
             public void onClick(View v)
             {
-                loadingProgressBar.setVisibility(View.VISIBLE);
+                showProgessBar(true);
+
+                loginButton.setEnabled(false);
 
                 loginViewModel.login(
                         usernameEditText.getText().toString(),
@@ -176,5 +183,16 @@ public class LoginActivity extends AppCompatActivity
     private void showLoginFailed(@StringRes Integer errorString)
     {
         Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
+    }
+
+    private void showProgessBar(boolean show)
+    {
+        final int login_view_visibility = show ? View.GONE : View.VISIBLE;
+        usernameEditText.setVisibility(login_view_visibility);
+        passwordEditText.setVisibility(login_view_visibility);
+        loginButton.setVisibility(login_view_visibility);
+        registerButton.setVisibility(login_view_visibility);
+
+        loadingProgressBar.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 }
